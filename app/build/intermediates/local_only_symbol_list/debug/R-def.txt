@@ -1,10 +1,32 @@
 R_DEF: Internal format may change without notice
 local
 color black
+color navy
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
 color white
+drawable add
+drawable home
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable settings
+drawable statistics
+drawable transparent_background
+drawable wishlist
+id bottomAppBar
+id bottomNavigationView
+id fab
+id frameLayout
+id home
+id placeholder
+id settings
+id statistics
+id wishlist
 layout activity_main
+menu bottom_nav_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name

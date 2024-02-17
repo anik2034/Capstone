@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.capstone'
+    namespace 'com.anik.capstone'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.capstone"
+        applicationId "com.anik.capstone"
         minSdk 26
         targetSdk 34
         versionCode 1

@@ -1,4 +1,4 @@
-package com.example.capstone;
+package com.anik.capstone;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.capstone.databinding.FragmentBookListBinding;
+import com.anik.capstone.databinding.FragmentBookListBinding;
 
 
 public class BookListFragment extends Fragment {

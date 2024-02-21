@@ -6,35 +6,55 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.databinding.ActivityMainBinding;
 
+import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
+    NavBarViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        viewModel = new ViewModelProvider(this).get(NavBarViewModel.class);
+        viewModel.init();
         replaceFragment(BookListFragment.newInstance(R.string.home_fragment));
         binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.home) {
-                replaceFragment(BookListFragment.newInstance(R.string.home_fragment));
-            } else if (itemId == R.id.statistics) {
-                replaceFragment(new StatisticsFragment());
-            } else if (itemId == R.id.settings) {
-                replaceFragment(new SettingsFragment());
-            } else if (itemId == R.id.wishlist) {
-                replaceFragment(BookListFragment.newInstance(R.string.wishlist_fragment));
-            }
+            viewModel.setSelectedDisplayType(item.getItemId());
             return true;
         });
-        binding.addNewBook.setOnClickListener(view -> replaceFragment(new AddNewBookFragment()));
+        binding.addNewBook.setOnClickListener(view -> {
+            viewModel.setSelectedDisplayType(view.getId());
+        });
+        viewModel.getDisplay().observe(this, displayType -> {
+            switch (displayType) {
+                case HOME:
+                    replaceFragment(BookListFragment.newInstance(R.string.home_fragment));
+                    break;
+                case SETTINGS:
+                    replaceFragment(SettingsFragment.newInstance());
+                    break;
+                case WISHLIST:
+                    replaceFragment(BookListFragment.newInstance(R.string.wishlist_fragment));
+                    break;
+                case STATISTICS:
+                    replaceFragment(StatisticsFragment.newInstance());
+                    break;
+                case ADD:
+                    replaceFragment(AddNewBookFragment.newInstance());
+                    break;
+            }
+        });
     }
 
     private void replaceFragment(Fragment fragment) {

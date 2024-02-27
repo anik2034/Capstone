@@ -1,16 +1,14 @@
 package com.anik.capstone.settings;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.anik.capstone.R;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -19,6 +17,7 @@ public class SettingsFragment extends Fragment {
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
+
     private SettingsViewModel settingsViewModel;
 
     @Override

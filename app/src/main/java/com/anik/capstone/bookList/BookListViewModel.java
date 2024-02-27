@@ -1,25 +1,19 @@
 package com.anik.capstone.bookList;
 
-import android.content.Context;
+import com.anik.capstone.util.ResourceHelper;
+
+import javax.inject.Inject;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.anik.capstone.util.ResourceHelper;
-import com.anik.capstone.util.ResourceHelperProvider;
-
-import javax.inject.Inject;
-
-import dagger.Provides;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import dagger.hilt.android.qualifiers.ApplicationContext;
 
-// removed @HiltViewModel for it to be able to inject into BookListFragment field
 @HiltViewModel
 public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
-    private MutableLiveData<String> _title = new MutableLiveData<>();
+
+    private final MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
 
     @Inject

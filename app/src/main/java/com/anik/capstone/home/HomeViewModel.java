@@ -19,7 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<DisplayType> _displayType = new MutableLiveData<>(HOME);
+    private final MutableLiveData<DisplayType> _displayType = new MutableLiveData<>(HOME);
     LiveData<DisplayType> displayType = _displayType;
 
     @Inject

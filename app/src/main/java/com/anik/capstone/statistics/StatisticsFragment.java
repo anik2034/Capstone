@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.anik.capstone.R;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.anik.capstone.R;
 
 public class StatisticsFragment extends Fragment {
     private StatisticsViewModel statisticsViewModel;

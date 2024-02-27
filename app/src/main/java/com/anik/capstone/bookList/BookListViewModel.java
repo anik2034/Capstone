@@ -11,17 +11,20 @@ import com.anik.capstone.util.ResourceHelperProvider;
 
 import javax.inject.Inject;
 
+import dagger.Provides;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 // removed @HiltViewModel for it to be able to inject into BookListFragment field
+@HiltViewModel
 public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
     private MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
 
     @Inject
-    public BookListViewModel(@ApplicationContext Context context) {
-        this.resourceHelper = ResourceHelperProvider.resourceHelper(context);
+    public BookListViewModel(ResourceHelper resourceHelper) {
+        this.resourceHelper = resourceHelper;
     }
 
     public void init(int titleResId) {

@@ -1,4 +1,4 @@
-package com.anik.capstone;
+package com.anik.capstone.statistics;
 
 import androidx.lifecycle.ViewModel;
 
@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class AddNewBookViewModel extends ViewModel {
+public class StatisticsViewModel extends ViewModel {
     @Inject
-    public AddNewBookViewModel() {
+    public StatisticsViewModel() {
     }
 }

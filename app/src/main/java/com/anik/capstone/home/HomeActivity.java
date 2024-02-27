@@ -1,4 +1,4 @@
-package com.anik.capstone;
+package com.anik.capstone.home;
 
 import android.os.Bundle;
 
@@ -8,26 +8,30 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.anik.capstone.databinding.ActivityMainBinding;
+import com.anik.capstone.R;
+import com.anik.capstone.addNewBook.AddNewBookFragment;
+import com.anik.capstone.bookList.BookListFragment;
+import com.anik.capstone.databinding.ActivityHomeBinding;
+import com.anik.capstone.settings.SettingsFragment;
+import com.anik.capstone.statistics.StatisticsFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity {
-
-	private ActivityMainBinding binding;
-    private NavBarViewModel viewModel;
+public class HomeActivity extends AppCompatActivity {
+    private ActivityHomeBinding binding;
+    private HomeViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        viewModel = new ViewModelProvider(this).get(NavBarViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         viewModel.init();
 
-		initViews();
+        initViews();
 
         viewModel.displayType.observe(this, displayType -> {
             switch (displayType) {
@@ -50,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-	private void initViews() {
-		binding.bottomNavigationView.setBackground(null);
-		binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-			viewModel.onDisplayTypeChange(item.getItemId());
-			return true;
-		});
-		binding.addNewBook.setOnClickListener(view -> viewModel.onDisplayTypeChange(view.getId()));
-	}
+    private void initViews() {
+        binding.bottomNavigationView.setBackground(null);
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            viewModel.onDisplayTypeChange(item.getItemId());
+            return true;
+        });
+        binding.addNewBook.setOnClickListener(view -> viewModel.onDisplayTypeChange(view.getId()));
+    }
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

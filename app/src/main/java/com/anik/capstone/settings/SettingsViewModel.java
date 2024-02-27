@@ -1,4 +1,4 @@
-package com.anik.capstone;
+package com.anik.capstone.settings;
 
 import androidx.lifecycle.ViewModel;
 

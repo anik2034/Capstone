@@ -1,8 +1,6 @@
-package com.anik.capstone;
+package com.anik.capstone.util;
 
 import android.content.Context;
-
-import com.anik.capstone.util.ResourceHelper;
 
 import javax.inject.Singleton;
 
@@ -16,9 +14,9 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 public class ResourceHelperProvider {
 
-	@Singleton
-	@Provides
-	public static ResourceHelper resourceHelper(@ApplicationContext Context context) {
-		return new ResourceHelper(context);
-	}
+    @Singleton
+    @Provides
+    public static ResourceHelper resourceHelper(@ApplicationContext Context context) {
+        return new ResourceHelper(context);
+    }
 }

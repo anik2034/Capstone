@@ -1,14 +1,18 @@
 package com.anik.capstone.home;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.anik.capstone.R;
 import com.anik.capstone.addNewBook.AddNewBookFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
 import com.anik.capstone.settings.SettingsFragment;
+import com.anik.capstone.settings.SettingsViewModel;
 import com.anik.capstone.statistics.StatisticsFragment;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -52,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void initViews() {
         binding.bottomNavigationView.setBackground(null);

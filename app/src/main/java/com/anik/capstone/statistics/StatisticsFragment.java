@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class StatisticsFragment extends Fragment {
     private StatisticsViewModel statisticsViewModel;
-
     public static StatisticsFragment newInstance() {
         return new StatisticsFragment();
     }

@@ -3,7 +3,6 @@ package com.anik.capstone.util;
 import android.content.Context;
 
 public class ResourceHelper {
-
     private final Context context;
 
     public ResourceHelper(Context context) {

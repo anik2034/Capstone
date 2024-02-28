@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
 
@@ -22,6 +23,7 @@ public class AddNewBookFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        addNewBookViewModel = new ViewModelProvider(this).get(AddNewBookViewModel.class);
         return inflater.inflate(R.layout.fragment_add_new_book, container, false);
     }
 }

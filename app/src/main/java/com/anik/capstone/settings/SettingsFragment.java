@@ -17,7 +17,6 @@ public class SettingsFragment extends Fragment {
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
-
     private SettingsViewModel settingsViewModel;
 
     @Override

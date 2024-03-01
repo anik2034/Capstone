@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.anik.capstone.BookRecyclerAdapter;
+import com.anik.capstone.bookList.bookListViewModels.BookListViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -19,6 +21,7 @@ public class BookListFragment extends Fragment {
 
     private BookListViewModel bookListViewModel;
     private FragmentBookListBinding fragmentBookListBinding;
+    private BookRecyclerAdapter adapter;
 
     public static BookListFragment newInstance(int titleResId) {
         Bundle args = new Bundle();
@@ -26,6 +29,10 @@ public class BookListFragment extends Fragment {
         BookListFragment fragment = new BookListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setViewModel(BookListViewModel viewModel) {
+        bookListViewModel = viewModel;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,13 +43,25 @@ public class BookListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bookListViewModel = new ViewModelProvider(this).get(BookListViewModel.class);
+
+
         fragmentBookListBinding.setViewModel(bookListViewModel);
         fragmentBookListBinding.setLifecycleOwner(this);
+
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(ARG_TITLE_RES_ID)) {
             int titleResId = bundle.getInt(ARG_TITLE_RES_ID);
             bookListViewModel.init(titleResId);
         }
+        bookListViewModel.loadBooks();
+        ;
+        adapter = new BookRecyclerAdapter();
+        fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        fragmentBookListBinding.recyclerView.setAdapter(adapter);
+
+        bookListViewModel.books.observe(getViewLifecycleOwner(), b -> {
+            adapter.setBooks(b);
+        });
+
     }
 }

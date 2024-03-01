@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.anik.capstone.bookList.BookListViewModel" />
+            type="com.anik.capstone.bookList.bookListViewModels.BookListViewModel" />
     </data>
 
     <FrameLayout
@@ -17,12 +17,34 @@
         tools:context=".bookList.BookListFragment">
 
 
-        <TextView
-            android:id="@+id/bookListTextView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@{viewModel.title.toString()}" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pageTitleTextView" />
+
+            <TextView
+                android:id="@+id/pageTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text="@{viewModel.title.toString()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 </layout>

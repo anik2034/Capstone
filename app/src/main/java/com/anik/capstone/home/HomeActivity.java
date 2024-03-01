@@ -1,29 +1,29 @@
 package com.anik.capstone.home;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.anik.capstone.R;
 import com.anik.capstone.addNewBook.AddNewBookFragment;
 import com.anik.capstone.bookList.BookListFragment;
+import com.anik.capstone.bookList.bookListViewModels.LibraryViewModel;
+import com.anik.capstone.bookList.bookListViewModels.WishlistViewModel;
 import com.anik.capstone.databinding.ActivityHomeBinding;
 import com.anik.capstone.settings.SettingsFragment;
-import com.anik.capstone.settings.SettingsViewModel;
 import com.anik.capstone.statistics.StatisticsFragment;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
+    private BookListFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +39,17 @@ public class HomeActivity extends AppCompatActivity {
         viewModel.displayType.observe(this, displayType -> {
             switch (displayType) {
                 case HOME:
-                    replaceFragment(BookListFragment.newInstance(R.string.home_fragment));
+                    fragment = BookListFragment.newInstance(R.string.home_fragment);
+                    fragment.setViewModel(new ViewModelProvider(this).get(LibraryViewModel.class));
+                    replaceFragment(fragment);
                     break;
                 case SETTINGS:
                     replaceFragment(SettingsFragment.newInstance());
                     break;
                 case WISHLIST:
-                    replaceFragment(BookListFragment.newInstance(R.string.wishlist_fragment));
+                    fragment = BookListFragment.newInstance(R.string.wishlist_fragment);
+                    fragment.setViewModel(new ViewModelProvider(this).get(WishlistViewModel.class));
+                    replaceFragment(fragment);
                     break;
                 case STATISTICS:
                     replaceFragment(StatisticsFragment.newInstance());

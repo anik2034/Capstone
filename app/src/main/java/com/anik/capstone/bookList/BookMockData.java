@@ -1,4 +1,4 @@
-package com.anik.capstone;
+package com.anik.capstone.bookList;
 
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BorrowingStatus;

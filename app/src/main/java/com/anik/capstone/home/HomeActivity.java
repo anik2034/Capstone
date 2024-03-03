@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        binding.setViewModel(viewModel);
         viewModel.init();
 
         initViews();
@@ -63,12 +64,10 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void initViews() {
-        binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             viewModel.onDisplayTypeChange(item.getItemId());
             return true;
         });
-        binding.addNewBook.setOnClickListener(view -> viewModel.onDisplayTypeChange(view.getId()));
     }
 
     private void replaceFragment(Fragment fragment) {

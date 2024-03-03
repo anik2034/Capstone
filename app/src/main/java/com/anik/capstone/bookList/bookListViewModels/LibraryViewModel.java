@@ -1,6 +1,6 @@
 package com.anik.capstone.bookList.bookListViewModels;
 
-import com.anik.capstone.BookMockData;
+import com.anik.capstone.bookList.BookMockData;
 import com.anik.capstone.util.ResourceHelper;
 
 import javax.inject.Inject;
@@ -15,6 +15,7 @@ public class LibraryViewModel extends BookListViewModel {
         super(resourceHelper);
     }
 
+    @Override
     public void loadBooks() {
         super.setBooks(BookMockData.getLibraryBooks());
     }

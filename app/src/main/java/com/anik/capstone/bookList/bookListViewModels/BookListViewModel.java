@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.anik.capstone.BookMockData;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.util.ResourceHelper;
 
@@ -18,15 +17,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
-    private final MutableLiveData<String> _title = new MutableLiveData<>();
-    private MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
 
+    private final MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
+
+    private MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
     public LiveData<List<BookModel>> books = _books;
 
     @Inject
     public BookListViewModel(ResourceHelper resourceHelper) {
         this.resourceHelper = resourceHelper;
+    }
+
+    public void init(int titleResId) {
+        _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
     }
 
@@ -34,10 +38,8 @@ public class BookListViewModel extends ViewModel {
         _books.setValue(books);
     }
 
-    public void init(int titleResId) {
-        _title.setValue(resourceHelper.getString(titleResId));
+    public void loadBooks() {
+
     }
 
-    public void loadBooks() {
-    }
 }

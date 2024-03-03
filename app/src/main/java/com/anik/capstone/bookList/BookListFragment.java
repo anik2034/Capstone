@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.anik.capstone.BookRecyclerAdapter;
 import com.anik.capstone.bookList.bookListViewModels.BookListViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 
@@ -44,7 +43,6 @@ public class BookListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         fragmentBookListBinding.setViewModel(bookListViewModel);
         fragmentBookListBinding.setLifecycleOwner(this);
 
@@ -54,14 +52,12 @@ public class BookListFragment extends Fragment {
             bookListViewModel.init(titleResId);
         }
         bookListViewModel.loadBooks();
-        ;
+
         adapter = new BookRecyclerAdapter();
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
 
-        bookListViewModel.books.observe(getViewLifecycleOwner(), b -> {
-            adapter.setBooks(b);
-        });
+        bookListViewModel.books.observe(getViewLifecycleOwner(), books -> adapter.setBooks(books));
 
     }
 }

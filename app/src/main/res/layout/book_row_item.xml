@@ -12,11 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <ImageView
             android:id="@+id/coverImageView"
-            android:layout_width="83dp"
-            android:layout_height="99dp"
+            android:layout_width="84dp"
+            android:layout_height="100dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"

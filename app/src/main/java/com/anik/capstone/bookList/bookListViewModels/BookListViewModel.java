@@ -19,13 +19,12 @@ public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
 
     private final MutableLiveData<String> _title = new MutableLiveData<>();
+    private final MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
     public LiveData<String> title = _title;
-
-    private MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
     public LiveData<List<BookModel>> books = _books;
 
     @Inject
-    public BookListViewModel(ResourceHelper resourceHelper) {
+    protected BookListViewModel(ResourceHelper resourceHelper) {
         this.resourceHelper = resourceHelper;
     }
 

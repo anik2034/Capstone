@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncDifferConfig;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anik.capstone.databinding.BookRowItemBinding;
@@ -12,14 +15,11 @@ import com.anik.capstone.model.BookModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.BookViewHolder> {
-    private List<BookModel> bookList = new ArrayList<>();
 
-    public void setBooks(List<BookModel> books) {
-        this.bookList = books;
-        notifyDataSetChanged();
+public class BookRecyclerAdapter extends ListAdapter<BookModel, BookRecyclerAdapter.BookViewHolder> {
+    public BookRecyclerAdapter() {
+        super(DIFF_CALLBACK);
     }
-
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,27 +27,30 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         BookRowItemBinding bookRowItemBinding = BookRowItemBinding.inflate(layoutInflater, parent, false);
         return new BookViewHolder(bookRowItemBinding);
     }
-
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        final BookModel book = bookList.get(position);
+        final BookModel book = getItem(position);
         holder.bookRowItemBinding.setBookModel(book);
         holder.bookRowItemBinding.executePendingBindings();
     }
-
-    @Override
-    public int getItemCount() {
-        return bookList.size();
-    }
-
-    class BookViewHolder extends RecyclerView.ViewHolder {
-
+    static class BookViewHolder extends RecyclerView.ViewHolder {
         BookRowItemBinding bookRowItemBinding;
 
         public BookViewHolder(@NonNull BookRowItemBinding bookRowItemBinding) {
             super(bookRowItemBinding.getRoot());
             this.bookRowItemBinding = bookRowItemBinding;
-
         }
     }
+    private static final DiffUtil.ItemCallback<BookModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 }
+

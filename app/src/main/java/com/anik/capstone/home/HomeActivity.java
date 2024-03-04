@@ -1,15 +1,9 @@
 package com.anik.capstone.home;
 
-import android.os.Bundle;
+import static com.anik.capstone.home.DisplayType.HOME;
+import static com.anik.capstone.home.DisplayType.WISHLIST;
 
-import com.anik.capstone.R;
-import com.anik.capstone.addNewBook.AddNewBookFragment;
-import com.anik.capstone.bookList.BookListFragment;
-import com.anik.capstone.bookList.bookListViewModels.LibraryViewModel;
-import com.anik.capstone.bookList.bookListViewModels.WishlistViewModel;
-import com.anik.capstone.databinding.ActivityHomeBinding;
-import com.anik.capstone.settings.SettingsFragment;
-import com.anik.capstone.statistics.StatisticsFragment;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,14 +11,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.anik.capstone.R;
+import com.anik.capstone.addNewBook.AddNewBookFragment;
+import com.anik.capstone.bookList.BookListFragment;
+import com.anik.capstone.databinding.ActivityHomeBinding;
+import com.anik.capstone.settings.SettingsFragment;
+import com.anik.capstone.statistics.StatisticsFragment;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
-    private BookListFragment fragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +39,13 @@ public class HomeActivity extends AppCompatActivity {
         viewModel.displayType.observe(this, displayType -> {
             switch (displayType) {
                 case HOME:
-                    fragment = BookListFragment.newInstance(R.string.home_fragment);
-                    fragment.setViewModel(new ViewModelProvider(this).get(LibraryViewModel.class));
-                    replaceFragment(fragment);
+                    replaceFragment(BookListFragment.newInstance(HOME));
                     break;
                 case SETTINGS:
                     replaceFragment(SettingsFragment.newInstance());
                     break;
                 case WISHLIST:
-                    fragment = BookListFragment.newInstance(R.string.wishlist_fragment);
-                    fragment.setViewModel(new ViewModelProvider(this).get(WishlistViewModel.class));
-                    replaceFragment(fragment);
+                    replaceFragment(BookListFragment.newInstance(WISHLIST));
                     break;
                 case STATISTICS:
                     replaceFragment(StatisticsFragment.newInstance());
@@ -61,15 +56,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
-
     private void initViews() {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             viewModel.onDisplayTypeChange(item.getItemId());
             return true;
         });
     }
-
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

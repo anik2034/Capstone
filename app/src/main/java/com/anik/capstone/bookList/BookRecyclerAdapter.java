@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,14 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anik.capstone.databinding.BookRowItemBinding;
 import com.anik.capstone.model.BookModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class BookRecyclerAdapter extends ListAdapter<BookModel, BookRecyclerAdapter.BookViewHolder> {
+    private static final DiffUtil.ItemCallback<BookModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookModel>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
+            return oldItem.getISBN().equals(newItem.getISBN());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
     public BookRecyclerAdapter() {
         super(DIFF_CALLBACK);
     }
+
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,12 +36,14 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, BookRecyclerAdap
         BookRowItemBinding bookRowItemBinding = BookRowItemBinding.inflate(layoutInflater, parent, false);
         return new BookViewHolder(bookRowItemBinding);
     }
+
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         final BookModel book = getItem(position);
         holder.bookRowItemBinding.setBookModel(book);
         holder.bookRowItemBinding.executePendingBindings();
     }
+
     static class BookViewHolder extends RecyclerView.ViewHolder {
         BookRowItemBinding bookRowItemBinding;
 
@@ -41,16 +52,5 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, BookRecyclerAdap
             this.bookRowItemBinding = bookRowItemBinding;
         }
     }
-    private static final DiffUtil.ItemCallback<BookModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookModel>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
-            return oldItem.equals(newItem);
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 }
 

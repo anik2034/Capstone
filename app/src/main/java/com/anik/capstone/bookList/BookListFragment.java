@@ -1,6 +1,7 @@
 package com.anik.capstone.bookList;
 
 import static com.anik.capstone.home.DisplayType.HOME;
+import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
 import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 import android.os.Bundle;
@@ -16,9 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.bookListViewModels.BookListViewModel;
 import com.anik.capstone.bookList.bookListViewModels.LibraryViewModel;
+import com.anik.capstone.bookList.bookListViewModels.RecommendationsViewModel;
 import com.anik.capstone.bookList.bookListViewModels.WishlistViewModel;
+import com.anik.capstone.bookList.bookWants.BookRecyclerAdapter;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
+
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -31,7 +36,7 @@ public class BookListFragment extends Fragment {
 
     public static BookListFragment newInstance(DisplayType displayType) {
         Bundle args = new Bundle();
-        args.putInt(ARG_DISPLAY_TYPE, displayType.ordinal());
+        args.putString(ARG_DISPLAY_TYPE, displayType.name());
         BookListFragment fragment = new BookListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -50,14 +55,17 @@ public class BookListFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(ARG_DISPLAY_TYPE)) {
-            int displayType = bundle.getInt(ARG_DISPLAY_TYPE);
+            String displayType = bundle.getString(ARG_DISPLAY_TYPE);
             int titleResId = 0;
-            if (displayType == HOME.ordinal()) {
-                titleResId = R.string.home_fragment;
+            if (Objects.equals(displayType, HOME.name())) {
+                titleResId = R.string.home;
                 bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
-            } else if (displayType == WISHLIST.ordinal()) {
-                titleResId = R.string.wishlist_fragment;
+            } else if (Objects.equals(displayType, WISHLIST.name())) {
+                titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
+            } else if (Objects.equals(displayType, RECOMMENDATIONS.name())) {
+                titleResId = R.string.recommendations;
+                bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
             }
             bookListViewModel.init(titleResId);
         }

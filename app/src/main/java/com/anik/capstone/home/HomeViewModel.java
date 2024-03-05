@@ -1,6 +1,7 @@
 package com.anik.capstone.home;
 
 import static com.anik.capstone.home.DisplayType.ADD;
+import static com.anik.capstone.home.DisplayType.BOOK_WANTS;
 import static com.anik.capstone.home.DisplayType.HOME;
 import static com.anik.capstone.home.DisplayType.SETTINGS;
 import static com.anik.capstone.home.DisplayType.STATISTICS;
@@ -37,8 +38,8 @@ public class HomeViewModel extends ViewModel {
             _displayType.setValue(STATISTICS);
         } else if (itemId == R.id.settings) {
             _displayType.setValue(SETTINGS);
-        } else if (itemId == R.id.wishlist) {
-            _displayType.setValue(WISHLIST);
+        } else if (itemId == R.id.bookWants) {
+            _displayType.setValue(BOOK_WANTS);
         } else if (itemId == R.id.addNewBook) {
             _displayType.setValue(ADD);
         }

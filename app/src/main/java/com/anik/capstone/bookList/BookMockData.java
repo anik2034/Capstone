@@ -23,7 +23,6 @@ public class BookMockData {
         books.add(new BookModel("1597536842","https://zangakbookstore.am/uploads/images/products/336b07cc268b03dabb8066d16701f994.jpg", "André Aciman", "Call Me by Your Name", "Romance", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
 
         return books;
-
     }
     public static List<BookModel> getWishlistBooks() {
         List<BookModel> books = new ArrayList<>();
@@ -38,8 +37,22 @@ public class BookMockData {
         books.add(new BookModel("0281726554","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4I6Ckv9gB_bcNuAUIZjDeM5anIpQKLTirHxqXOf2Ukg&s", "Tess Gerritsen", "The Surgeon", "Mystery/Thriller", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
         books.add(new BookModel("1111111111","https://m.media-amazon.com/images/I/51cLnFHabhS.jpg", "Thomas Harris", "The Silence of the Lambs", "Thriller", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
 
+        return books;
+    }
+
+    public static List<BookModel> getRecommendationsBooks(){
+        List<BookModel> books = new ArrayList<>();
+        books.add(new BookModel("9780547928227", "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216l/5907.jpg", "J.R.R. Tolkien", "The Hobbit", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780345538376", "https://images.booksense.com/images/689/381/9780553381689.jpg", "George R.R. Martin", "A Game of Thrones", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780575075925", "https://m.media-amazon.com/images/I/91U6rc7u0yL._AC_UF1000,1000_QL80_.jpg", "Brandon Sanderson", "Mistborn: The Final Empire", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780756404741", "https://images.penguinrandomhouse.com/cover/9780756413712", "Patrick Rothfuss", "The Name of the Wind", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780553382563", "https://upload.wikimedia.org/wikipedia/en/0/00/WoT01_TheEyeOfTheWorld.jpg", "Robert Jordan", "The Eye of the World", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780316038379", "https://m.media-amazon.com/images/I/816JhuO1cyS._AC_UF1000,1000_QL80_.jpg", "Leigh Bardugo", "Shadow and Bone", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780316207586", "https://m.media-amazon.com/images/I/81WbBVgtVNL._AC_UF1000,1000_QL80_.jpg", "Marissa Meyer", "Cinder", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780765331724", "https://m.media-amazon.com/images/I/91UDzcPH-nL._AC_UF1000,1000_QL80_.jpg", "Brandon Sanderson", "The Way of Kings", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780575077172", "https://m.media-amazon.com/images/I/716LpMKQ3iL._AC_UF1000,1000_QL80_.jpg", "Neil Gaiman", "American Gods", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
+        books.add(new BookModel("9780756404079", "https://m.media-amazon.com/images/I/81tbBNvLFKL._AC_UF894,1000_QL80_.jpg", "Patrick Rothfuss", "The Wise Man's Fear", "Fantasy", ReadingStatus.FINISHED, BorrowingStatus.NOT_BORROWED));
 
         return books;
-
     }
 }

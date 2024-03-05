@@ -3,13 +3,13 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/home"
-        android:title="Home"
+        android:title="@string/home"
         />
 
     <item
-        android:id="@+id/wishlist"
+        android:id="@+id/bookWants"
         android:icon="@drawable/wishlist"
-        android:title="Wishlist"
+        android:title="@string/book_wants"
         />
 
     <item
@@ -20,12 +20,12 @@
     <item
         android:id="@+id/statistics"
         android:icon="@drawable/statistics"
-        android:title="Statistics"
+        android:title="@string/statistics"
         />
 
     <item
         android:id="@+id/settings"
         android:icon="@drawable/settings"
-        android:title="Settings"
+        android:title="@string/settings"
         />
 </menu>

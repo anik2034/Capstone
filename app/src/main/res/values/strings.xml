@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Capstone</string>
-    <string name="book_list_fragment">Book List Fragment</string>
-    <string name="home_fragment">Home Fragment</string>
-    <string name="settings_fragment">Settings Fragments</string>
-    <string name="wishlist_fragment">Wishlist Fragment</string>
-    <string name="statistics_fragment">Statistics Fragments</string>
-    <string name="add_new_book_fragment">Add New Book Fragments</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Library</string>
+    <string name="settings">Settings</string>
+    <string name="book_wants">BookWants</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="statistics">Statistics</string>
+    <string name="add_new_book">Add New Book</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.anik.capstone.home;
 
 import static com.anik.capstone.home.DisplayType.HOME;
-import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 import android.os.Bundle;
 
@@ -11,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.anik.capstone.bookList.bookWants.BookWantsFragment;
 import com.anik.capstone.R;
 import com.anik.capstone.addNewBook.AddNewBookFragment;
 import com.anik.capstone.bookList.BookListFragment;
@@ -44,8 +44,8 @@ public class HomeActivity extends AppCompatActivity {
                 case SETTINGS:
                     replaceFragment(SettingsFragment.newInstance());
                     break;
-                case WISHLIST:
-                    replaceFragment(BookListFragment.newInstance(WISHLIST));
+                case BOOK_WANTS:
+                    replaceFragment(BookWantsFragment.newInstance());
                     break;
                 case STATISTICS:
                     replaceFragment(StatisticsFragment.newInstance());

@@ -1,4 +1,4 @@
-package com.anik.capstone.bookList;
+package com.anik.capstone.bookList.bookWants;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

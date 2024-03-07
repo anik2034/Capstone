@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.anik.capstone.home.HomeViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.anik.capstone.home.HomeViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -16,7 +19,7 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"/>
+            android:layout_marginBottom="60dp" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"
@@ -40,9 +43,9 @@
             android:id="@+id/addNewBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{(view) -> viewModel.onDisplayTypeChange(view.getId())}"
             android:src="@drawable/add"
-            app:layout_anchor="@id/bottomAppBar"
-            android:onClick="@{(view) -> viewModel.onDisplayTypeChange(view.getId())}" />
+            app:layout_anchor="@id/bottomAppBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -1,6 +1,7 @@
 package com.anik.capstone.bookList;
 
 import static com.anik.capstone.home.DisplayType.HOME;
+import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
 import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 import android.os.Bundle;
@@ -16,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.bookListViewModels.BookListViewModel;
 import com.anik.capstone.bookList.bookListViewModels.LibraryViewModel;
+import com.anik.capstone.bookList.bookListViewModels.RecommendationsViewModel;
 import com.anik.capstone.bookList.bookListViewModels.WishlistViewModel;
+import com.anik.capstone.bookList.bookWants.BookRecyclerAdapter;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 
@@ -53,11 +56,14 @@ public class BookListFragment extends Fragment {
             int displayType = bundle.getInt(ARG_DISPLAY_TYPE);
             int titleResId = 0;
             if (displayType == HOME.ordinal()) {
-                titleResId = R.string.home_fragment;
+                titleResId = R.string.home;
                 bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
             } else if (displayType == WISHLIST.ordinal()) {
-                titleResId = R.string.wishlist_fragment;
+                titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
+            } else if (displayType == RECOMMENDATIONS.ordinal()) {
+                titleResId = R.string.recommendations;
+                bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
             }
             bookListViewModel.init(titleResId);
         }

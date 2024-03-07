@@ -12,8 +12,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.anik.capstone.databinding.FragmentBookWantsBinding;
 import com.google.android.material.tabs.TabLayout;
 
+
 public class BookWantsFragment extends Fragment {
-    private static final String ARG_DISPLAY_TYPE = "ARGS_DISPLAY_TYPE";
     private FragmentBookWantsBinding fragmentBookWantsBinding;
 
     public static BookWantsFragment newInstance() {
@@ -22,7 +22,7 @@ public class BookWantsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentBookWantsBinding = FragmentBookWantsBinding.inflate(inflater, container, false);
         return fragmentBookWantsBinding.getRoot();
@@ -30,12 +30,11 @@ public class BookWantsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager = fragmentBookWantsBinding.viewPager;
         TabLayout tabLayout = fragmentBookWantsBinding.tabLayout;
-        super.onViewCreated(view, savedInstanceState);
         fragmentBookWantsBinding.setLifecycleOwner(this);
         viewPager.setAdapter(new BookWantsViewPagerAdapter(this));
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -52,7 +51,6 @@ public class BookWantsFragment extends Fragment {
 
             }
         });
-
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -60,7 +58,5 @@ public class BookWantsFragment extends Fragment {
                 tabLayout.getTabAt(position).select();
             }
         });
-
-
     }
 }

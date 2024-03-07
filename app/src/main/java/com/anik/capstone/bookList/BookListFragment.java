@@ -23,8 +23,6 @@ import com.anik.capstone.bookList.bookWants.BookRecyclerAdapter;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 
-import java.util.Objects;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -36,7 +34,7 @@ public class BookListFragment extends Fragment {
 
     public static BookListFragment newInstance(DisplayType displayType) {
         Bundle args = new Bundle();
-        args.putString(ARG_DISPLAY_TYPE, displayType.name());
+        args.putInt(ARG_DISPLAY_TYPE, displayType.ordinal());
         BookListFragment fragment = new BookListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -55,15 +53,15 @@ public class BookListFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(ARG_DISPLAY_TYPE)) {
-            String displayType = bundle.getString(ARG_DISPLAY_TYPE);
+            int displayType = bundle.getInt(ARG_DISPLAY_TYPE);
             int titleResId = 0;
-            if (Objects.equals(displayType, HOME.name())) {
+            if (displayType == HOME.ordinal()) {
                 titleResId = R.string.home;
                 bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
-            } else if (Objects.equals(displayType, WISHLIST.name())) {
+            } else if (displayType == WISHLIST.ordinal()) {
                 titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
-            } else if (Objects.equals(displayType, RECOMMENDATIONS.name())) {
+            } else if (displayType == RECOMMENDATIONS.ordinal()) {
                 titleResId = R.string.recommendations;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
             }

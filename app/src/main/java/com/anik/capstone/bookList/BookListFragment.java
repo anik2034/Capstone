@@ -1,5 +1,7 @@
 package com.anik.capstone.bookList;
 
+import static com.anik.capstone.bookList.ItemViewType.GRID;
+import static com.anik.capstone.bookList.ItemViewType.ROW;
 import static com.anik.capstone.home.DisplayType.HOME;
 import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
 import static com.anik.capstone.home.DisplayType.WISHLIST;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.anik.capstone.R;
@@ -67,14 +70,33 @@ public class BookListFragment extends Fragment {
             }
             bookListViewModel.init(titleResId);
         }
+
         fragmentBookListBinding.setViewModel(bookListViewModel);
         bookListViewModel.loadBooks();
 
         adapter = new BookRecyclerAdapter();
+        adapter.setItemView(ROW);
+
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
 
-        bookListViewModel.books.observe(getViewLifecycleOwner(), books -> adapter.submitList(books));
+        bookListViewModel.books.observe(getViewLifecycleOwner(), books -> {
+            adapter.submitList(books);
+        });
 
+        bookListViewModel.itemViewType.observe(getViewLifecycleOwner(), itemViewType -> {
+            if (itemViewType == GRID) {
+                bookListViewModel.setButtonIcon(R.drawable.grid);
+                fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
+                adapter.setItemView(ROW);
+            } else {
+                bookListViewModel.setButtonIcon(R.drawable.row);
+                fragmentBookListBinding.recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
+                fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
+                adapter.setItemView(GRID);
+
+            }
+        });
     }
 }

@@ -63,6 +63,7 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, RecyclerView.Vie
             ((BookViewHolderRow) holder).bookRowItemBinding.executePendingBindings();
         }
 
+
     }
 
     static class BookViewHolderRow extends RecyclerView.ViewHolder {

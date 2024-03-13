@@ -42,8 +42,11 @@ public class BookListViewModel extends ViewModel {
     }
 
     public void onItemViewClick() {
-        if (_itemViewType.getValue() == GRID) _itemViewType.setValue(ROW);
-        else if (_itemViewType.getValue() == ROW) _itemViewType.setValue(GRID);
+        if (_itemViewType.getValue() == GRID) {
+            _itemViewType.setValue(ROW);
+        } else if (_itemViewType.getValue() == ROW) {
+            _itemViewType.setValue(GRID);
+        }
     }
 
     public void init(int titleResId) {

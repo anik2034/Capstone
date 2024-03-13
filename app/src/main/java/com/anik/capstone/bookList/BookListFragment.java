@@ -1,10 +1,5 @@
 package com.anik.capstone.bookList;
 
-import static com.anik.capstone.bookList.ItemViewType.GRID;
-import static com.anik.capstone.bookList.ItemViewType.ROW;
-import static com.anik.capstone.home.DisplayType.HOME;
-import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
-import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.bookListViewModels.BookListViewModel;
@@ -34,6 +30,7 @@ public class BookListFragment extends Fragment {
     private BookListViewModel bookListViewModel;
     private FragmentBookListBinding fragmentBookListBinding;
     private BookRecyclerAdapter adapter;
+    private final int gridColumnCount = 3;
 
     public static BookListFragment newInstance(DisplayType displayType) {
         Bundle args = new Bundle();
@@ -58,13 +55,13 @@ public class BookListFragment extends Fragment {
         if (bundle != null && bundle.containsKey(ARG_DISPLAY_TYPE)) {
             int displayType = bundle.getInt(ARG_DISPLAY_TYPE);
             int titleResId = 0;
-            if (displayType == HOME.ordinal()) {
+            if (displayType == DisplayType.HOME.ordinal()) {
                 titleResId = R.string.home;
                 bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
-            } else if (displayType == WISHLIST.ordinal()) {
+            } else if (displayType == DisplayType.WISHLIST.ordinal()) {
                 titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
-            } else if (displayType == RECOMMENDATIONS.ordinal()) {
+            } else if (displayType == DisplayType.RECOMMENDATIONS.ordinal()) {
                 titleResId = R.string.recommendations;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
             }
@@ -75,7 +72,7 @@ public class BookListFragment extends Fragment {
         bookListViewModel.loadBooks();
 
         adapter = new BookRecyclerAdapter();
-        adapter.setItemView(ROW);
+        adapter.setItemView(ItemViewType.ROW);
 
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
@@ -85,18 +82,19 @@ public class BookListFragment extends Fragment {
         });
 
         bookListViewModel.itemViewType.observe(getViewLifecycleOwner(), itemViewType -> {
-            if (itemViewType == GRID) {
-                bookListViewModel.setButtonIcon(R.drawable.grid);
-                fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
-                adapter.setItemView(ROW);
+            if (itemViewType == ItemViewType.GRID) {
+                switchItemViewType(R.drawable.grid, new LinearLayoutManager(requireContext()), ItemViewType.ROW);
             } else {
-                bookListViewModel.setButtonIcon(R.drawable.row);
-                fragmentBookListBinding.recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
-                fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
-                adapter.setItemView(GRID);
+                switchItemViewType(R.drawable.row, new GridLayoutManager(requireContext(), gridColumnCount), ItemViewType.GRID);
 
             }
         });
+    }
+
+    private void switchItemViewType(int buttonDrawable, RecyclerView.LayoutManager newLayoutManager, ItemViewType newItemViewType) {
+        bookListViewModel.setButtonIcon(buttonDrawable);
+        fragmentBookListBinding.recyclerView.setLayoutManager(newLayoutManager);
+        fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
+        adapter.setItemView(newItemViewType);
     }
 }

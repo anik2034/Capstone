@@ -17,13 +17,15 @@ public class BookWantsFragment extends Fragment {
     private FragmentBookWantsBinding fragmentBookWantsBinding;
 
     public static BookWantsFragment newInstance() {
-
         return new BookWantsFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
         fragmentBookWantsBinding = FragmentBookWantsBinding.inflate(inflater, container, false);
         return fragmentBookWantsBinding.getRoot();
     }

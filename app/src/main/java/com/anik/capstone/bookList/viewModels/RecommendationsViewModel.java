@@ -1,4 +1,4 @@
-package com.anik.capstone.bookList.bookListViewModels;
+package com.anik.capstone.bookList.viewModels;
 
 import com.anik.capstone.bookList.BookMockData;
 import com.anik.capstone.util.ResourceHelper;

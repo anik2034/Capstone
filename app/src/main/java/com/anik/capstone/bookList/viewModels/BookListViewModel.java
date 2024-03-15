@@ -42,15 +42,6 @@ public class BookListViewModel extends ViewModel {
         this.resourceHelper = resourceHelper;
     }
 
-    public void setButtonIcon(int resId) {
-        _icon.setValue(resourceHelper.getDrawable(resId));
-    }
-
-    public void onItemViewClick() {
-        if (_itemViewType.getValue() == GRID) _itemViewType.setValue(ROW);
-        else if (_itemViewType.getValue() == ROW) _itemViewType.setValue(GRID);
-    }
-
     public void init(int titleResId, LayoutViewType layoutViewType) {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
@@ -68,10 +59,14 @@ public class BookListViewModel extends ViewModel {
     }
 
     public void onItemViewClick() {
-        if (_itemViewType.getValue() == GRID) {
-            _itemViewType.setValue(ROW);
-        } else if (_itemViewType.getValue() == ROW) {
-            _itemViewType.setValue(GRID);
+        if (_layoutViewType.getValue() == GRID) {
+            _layoutViewType.setValue(ROW);
+        } else if (_layoutViewType.getValue() == ROW) {
+            _layoutViewType.setValue(GRID);
         }
+    }
+
+    public void setButtonIcon(int resId) {
+        _icon.setValue(resourceHelper.getDrawable(resId));
     }
 }

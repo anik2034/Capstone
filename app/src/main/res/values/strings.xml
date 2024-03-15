@@ -7,4 +7,12 @@
     <string name="recommendations">Recommendations</string>
     <string name="statistics">Statistics</string>
     <string name="add_new_book">Add New Book</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="manual_input">Manual Input</string>
+    <string name="search_by">Search by</string>
+    <string name="search">Search</string>
+    <string-array name="search_options">
+        <item>Title</item>
+        <item>ISBN</item>
+    </string-array>
 </resources>

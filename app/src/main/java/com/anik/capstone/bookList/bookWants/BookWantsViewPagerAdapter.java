@@ -23,9 +23,8 @@ public class BookWantsViewPagerAdapter extends FragmentStateAdapter {
                 return BookListFragment.newInstance(WISHLIST);
             case 1:
                 return BookListFragment.newInstance(RECOMMENDATIONS);
-            default:
-                return BookListFragment.newInstance(WISHLIST);
         }
+        throw new IllegalArgumentException("Invalid position: " + position);
     }
 
     @Override

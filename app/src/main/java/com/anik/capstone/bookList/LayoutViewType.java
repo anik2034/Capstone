@@ -1,6 +1,6 @@
 package com.anik.capstone.bookList;
 
-public enum ItemViewType {
+public enum LayoutViewType {
     ROW,
     GRID
 }

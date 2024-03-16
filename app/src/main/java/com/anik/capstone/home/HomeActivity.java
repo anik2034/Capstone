@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
                 case STATISTICS:
                     replaceFragment(StatisticsFragment.newInstance());
                     break;
-                case ADD:
+                case ADD_NEW_BOOK:
                     replaceFragment(AddNewBookFragment.newInstance());
                     break;
             }

@@ -25,21 +25,26 @@ public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
 
     private final MutableLiveData<String> _title = new MutableLiveData<>();
-    public LiveData<String> title = _title;
-
     private final MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
-    public LiveData<List<BookModel>> books = _books;
-
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
-    public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
-
     private final MutableLiveData<Drawable> _icon = new MutableLiveData<>();
+    public LiveData<String> title = _title;
+    public LiveData<List<BookModel>> books = _books;
+    public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
     public LiveData<Drawable> icon = _icon;
 
 
     @Inject
     protected BookListViewModel(ResourceHelper resourceHelper) {
         this.resourceHelper = resourceHelper;
+    }
+
+    public void init(int titleResId, LayoutViewType layoutViewType) {
+        _title.setValue(resourceHelper.getString(titleResId));
+        _books.setValue(Collections.emptyList());
+        _layoutViewType.setValue(layoutViewType);
+
+        loadBooks();
     }
 
     public void setButtonIcon(int resId) {
@@ -49,14 +54,6 @@ public class BookListViewModel extends ViewModel {
     public void onItemViewClick() {
         if (_layoutViewType.getValue() == GRID) _layoutViewType.setValue(ROW);
         else if (_layoutViewType.getValue() == ROW) _layoutViewType.setValue(GRID);
-    }
-
-    public void init(int titleResId, LayoutViewType layoutViewType) {
-        _title.setValue(resourceHelper.getString(titleResId));
-        _books.setValue(Collections.emptyList());
-        _layoutViewType.setValue(layoutViewType);
-
-        loadBooks();
     }
 
     protected void setBooks(List<BookModel> books) {

@@ -1,6 +1,7 @@
 package com.anik.capstone.home;
 
-import static com.anik.capstone.home.DisplayType.ADD;
+
+import static com.anik.capstone.home.DisplayType.ADD_NEW_BOOK;
 import static com.anik.capstone.home.DisplayType.BOOK_WANTS;
 import static com.anik.capstone.home.DisplayType.HOME;
 import static com.anik.capstone.home.DisplayType.SETTINGS;
@@ -41,7 +42,7 @@ public class HomeViewModel extends ViewModel {
         } else if (itemId == R.id.bookWants) {
             _displayType.setValue(BOOK_WANTS);
         } else if (itemId == R.id.addNewBook) {
-            _displayType.setValue(ADD);
+            _displayType.setValue(ADD_NEW_BOOK);
         }
     }
 }

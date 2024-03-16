@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.anik.capstone.bookList.BookListFragment;
-import com.anik.capstone.bookList.bookListViewModels.LibraryViewModel;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;

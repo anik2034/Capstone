@@ -16,10 +16,10 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
 public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
-    private BookDataListener listener;
-    private String ISBN;
+    private BarcodeDataListener listener;
+    private String barcodeData;
 
-    public void setBookDataListener(BookDataListener listener) {
+    public BarcodeAnalyzer(BarcodeDataListener listener) {
         this.listener = listener;
     }
 
@@ -47,9 +47,9 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
             scanner.process(inputImage)
                     .addOnSuccessListener(barcodes -> {
                         for (Barcode barcode : barcodes) {
-                            ISBN = barcode.getRawValue();
+                            barcodeData = barcode.getRawValue();
                             if (listener != null) {
-                                listener.onBookDataReceived(ISBN);
+                                listener.onBarcodeDataReceived(barcodeData);
                             }
                             break;
                         }
@@ -58,6 +58,10 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
         } finally {
             imageProxy.close();
         }
+    }
+
+    public interface BarcodeDataListener {
+        void onBarcodeDataReceived(String bookData);
     }
 
 

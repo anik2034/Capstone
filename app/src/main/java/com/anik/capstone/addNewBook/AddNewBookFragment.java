@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.databinding.FragmentAddNewBookBinding;
+import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.HomeActivity;
 import com.anik.capstone.manualInput.ManualInputFragment;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -33,18 +34,42 @@ import java.util.concurrent.Executors;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddNewBookFragment extends Fragment implements BookDataListener {
+public class AddNewBookFragment extends Fragment implements BarcodeAnalyzer.BarcodeDataListener {
     private AddNewBookViewModel addNewBookViewModel;
     private FragmentAddNewBookBinding fragmentAddNewBookBinding;
+
+    private String barcodeDataReceived;
     private PreviewView previewView;
+
     private ExecutorService cameraExecutor;
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+    private CameraSelector cameraSelector;
+    private Preview preview;
+    private ImageAnalysis imageAnalysis;
+    private BarcodeAnalyzer barcodeAnalyzer;
+
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    startCamera();
-                } else {
-                    ((HomeActivity) requireActivity()).replaceFragment(ManualInputFragment.newInstance());
-                }
+                addNewBookViewModel.checkCameraPermissions();
+                addNewBookViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> {
+                    if (cameraStart) {
+                        startCamera();
+                    } else {
+                        addNewBookViewModel.setNextScreen(DisplayType.MANUAL_INPUT);
+                    }
+                });
+                addNewBookViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreen -> {
+                    switch (nextScreen) {
+                        case MANUAL_INPUT: {
+                            ((HomeActivity) requireActivity()).replaceFragment(ManualInputFragment.newInstance());
+                            break;
+                        }
+                        case BOOK_DETAILS: {
+                            ((HomeActivity) requireActivity()).replaceFragment(BookDetailsFragment.newInstance(barcodeDataReceived));
+                            break;
+                        }
+                    }
+                });
             });
 
     public static AddNewBookFragment newInstance() {
@@ -62,47 +87,45 @@ public class AddNewBookFragment extends Fragment implements BookDataListener {
         super.onViewCreated(view, savedInstanceState);
         fragmentAddNewBookBinding.setLifecycleOwner(this);
         addNewBookViewModel = new ViewModelProvider(this).get(AddNewBookViewModel.class);
+        addNewBookViewModel.init();
+
         previewView = fragmentAddNewBookBinding.previewView;
-        if (!addNewBookViewModel.isFirstTimeCameraPermission() && !addNewBookViewModel.hasCameraPermission()) {
-            ((HomeActivity) requireActivity()).replaceFragment(ManualInputFragment.newInstance());
-        } else if (!addNewBookViewModel.isFirstTimeCameraPermission() && addNewBookViewModel.hasCameraPermission()) {
-            startCamera();
-        } else {
-            addNewBookViewModel.setFirstTimeCameraPermission(false);
-            requestPermissionLauncher.launch(Manifest.permission.CAMERA);
-        }
+
+        cameraExecutor = Executors.newSingleThreadExecutor();
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext());
+        preview = new Preview.Builder().build();
+        cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
+        imageAnalysis = new ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
+        barcodeAnalyzer = new BarcodeAnalyzer(this);
+
+        addNewBookViewModel.permissionRequest.observe(getViewLifecycleOwner(), permissionRequest -> {
+            if (permissionRequest) {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
         fragmentAddNewBookBinding.manualInputButton.setOnClickListener(v -> {
-            ((HomeActivity) requireActivity()).replaceFragment(ManualInputFragment.newInstance());
+            addNewBookViewModel.setNextScreen(DisplayType.MANUAL_INPUT);
         });
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         startCamera();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         stopCamera();
     }
 
     private void startCamera() {
-        cameraExecutor = Executors.newSingleThreadExecutor();
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext());
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                Preview preview = new Preview.Builder().build();
-                CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
-
-                ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
-                BarcodeAnalyzer barcodeAnalyzer = new BarcodeAnalyzer();
-                barcodeAnalyzer.setBookDataListener(this);
                 imageAnalysis.setAnalyzer(cameraExecutor, barcodeAnalyzer);
-
                 cameraProvider.unbindAll();
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
             } catch (ExecutionException | InterruptedException e) {
@@ -119,8 +142,8 @@ public class AddNewBookFragment extends Fragment implements BookDataListener {
     }
 
     @Override
-    public void onBookDataReceived(String isbn) {
-        ((HomeActivity) requireActivity()).replaceFragment(BookDetailsFragment.newInstance(isbn));
-
+    public void onBarcodeDataReceived(String barcodeDataReceived) {
+        this.barcodeDataReceived = barcodeDataReceived;
+        addNewBookViewModel.setNextScreen(DisplayType.BOOK_DETAILS);
     }
 }

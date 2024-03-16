@@ -1,9 +1,21 @@
 package com.anik.capstone.bookList;
 
+import static com.anik.capstone.bookList.LayoutViewType.GRID;
+import static com.anik.capstone.bookList.LayoutViewType.ROW;
+import static com.anik.capstone.home.DisplayType.HOME;
+import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
+import static com.anik.capstone.home.DisplayType.WISHLIST;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.viewModels.BookListViewModel;
@@ -13,18 +25,7 @@ import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.hilt.android.AndroidEntryPoint;
-
-import static com.anik.capstone.bookList.LayoutViewType.GRID;
-import static com.anik.capstone.bookList.LayoutViewType.ROW;
-import static com.anik.capstone.home.DisplayType.HOME;
-import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
-import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 @AndroidEntryPoint
 public class BookListFragment extends Fragment {

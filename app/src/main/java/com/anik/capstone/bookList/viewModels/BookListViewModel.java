@@ -63,16 +63,4 @@ public class BookListViewModel extends ViewModel {
     public void loadBooks() {
 
     }
-
-    public void onItemViewClick() {
-        if (_layoutViewType.getValue() == GRID) {
-            _layoutViewType.setValue(ROW);
-        } else if (_layoutViewType.getValue() == ROW) {
-            _layoutViewType.setValue(GRID);
-        }
-    }
-
-    public void setButtonIcon(int resId) {
-        _icon.setValue(resourceHelper.getDrawable(resId));
-    }
 }

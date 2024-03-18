@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.anik.capstone.addNewBook.BarcodeScannerViewModel;
 import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.util.ResourceHelper;
 
@@ -13,13 +14,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class ManualInputViewModel extends ViewModel {
-    private ResourceHelper resourceHelper;
-
-    private MutableLiveData<Boolean> _cameraStart = new MutableLiveData<>();
-    public LiveData<Boolean> cameraStart = _cameraStart;
-
-    private MutableLiveData<DisplayType> _nextScreen = new MutableLiveData<>();
-    public LiveData<DisplayType> nextScreen = _nextScreen;
+    private final ResourceHelper resourceHelper;
+    private final MutableLiveData<BarcodeScannerViewModel.NextScreenData> _nextScreen = new MutableLiveData<>();
+    public LiveData<BarcodeScannerViewModel.NextScreenData> nextScreen = _nextScreen;
+    private final MutableLiveData<Boolean> _onShowPermissionRequestDialog = new MutableLiveData<>();
+    public LiveData<Boolean> onShowPermissionRequestDialog = _onShowPermissionRequestDialog;
 
     @Inject
     public ManualInputViewModel(ResourceHelper resourceHelper) {
@@ -30,13 +29,21 @@ public class ManualInputViewModel extends ViewModel {
         checkCameraPermissions();
     }
 
-    public void setNextScreen(DisplayType displayType) {
-        _nextScreen.setValue(displayType);
-    }
-
     public void checkCameraPermissions() {
         if (resourceHelper.hasCameraPermission()) {
-            _cameraStart.setValue(true);
+            _onShowPermissionRequestDialog.setValue(false);
         }
+    }
+
+    public void onCameraButtonClicked() {
+        if (resourceHelper.hasCameraPermission()) {
+            _nextScreen.setValue(new BarcodeScannerViewModel.NextScreenData(DisplayType.BARCODE_SCANNER, null));
+        } else {
+            _onShowPermissionRequestDialog.setValue(true);
+        }
+    }
+
+    public void onSearchButtonClicked(String searchQuery) {
+        _nextScreen.setValue(new BarcodeScannerViewModel.NextScreenData(DisplayType.BOOK_DETAILS, searchQuery));
     }
 }

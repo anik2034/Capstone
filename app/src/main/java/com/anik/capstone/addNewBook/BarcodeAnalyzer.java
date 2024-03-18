@@ -16,7 +16,7 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
 public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
-    private BarcodeDataListener listener;
+    private final BarcodeDataListener listener;
     private String barcodeData;
 
     public BarcodeAnalyzer(BarcodeDataListener listener) {
@@ -61,7 +61,7 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
     }
 
     public interface BarcodeDataListener {
-        void onBarcodeDataReceived(String bookData);
+        void onBarcodeDataReceived(String barcodeData);
     }
 
 

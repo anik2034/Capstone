@@ -21,8 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.bookDetails.BookDetailsFragment;
-import com.anik.capstone.databinding.FragmentAddNewBookBinding;
-import com.anik.capstone.home.DisplayType;
+import com.anik.capstone.databinding.FragmentBarcodeScannerBinding;
 import com.anik.capstone.home.HomeActivity;
 import com.anik.capstone.manualInput.ManualInputFragment;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -34,13 +33,12 @@ import java.util.concurrent.Executors;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class AddNewBookFragment extends Fragment implements BarcodeAnalyzer.BarcodeDataListener {
-    private AddNewBookViewModel addNewBookViewModel;
-    private FragmentAddNewBookBinding fragmentAddNewBookBinding;
-
-    private String barcodeDataReceived;
+public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.BarcodeDataListener {
+    private BarcodeScannerViewModel barcodeScannerViewModel;
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> barcodeScannerViewModel.onReceivedPermissionResult(isGranted));
+    private FragmentBarcodeScannerBinding barcodeScannerBinding;
     private PreviewView previewView;
-
     private ExecutorService cameraExecutor;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private CameraSelector cameraSelector;
@@ -48,48 +46,24 @@ public class AddNewBookFragment extends Fragment implements BarcodeAnalyzer.Barc
     private ImageAnalysis imageAnalysis;
     private BarcodeAnalyzer barcodeAnalyzer;
 
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                addNewBookViewModel.checkCameraPermissions();
-                addNewBookViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> {
-                    if (cameraStart) {
-                        startCamera();
-                    } else {
-                        addNewBookViewModel.setNextScreen(DisplayType.MANUAL_INPUT);
-                    }
-                });
-                addNewBookViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreen -> {
-                    switch (nextScreen) {
-                        case MANUAL_INPUT: {
-                            ((HomeActivity) requireActivity()).replaceFragment(ManualInputFragment.newInstance());
-                            break;
-                        }
-                        case BOOK_DETAILS: {
-                            ((HomeActivity) requireActivity()).replaceFragment(BookDetailsFragment.newInstance(barcodeDataReceived));
-                            break;
-                        }
-                    }
-                });
-            });
-
-    public static AddNewBookFragment newInstance() {
-        return new AddNewBookFragment();
+    public static BarcodeScannerFragment newInstance() {
+        return new BarcodeScannerFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentAddNewBookBinding = FragmentAddNewBookBinding.inflate(inflater, container, false);
-        return fragmentAddNewBookBinding.getRoot();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        barcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(inflater, container, false);
+        return barcodeScannerBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentAddNewBookBinding.setLifecycleOwner(this);
-        addNewBookViewModel = new ViewModelProvider(this).get(AddNewBookViewModel.class);
-        addNewBookViewModel.init();
+        barcodeScannerBinding.setLifecycleOwner(this);
+        barcodeScannerViewModel = new ViewModelProvider(this).get(BarcodeScannerViewModel.class);
+        barcodeScannerViewModel.init();
 
-        previewView = fragmentAddNewBookBinding.previewView;
+        previewView = barcodeScannerBinding.previewView;
 
         cameraExecutor = Executors.newSingleThreadExecutor();
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext());
@@ -98,13 +72,27 @@ public class AddNewBookFragment extends Fragment implements BarcodeAnalyzer.Barc
         imageAnalysis = new ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
         barcodeAnalyzer = new BarcodeAnalyzer(this);
 
-        addNewBookViewModel.permissionRequest.observe(getViewLifecycleOwner(), permissionRequest -> {
+        barcodeScannerBinding.manualInputButton.setOnClickListener(v -> barcodeScannerViewModel.onManualInputButtonClicked());
+
+        barcodeScannerViewModel.permissionRequest.observe(getViewLifecycleOwner(), permissionRequest -> {
             if (permissionRequest) {
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA);
             }
         });
-        fragmentAddNewBookBinding.manualInputButton.setOnClickListener(v -> {
-            addNewBookViewModel.setNextScreen(DisplayType.MANUAL_INPUT);
+        barcodeScannerViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> startCamera());
+        barcodeScannerViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
+            Fragment fragment = null;
+            switch (nextScreenData.getNextScreen()) {
+                case MANUAL_INPUT: {
+                    fragment = ManualInputFragment.newInstance();
+                    break;
+                }
+                case BOOK_DETAILS: {
+                    fragment = BookDetailsFragment.newInstance(nextScreenData.getData());
+                    break;
+                }
+            }
+            ((HomeActivity) requireActivity()).replaceFragment(fragment);
         });
     }
 
@@ -142,8 +130,7 @@ public class AddNewBookFragment extends Fragment implements BarcodeAnalyzer.Barc
     }
 
     @Override
-    public void onBarcodeDataReceived(String barcodeDataReceived) {
-        this.barcodeDataReceived = barcodeDataReceived;
-        addNewBookViewModel.setNextScreen(DisplayType.BOOK_DETAILS);
+    public void onBarcodeDataReceived(String barcodeData) {
+        barcodeScannerViewModel.onBarcodeDataReceived(barcodeData);
     }
 }

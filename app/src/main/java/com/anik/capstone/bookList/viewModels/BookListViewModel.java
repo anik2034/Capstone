@@ -25,13 +25,16 @@ public class BookListViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
 
     private final MutableLiveData<String> _title = new MutableLiveData<>();
-    private final MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
-    private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
-    private final MutableLiveData<Drawable> _icon = new MutableLiveData<>();
     public LiveData<String> title = _title;
+
+    private final MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
     public LiveData<List<BookModel>> books = _books;
-    public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
+
+    private final MutableLiveData<Drawable> _icon = new MutableLiveData<>();
     public LiveData<Drawable> icon = _icon;
+
+    private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
+    public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
 
     @Inject

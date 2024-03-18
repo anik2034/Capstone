@@ -17,32 +17,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
-import com.anik.capstone.addNewBook.AddNewBookFragment;
+import com.anik.capstone.addNewBook.BarcodeScannerFragment;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.databinding.FragmentManualInputBinding;
-import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.HomeActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class ManualInputFragment extends Fragment {
-    private Spinner searchOption;
     private ManualInputViewModel manualInputViewModel;
     private FragmentManualInputBinding fragmentManualInputBinding;
-    private String searchQuery;
-
-    public ManualInputFragment() {
-    }
 
     public static ManualInputFragment newInstance() {
-        ManualInputFragment fragment = new ManualInputFragment();
-        return fragment;
+        return new ManualInputFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentManualInputBinding = FragmentManualInputBinding.inflate(inflater, container, false);
         return fragmentManualInputBinding.getRoot();
     }
@@ -55,36 +47,34 @@ public class ManualInputFragment extends Fragment {
         manualInputViewModel.init();
         setUpSpinner();
 
-        fragmentManualInputBinding.cameraImageButton.setOnClickListener(v -> {
-                    manualInputViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> {
-                        if (cameraStart) {
-                            manualInputViewModel.setNextScreen(DisplayType.ADD_NEW_BOOK);
-                        } else {
-                            showPermissionRequestDialog();
-                        }
-                    });
-                }
+        fragmentManualInputBinding.cameraImageButton.setOnClickListener(v -> manualInputViewModel.onCameraButtonClicked()
         );
-        manualInputViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreen -> {
-            switch (nextScreen) {
-                case BOOK_DETAILS: {
-                    ((HomeActivity) requireActivity()).replaceFragment(BookDetailsFragment.newInstance(searchQuery));
+
+        manualInputViewModel.onShowPermissionRequestDialog.observe(getViewLifecycleOwner(), onShowPermissionRequestDialog -> {
+            if (onShowPermissionRequestDialog) {
+                showPermissionRequestDialog();
+            }
+        });
+
+        manualInputViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
+            Fragment fragment = null;
+            switch (nextScreenData.getNextScreen()) {
+                case BARCODE_SCANNER: {
+                    fragment = BarcodeScannerFragment.newInstance();
                     break;
                 }
-                case ADD_NEW_BOOK: {
-                    ((HomeActivity) requireActivity()).replaceFragment(AddNewBookFragment.newInstance());
+                case BOOK_DETAILS: {
+                    fragment = BookDetailsFragment.newInstance(nextScreenData.getData());
                     break;
                 }
             }
+            ((HomeActivity) requireActivity()).replaceFragment(fragment);
         });
-        fragmentManualInputBinding.searchButton.setOnClickListener(v -> {
-            searchQuery = fragmentManualInputBinding.searchEditText.getText().toString();
-            manualInputViewModel.setNextScreen(DisplayType.BOOK_DETAILS);
-        });
+        fragmentManualInputBinding.searchButton.setOnClickListener(v -> manualInputViewModel.onSearchButtonClicked(fragmentManualInputBinding.searchEditText.getText().toString()));
     }
 
     private void setUpSpinner() {
-        searchOption = fragmentManualInputBinding.searchBySpinner;
+        Spinner searchOption = fragmentManualInputBinding.searchBySpinner;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),
                 R.array.search_options,

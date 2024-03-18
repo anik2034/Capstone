@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class BookDetailsViewModel extends ViewModel {
-    private MutableLiveData<String> _ISBN = new MutableLiveData<>();
+    private final MutableLiveData<String> _ISBN = new MutableLiveData<>();
     public LiveData<String> ISBN = _ISBN;
 
     @Inject

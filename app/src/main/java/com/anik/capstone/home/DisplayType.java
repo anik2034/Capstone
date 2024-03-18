@@ -9,5 +9,5 @@ public enum DisplayType {
     SETTINGS,
     BOOK_DETAILS,
     MANUAL_INPUT,
-    ADD_NEW_BOOK
+    BARCODE_SCANNER
 }

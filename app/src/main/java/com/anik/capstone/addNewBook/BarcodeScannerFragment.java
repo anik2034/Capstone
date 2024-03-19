@@ -34,9 +34,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.BarcodeDataListener {
+
     private BarcodeScannerViewModel barcodeScannerViewModel;
+
     private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> barcodeScannerViewModel.onReceivedPermissionResult(isGranted));
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted ->
+                    barcodeScannerViewModel.onReceivedPermissionResult(isGranted));
+
     private FragmentBarcodeScannerBinding barcodeScannerBinding;
     private PreviewView previewView;
     private ExecutorService cameraExecutor;

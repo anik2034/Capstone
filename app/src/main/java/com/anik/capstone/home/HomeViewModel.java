@@ -49,6 +49,7 @@ public class HomeViewModel extends ViewModel {
         } else if (itemId == R.id.addNewBook) {
             if (sharedPrefHelper.isFirstTimeCameraPermission()) {
                 _displayType.setValue(BARCODE_SCANNER);
+                sharedPrefHelper.setFirstTimeCameraPermission(false);
             } else if (resourceHelper.hasCameraPermission()) {
                 _displayType.setValue(BARCODE_SCANNER);
             } else {

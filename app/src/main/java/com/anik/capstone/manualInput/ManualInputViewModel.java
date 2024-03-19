@@ -15,8 +15,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class ManualInputViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
+
     private final MutableLiveData<BarcodeScannerViewModel.NextScreenData> _nextScreen = new MutableLiveData<>();
     public LiveData<BarcodeScannerViewModel.NextScreenData> nextScreen = _nextScreen;
+
     private final MutableLiveData<Boolean> _onShowPermissionRequestDialog = new MutableLiveData<>();
     public LiveData<Boolean> onShowPermissionRequestDialog = _onShowPermissionRequestDialog;
 

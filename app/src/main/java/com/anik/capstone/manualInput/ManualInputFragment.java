@@ -50,6 +50,9 @@ public class ManualInputFragment extends Fragment {
         fragmentManualInputBinding.cameraImageButton.setOnClickListener(v -> manualInputViewModel.onCameraButtonClicked()
         );
 
+        fragmentManualInputBinding.searchButton.setOnClickListener(v ->
+                manualInputViewModel.onSearchButtonClicked(fragmentManualInputBinding.searchEditText.getText().toString()));
+
         manualInputViewModel.onShowPermissionRequestDialog.observe(getViewLifecycleOwner(), onShowPermissionRequestDialog -> {
             if (onShowPermissionRequestDialog) {
                 showPermissionRequestDialog();
@@ -70,7 +73,7 @@ public class ManualInputFragment extends Fragment {
             }
             ((HomeActivity) requireActivity()).replaceFragment(fragment);
         });
-        fragmentManualInputBinding.searchButton.setOnClickListener(v -> manualInputViewModel.onSearchButtonClicked(fragmentManualInputBinding.searchEditText.getText().toString()));
+
     }
 
     private void setUpSpinner() {

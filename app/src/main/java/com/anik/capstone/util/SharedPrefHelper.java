@@ -6,12 +6,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPrefHelper {
-    public static final String CAMERA_PREFERENCES = "CAMERA_PREFERENCES";
+    public static final String CAPSTONE_PREFERENCES = "CAPSTONE_PREFERENCES";
     private static final String PREF_CAMERA_PERMISSION_REQUESTED = "camera_permission_requested";
     private final SharedPreferences sharedPreferences;
 
     SharedPrefHelper(Context context) {
-        sharedPreferences = context.getSharedPreferences(SharedPrefHelper.CAMERA_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SharedPrefHelper.CAPSTONE_PREFERENCES, MODE_PRIVATE);
     }
 
     public boolean isFirstTimeCameraPermission() {

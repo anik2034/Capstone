@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/bookListFragment">
+
+    <fragment
+        android:id="@+id/bookListFragment"
+        android:name="com.anik.capstone.bookList.BookListFragment"
+        android:label="Booklist">
+        <argument
+            android:name="ARGS_DISPLAY_TYPE"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/barcodeScannerFragment"
+        android:name="com.anik.capstone.addNewBook.BarcodeScannerFragment"
+        android:label="Barcode Scanner">
+        <!--        <action-->
+        <!--            android:id="@+id/action_barcodeScannerFragment_to_manualInputFragment"-->
+        <!--            app:destination="@id/manualInputFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/manualInputFragment"
+        android:name="com.anik.capstone.manualInput.ManualInputFragment"
+        android:label="Manual Input" />
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.anik.capstone.statistics.StatisticsFragment"
+        android:label="Statistics" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.anik.capstone.settings.SettingsFragment"
+        android:label="Settings" />
+    <fragment
+        android:id="@+id/bookWantsFragment"
+        android:name="com.anik.capstone.bookList.bookWants.BookWantsFragment"
+        android:label="Book Wants" />
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.anik.capstone.bookDetails.BookDetailsFragment"
+        android:label="Book Details">
+        <argument
+            android:name="ARG_ISBN"
+            app:argType="string" />
+    </fragment>
+
+
+</navigation>

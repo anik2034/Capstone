@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class BookDetailsFragment extends Fragment {
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
-    private static final String ARG_ISBN = "ARG_ISBN";
+    public static final String ARG_ISBN = "ARG_ISBN";
 
     public static BookDetailsFragment newInstance(String ISBN) {
         Bundle args = new Bundle();

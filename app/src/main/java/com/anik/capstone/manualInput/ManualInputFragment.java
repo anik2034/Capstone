@@ -17,8 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
-import com.anik.capstone.addNewBook.BarcodeScannerFragment;
-import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.databinding.FragmentManualInputBinding;
 import com.anik.capstone.home.HomeActivity;
 
@@ -60,18 +58,20 @@ public class ManualInputFragment extends Fragment {
         });
 
         manualInputViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
-            Fragment fragment = null;
+            int resId = 0;
+            String data = null;
             switch (nextScreenData.getNextScreen()) {
                 case BARCODE_SCANNER: {
-                    fragment = BarcodeScannerFragment.newInstance();
+                    resId = R.id.barcodeScannerFragment;
                     break;
                 }
                 case BOOK_DETAILS: {
-                    fragment = BookDetailsFragment.newInstance(nextScreenData.getData());
+                    resId = R.id.bookDetailsFragment;
+                    data = nextScreenData.getData();
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).replaceFragment(fragment);
+            ((HomeActivity) requireActivity()).navigateTo(resId, data);
         });
 
     }

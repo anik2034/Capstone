@@ -7,5 +7,7 @@ public enum DisplayType {
     RECOMMENDATIONS,
     STATISTICS,
     SETTINGS,
-    ADD
+    BOOK_DETAILS,
+    MANUAL_INPUT,
+    BARCODE_SCANNER
 }

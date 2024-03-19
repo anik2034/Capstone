@@ -7,4 +7,17 @@
     <string name="recommendations">Recommendations</string>
     <string name="statistics">Statistics</string>
     <string name="add_new_book">Add New Book</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="manual_input">Manual Input</string>
+    <string name="search_by">Search by</string>
+    <string name="search">Search</string>
+    <string name="settings_option">Go to Settings</string>
+    <string name="cancel_option">Cancel</string>
+    <string name="permission_dialog_title">Permission Required</string>
+    <string name="permission_dialog_body">This app needs camera permission for barcode scanning.
+        Please grant the permission in the app settings, otherwise continue with manual input.</string>
+    <string-array name="search_options">
+        <item>Title</item>
+        <item>ISBN</item>
+    </string-array>
 </resources>

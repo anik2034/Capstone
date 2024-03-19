@@ -3,6 +3,7 @@ package com.anik.capstone.bookList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+
 import com.anik.capstone.BR;
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;

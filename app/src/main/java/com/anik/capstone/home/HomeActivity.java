@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.bookList.bookWants.BookWantsFragment;
 import com.anik.capstone.R;
-import com.anik.capstone.addNewBook.AddNewBookFragment;
+import com.anik.capstone.addNewBook.BarcodeScannerFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
 import com.anik.capstone.settings.SettingsFragment;
@@ -50,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
                 case STATISTICS:
                     replaceFragment(StatisticsFragment.newInstance());
                     break;
-                case ADD:
-                    replaceFragment(AddNewBookFragment.newInstance());
+                case BARCODE_SCANNER:
+                    replaceFragment(BarcodeScannerFragment.newInstance());
                     break;
             }
         });
@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
     }
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);

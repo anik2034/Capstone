@@ -12,15 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class BarcodeScannerViewModel extends ViewModel {
-
-
     private final MutableLiveData<Boolean> _cameraStart = new MutableLiveData<>();
-    public LiveData<Boolean> cameraStart = _cameraStart;
-
     private final MutableLiveData<Boolean> _permissionRequest = new MutableLiveData<>();
-    public LiveData<Boolean> permissionRequest = _permissionRequest;
-
     private final MutableLiveData<NextScreenData> _nextScreen = new MutableLiveData<>();
+    public LiveData<Boolean> cameraStart = _cameraStart;
+    public LiveData<Boolean> permissionRequest = _permissionRequest;
     public LiveData<NextScreenData> nextScreen = _nextScreen;
 
 

@@ -5,6 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.viewModels.BookListViewModel;
 import com.anik.capstone.bookList.viewModels.LibraryViewModel;
@@ -13,21 +19,15 @@ import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BookListFragment extends Fragment {
-    private static final String ARG_DISPLAY_TYPE = "ARGS_DISPLAY_TYPE";
+    public static final String ARG_DISPLAY_TYPE = "ARG_DISPLAY_TYPE";
+    private static final int GRID_COLUMN_COUNT = 3;
     private BookListViewModel bookListViewModel;
     private FragmentBookListBinding fragmentBookListBinding;
     private BookRecyclerAdapter adapter;
-
-    private static final int GRID_COLUMN_COUNT = 3;
 
     public static BookListFragment newInstance(DisplayType displayType) {
         Bundle args = new Bundle();
@@ -49,9 +49,9 @@ public class BookListFragment extends Fragment {
         fragmentBookListBinding.setLifecycleOwner(this);
 
         Bundle bundle = getArguments();
+        int titleResId = 0;
         if (bundle != null && bundle.containsKey(ARG_DISPLAY_TYPE)) {
             int displayType = bundle.getInt(ARG_DISPLAY_TYPE);
-            int titleResId = 0;
             if (displayType == DisplayType.HOME.ordinal()) {
                 titleResId = R.string.home;
                 bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
@@ -62,8 +62,11 @@ public class BookListFragment extends Fragment {
                 titleResId = R.string.recommendations;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
             }
-            bookListViewModel.init(titleResId, LayoutViewType.ROW);
+        } else {
+            titleResId = R.string.home;
+            bookListViewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
         }
+        bookListViewModel.init(titleResId, LayoutViewType.ROW);
 
         fragmentBookListBinding.setViewModel(bookListViewModel);
 

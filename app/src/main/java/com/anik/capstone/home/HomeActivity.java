@@ -1,22 +1,16 @@
 package com.anik.capstone.home;
 
-import static com.anik.capstone.home.DisplayType.HOME;
-
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
-import com.anik.capstone.bookList.bookWants.BookWantsFragment;
 import com.anik.capstone.R;
-import com.anik.capstone.addNewBook.BarcodeScannerFragment;
+import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
-import com.anik.capstone.settings.SettingsFragment;
-import com.anik.capstone.statistics.StatisticsFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,6 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
+
+    private NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,36 +33,59 @@ public class HomeActivity extends AppCompatActivity {
 
         initViews();
 
+
+        navController = Navigation.findNavController(this, R.id.fragmentContainerView);
+
+
         viewModel.displayType.observe(this, displayType -> {
             switch (displayType) {
                 case HOME:
-                    replaceFragment(BookListFragment.newInstance(HOME));
+                    navigateTo(R.id.bookListFragment, displayType);
                     break;
                 case SETTINGS:
-                    replaceFragment(SettingsFragment.newInstance());
+                    navigateTo(R.id.settingsFragment);
                     break;
                 case BOOK_WANTS:
-                    replaceFragment(BookWantsFragment.newInstance());
+                    navigateTo(R.id.bookWantsFragment);
                     break;
                 case STATISTICS:
-                    replaceFragment(StatisticsFragment.newInstance());
+                    navigateTo(R.id.statisticsFragment);
                     break;
                 case BARCODE_SCANNER:
-                    replaceFragment(BarcodeScannerFragment.newInstance());
+                    navigateTo(R.id.barcodeScannerFragment);
+                    break;
+                case MANUAL_INPUT:
+                    navigateTo(R.id.manualInputFragment);
                     break;
             }
         });
     }
+
     private void initViews() {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             viewModel.onDisplayTypeChange(item.getItemId());
             return true;
         });
     }
-    public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
+
+    public void navigateTo(int fragmentId) {
+        navController.navigate(fragmentId);
     }
+
+    public void navigateTo(int fragmentId, DisplayType displayType) {
+        Bundle args = new Bundle();
+        args.putInt(BookListFragment.ARG_DISPLAY_TYPE, displayType.ordinal());
+        navController.navigate(fragmentId, args);
+    }
+
+    public void navigateTo(int fragmentId, String data) {
+        Bundle args = new Bundle();
+        args.putString(BookDetailsFragment.ARG_ISBN, data);
+        navController.navigate(fragmentId, args);
+    }
+
+
 }
+
+
+

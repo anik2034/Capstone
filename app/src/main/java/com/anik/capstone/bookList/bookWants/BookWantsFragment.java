@@ -12,7 +12,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.anik.capstone.databinding.FragmentBookWantsBinding;
 import com.google.android.material.tabs.TabLayout;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+
+@AndroidEntryPoint
 public class BookWantsFragment extends Fragment {
     private FragmentBookWantsBinding fragmentBookWantsBinding;
 

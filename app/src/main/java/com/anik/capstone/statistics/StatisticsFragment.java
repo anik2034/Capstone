@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class StatisticsFragment extends Fragment {
     private StatisticsViewModel statisticsViewModel;
     public static StatisticsFragment newInstance() {

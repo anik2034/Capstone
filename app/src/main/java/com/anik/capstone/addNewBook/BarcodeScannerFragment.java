@@ -20,10 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.anik.capstone.bookDetails.BookDetailsFragment;
+import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentBarcodeScannerBinding;
 import com.anik.capstone.home.HomeActivity;
-import com.anik.capstone.manualInput.ManualInputFragment;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
@@ -85,18 +84,20 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
         });
         barcodeScannerViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> startCamera());
         barcodeScannerViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
-            Fragment fragment = null;
+            int fragmentId = 0;
+            String data = null;
             switch (nextScreenData.getNextScreen()) {
                 case MANUAL_INPUT: {
-                    fragment = ManualInputFragment.newInstance();
+                    fragmentId = R.id.manualInputFragment;
                     break;
                 }
                 case BOOK_DETAILS: {
-                    fragment = BookDetailsFragment.newInstance(nextScreenData.getData());
+                    fragmentId = R.id.bookDetailsFragment;
+                    data = nextScreenData.getData();
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).replaceFragment(fragment);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data);
         });
     }
 

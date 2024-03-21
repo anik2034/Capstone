@@ -5,17 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.anik.capstone.databinding.FragmentBookDetailsBinding;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.anik.capstone.databinding.FragmentBookDetailsBinding;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BookDetailsFragment extends Fragment {
+    public static final String ARG_ISBN = "ARG_ISBN";
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
-    private static final String ARG_ISBN = "ARG_ISBN";
 
     public static BookDetailsFragment newInstance(String ISBN) {
         Bundle args = new Bundle();

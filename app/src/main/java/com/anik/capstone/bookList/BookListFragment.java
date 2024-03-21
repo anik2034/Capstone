@@ -18,11 +18,12 @@ import com.anik.capstone.bookList.viewModels.RecommendationsViewModel;
 import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
+import com.anik.capstone.home.HomeActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class BookListFragment extends Fragment {
+public class BookListFragment extends Fragment implements  BookRecyclerAdapter.OnItemClickListener{
     public static final String ARG_DISPLAY_TYPE = "ARG_DISPLAY_TYPE";
     private static final int GRID_COLUMN_COUNT = 3;
     private BookListViewModel bookListViewModel;
@@ -70,7 +71,7 @@ public class BookListFragment extends Fragment {
 
         fragmentBookListBinding.setViewModel(bookListViewModel);
 
-        adapter = new BookRecyclerAdapter();
+        adapter = new BookRecyclerAdapter(this);
 
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
@@ -89,6 +90,10 @@ public class BookListFragment extends Fragment {
                     break;
             }
         });
+    }
+    @Override
+    public void onItemClick(String isbn) {
+        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, isbn);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

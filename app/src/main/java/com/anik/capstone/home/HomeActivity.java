@@ -68,21 +68,23 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void navigateTo(int layoutId) {
-        navController.navigate(layoutId);
+    public void navigateTo(int fragmentId) {
+        navController.navigate(fragmentId);
     }
 
-    public void navigateTo(int layoutId, DisplayType displayType) {
+    public void navigateTo(int fragmentId, DisplayType displayType) {
         Bundle args = new Bundle();
         args.putInt(BookListFragment.ARG_DISPLAY_TYPE, displayType.ordinal());
-        navController.navigate(layoutId, args);
+        navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int layoutId, String data) {
+    public void navigateTo(int fragmentId, String data) {
         Bundle args = new Bundle();
         args.putString(BookDetailsFragment.ARG_ISBN, data);
-        navController.navigate(layoutId, args);
+        navController.navigate(fragmentId, args);
     }
+
+
 }
 
 

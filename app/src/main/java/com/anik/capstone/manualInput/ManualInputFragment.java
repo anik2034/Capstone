@@ -58,20 +58,20 @@ public class ManualInputFragment extends Fragment {
         });
 
         manualInputViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
-            int resId = 0;
+            int fragmentId = 0;
             String data = null;
             switch (nextScreenData.getNextScreen()) {
                 case BARCODE_SCANNER: {
-                    resId = R.id.barcodeScannerFragment;
+                    fragmentId = R.id.barcodeScannerFragment;
                     break;
                 }
                 case BOOK_DETAILS: {
-                    resId = R.id.bookDetailsFragment;
+                    fragmentId = R.id.bookDetailsFragment;
                     data = nextScreenData.getData();
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(resId, data);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data);
         });
 
     }

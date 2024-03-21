@@ -84,20 +84,20 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
         });
         barcodeScannerViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> startCamera());
         barcodeScannerViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
-            int resId = 0;
+            int fragmentId = 0;
             String data = null;
             switch (nextScreenData.getNextScreen()) {
                 case MANUAL_INPUT: {
-                    resId = R.id.manualInputFragment;
+                    fragmentId = R.id.manualInputFragment;
                     break;
                 }
                 case BOOK_DETAILS: {
-                    resId = R.id.bookDetailsFragment;
+                    fragmentId = R.id.bookDetailsFragment;
                     data = nextScreenData.getData();
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(resId, data);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data);
         });
     }
 

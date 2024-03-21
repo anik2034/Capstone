@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BookListFragment extends Fragment {
-    public static final String ARG_DISPLAY_TYPE = "ARGS_DISPLAY_TYPE";
+    public static final String ARG_DISPLAY_TYPE = "ARG_DISPLAY_TYPE";
     private static final int GRID_COLUMN_COUNT = 3;
     private BookListViewModel bookListViewModel;
     private FragmentBookListBinding fragmentBookListBinding;

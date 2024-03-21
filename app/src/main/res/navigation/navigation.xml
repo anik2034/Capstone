@@ -6,44 +6,38 @@
 
     <fragment
         android:id="@+id/bookListFragment"
-        android:name="com.anik.capstone.bookList.BookListFragment"
-        android:label="Booklist">
+        android:name="com.anik.capstone.bookList.BookListFragment">
         <argument
-            android:name="ARGS_DISPLAY_TYPE"
+            android:name="ARG_DISPLAY_TYPE"
             app:argType="integer" />
     </fragment>
 
     <fragment
         android:id="@+id/barcodeScannerFragment"
-        android:name="com.anik.capstone.addNewBook.BarcodeScannerFragment"
-        android:label="Barcode Scanner">
-        <!--        <action-->
-        <!--            android:id="@+id/action_barcodeScannerFragment_to_manualInputFragment"-->
-        <!--            app:destination="@id/manualInputFragment" />-->
+        android:name="com.anik.capstone.addNewBook.BarcodeScannerFragment">
+        <action
+            android:id="@+id/action_barcodeScannerFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/manualInputFragment"
-        android:name="com.anik.capstone.manualInput.ManualInputFragment"
-        android:label="Manual Input" />
+        android:name="com.anik.capstone.manualInput.ManualInputFragment">
+    </fragment>
 
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.anik.capstone.statistics.StatisticsFragment"
-        android:label="Statistics" />
+        android:name="com.anik.capstone.statistics.StatisticsFragment"/>
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.anik.capstone.settings.SettingsFragment"
-        android:label="Settings" />
+        android:name="com.anik.capstone.settings.SettingsFragment"/>
     <fragment
         android:id="@+id/bookWantsFragment"
-        android:name="com.anik.capstone.bookList.bookWants.BookWantsFragment"
-        android:label="Book Wants" />
+        android:name="com.anik.capstone.bookList.bookWants.BookWantsFragment"/>
     <fragment
         android:id="@+id/bookDetailsFragment"
-        android:name="com.anik.capstone.bookDetails.BookDetailsFragment"
-        android:label="Book Details">
+        android:name="com.anik.capstone.bookDetails.BookDetailsFragment">
         <argument
             android:name="ARG_ISBN"
             app:argType="string" />

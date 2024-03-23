@@ -97,7 +97,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true);
         });
     }
 

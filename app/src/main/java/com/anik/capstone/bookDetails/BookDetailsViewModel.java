@@ -13,11 +13,15 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<String> _ISBN = new MutableLiveData<>();
     public LiveData<String> ISBN = _ISBN;
 
+    private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
+    public LiveData<Boolean> isNewBook = _isNewBook;
+
     @Inject
     public BookDetailsViewModel() {
     }
 
-    public void init(String ISBN) {
+    public void init(String ISBN, Boolean isNewBook) {
         _ISBN.setValue(ISBN);
+        _isNewBook.setValue(isNewBook);
     }
 }

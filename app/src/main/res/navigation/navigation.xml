@@ -41,6 +41,9 @@
         <argument
             android:name="ARG_ISBN"
             app:argType="string" />
+        <argument
+            android:name="ARG_IS_NEW_BOOK"
+            app:argType="boolean"/>
     </fragment>
 
 

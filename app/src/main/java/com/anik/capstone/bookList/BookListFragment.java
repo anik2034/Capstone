@@ -93,7 +93,7 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
     }
     @Override
     public void onItemClick(String isbn) {
-        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, isbn);
+        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, isbn, false);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

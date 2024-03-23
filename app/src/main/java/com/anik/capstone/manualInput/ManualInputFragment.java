@@ -71,7 +71,7 @@ public class ManualInputFragment extends Fragment {
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true);
         });
 
     }

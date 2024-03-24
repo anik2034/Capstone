@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class BookDetailsFragment extends Fragment {
     public static final String ARG_ISBN = "ARG_ISBN";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
-    private BookDetailsReceived listener;
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
 
     public static BookDetailsFragment newInstance(String ISBN, boolean isNewBook) {
@@ -45,19 +44,5 @@ public class BookDetailsFragment extends Fragment {
             bookDetailsViewModel.init(bundle.getString(ARG_ISBN), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
-        listener = (BookDetailsCustomView) fragmentBookDetailsBinding.bookDetailsCustomView;
-
-
-        bookDetailsViewModel.ISBN.observe(getViewLifecycleOwner(), ISBN ->
-                listener.onBookDetailsReceived(ISBN));
-
-        bookDetailsViewModel.isNewBook.observe(getViewLifecycleOwner(), isNewBook ->
-                listener.onIsNewBookReceived(isNewBook));
-
-    }
-    public interface BookDetailsReceived {
-        void onBookDetailsReceived(String ISBN);
-
-        void onIsNewBookReceived(Boolean isNewBook);
     }
 }

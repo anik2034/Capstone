@@ -16,6 +16,7 @@
     <string name="permission_dialog_title">Permission Required</string>
     <string name="permission_dialog_body">This app needs camera permission for barcode scanning.
         Please grant the permission in the app settings, otherwise continue with manual input.</string>
+
     <string-array name="search_options">
         <item>Title</item>
         <item>ISBN</item>

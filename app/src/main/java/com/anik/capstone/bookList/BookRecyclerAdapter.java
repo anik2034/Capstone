@@ -59,14 +59,14 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, RecyclerView.Vie
             ((BaseViewHolder) holder).bind(getItem(position));
             holder.itemView.setOnClickListener(view -> {
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(getItem(position).getISBN());
+                    itemClickListener.onItemClick(getItem(position));
                 }
             });
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String isbn);
+        void onItemClick(BookModel bookModel);
     }
 
     static class BaseViewHolder extends RecyclerView.ViewHolder {

@@ -11,6 +11,7 @@ import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
+import com.anik.capstone.model.BookModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -78,9 +79,16 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String data, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, BookModel bookModel, Boolean isNewBook) {
         Bundle args = new Bundle();
-        args.putString(BookDetailsFragment.ARG_ISBN, data);
+        args.putSerializable(BookDetailsFragment.ARG_BOOK_MODEL, bookModel);
+        args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        navController.navigate(fragmentId, args);
+    }
+
+    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook) {
+        Bundle args = new Bundle();
+        args.putString(BookDetailsFragment.ARG_BOOK_MODEL, searchData);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
         navController.navigate(fragmentId, args);
     }

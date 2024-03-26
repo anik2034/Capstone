@@ -5,9 +5,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import com.anik.capstone.databinding.EditableTextViewBinding;
-
 import androidx.annotation.Nullable;
+
+import com.anik.capstone.databinding.EditableTextViewBinding;
 
 public class EditableTextView extends FrameLayout {
     private EditableTextViewBinding editableTextViewBinding;
@@ -28,12 +28,21 @@ public class EditableTextView extends FrameLayout {
         init();
 
     }
+
     public void init() {
         editableTextViewBinding = EditableTextViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
     }
 
+    public String getText() {
+        return editableTextViewBinding.getText();
+    }
+
     public void setText(String text) {
         editableTextViewBinding.setText(text);
+    }
+
+    public boolean getIsEditable() {
+        return editableTextViewBinding.getIsEditable();
     }
 
     public void setIsEditable(boolean isEditable) {

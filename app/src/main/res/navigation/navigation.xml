@@ -39,7 +39,10 @@
         android:id="@+id/bookDetailsFragment"
         android:name="com.anik.capstone.bookDetails.BookDetailsFragment">
         <argument
-            android:name="ARG_ISBN"
+            android:name="ARG_SEARCH_DATA"
+            app:argType="string" />
+        <argument
+            android:name="ARG_BOOK_MODEL"
             app:argType="string" />
         <argument
             android:name="ARG_IS_NEW_BOOK"

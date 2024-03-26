@@ -19,6 +19,7 @@ import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.HomeActivity;
+import com.anik.capstone.model.BookModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -92,8 +93,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
         });
     }
     @Override
-    public void onItemClick(String isbn) {
-        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, isbn, false);
+    public void onItemClick(BookModel bookModel) {
+        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModel, false);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

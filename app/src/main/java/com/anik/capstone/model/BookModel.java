@@ -1,6 +1,7 @@
 package com.anik.capstone.model;
 
-import com.anik.capstone.model.rating.Rating;
+import com.anik.capstone.model.borrowing.BorrowingModel;
+import com.anik.capstone.model.rating.RatingModel;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,10 +14,10 @@ public class BookModel implements Serializable {
     private String title;
     private String genre;
     private ReadingStatus readingStatus;
-    private Borrowing borrowing;
-    private Rating rating;
+    private BorrowingModel borrowing;
+    private RatingModel rating;
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, Borrowing borrowing, Rating rating) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
@@ -27,7 +28,7 @@ public class BookModel implements Serializable {
         this.rating = rating;
     }
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, Borrowing borrowing) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, BorrowingModel borrowing) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
@@ -35,7 +36,7 @@ public class BookModel implements Serializable {
         this.genre = genre;
         this.readingStatus = readingStatus;
         this.borrowing = borrowing;
-        this.rating = new Rating();
+        this.rating = new RatingModel();
     }
 
     public String getCoverUrl() {
@@ -78,11 +79,11 @@ public class BookModel implements Serializable {
         this.readingStatus = readingStatus;
     }
 
-    public Borrowing getBorrowing() {
+    public BorrowingModel getBorrowingModel() {
         return borrowing;
     }
 
-    public void setBorrowing(Borrowing borrowing) {
+    public void setBorrowingModel(BorrowingModel borrowing) {
         this.borrowing = borrowing;
     }
 
@@ -94,11 +95,11 @@ public class BookModel implements Serializable {
         this.ISBN = ISBN;
     }
 
-    public Rating getRating() {
+    public RatingModel getRating() {
         return rating;
     }
 
-    public void setRating(Rating rating) {
+    public void setRating(RatingModel rating) {
         this.rating = rating;
     }
 

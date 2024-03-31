@@ -4,25 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".bookDetails.BookDetailsFragment">
 
-    <data>
-        <variable
-            name="thumbnailUrl"
-            type="String" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/coverDetailsImageView"
-            android:layout_width="250dp"
-            android:layout_height="300dp"
-            android:loadImage="@{thumbnailUrl}"
-            android:scaleType="centerCrop"
+
+        <com.anik.capstone.widgets.HeaderView
+            android:id="@+id/itemHeaderView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

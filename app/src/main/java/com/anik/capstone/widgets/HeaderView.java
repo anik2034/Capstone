@@ -28,16 +28,11 @@ public class HeaderView extends FrameLayout {
         init();
 
     }
+    public void setHeaderName(String name){
+        headerBinding.setHeaderName(name);
+    }
 
     public void init() {
         headerBinding = HeaderBinding.inflate(LayoutInflater.from(getContext()), this, true);
-    }
-
-    public String getHeaderName() {
-        return headerBinding.getHeaderName();
-    }
-
-    public void setHeaderName(String headerName) {
-        headerBinding.setHeaderName(headerName);
     }
 }

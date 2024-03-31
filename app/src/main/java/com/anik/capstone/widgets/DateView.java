@@ -20,6 +20,7 @@ public class DateView extends FrameLayout {
     private DateViewBinding dateViewBinding;
     private TextView editableResultTextView;
     private Calendar selectedDate;
+    private SimpleDateFormat sdf;
 
     public DateView(Context context) {
         super(context);
@@ -37,6 +38,7 @@ public class DateView extends FrameLayout {
     }
 
     private void init() {
+        sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
         dateViewBinding = DateViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
         editableResultTextView = dateViewBinding.editableResultTextView;
 
@@ -56,7 +58,6 @@ public class DateView extends FrameLayout {
     }
 
     private void updateDateText() {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
         dateViewBinding.setDate(sdf.format(selectedDate.getTime()));
     }
 

@@ -1,6 +1,6 @@
 package com.anik.capstone.model.rating;
 
-public class Rating {
+public class RatingModel {
     private float emotionalImpact;
     private float character;
     private float pacing;
@@ -8,11 +8,11 @@ public class Rating {
     private float writingStyle;
     private float overallRating;
 
-    public Rating() {
+    public RatingModel() {
 
     }
 
-    public Rating(float emotionalImpact, float character, float pacing, float storyline, float writingStyle) {
+    public RatingModel(float emotionalImpact, float character, float pacing, float storyline, float writingStyle) {
         this.emotionalImpact = emotionalImpact;
         this.character = character;
         this.pacing = pacing;

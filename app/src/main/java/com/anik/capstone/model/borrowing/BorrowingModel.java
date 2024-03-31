@@ -1,16 +1,18 @@
-package com.anik.capstone.model;
+package com.anik.capstone.model.borrowing;
 
-public class Borrowing {
+import java.util.Objects;
+
+public class BorrowingModel {
     private BorrowingStatus borrowingStatus;
     private String name;
     private String date;
 
 
-    public Borrowing(BorrowingStatus borrowingStatus) {
+    public BorrowingModel(BorrowingStatus borrowingStatus) {
         this.borrowingStatus = borrowingStatus;
     }
 
-    public Borrowing(BorrowingStatus borrowingStatus, String name, String date) {
+    public BorrowingModel(BorrowingStatus borrowingStatus, String name, String date) {
         this.borrowingStatus = borrowingStatus;
         this.name = name;
         this.date = date;
@@ -38,5 +40,18 @@ public class Borrowing {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BorrowingModel that = (BorrowingModel) o;
+        return borrowingStatus == that.borrowingStatus && Objects.equals(name, that.name) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(borrowingStatus, name, date);
     }
 }

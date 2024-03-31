@@ -1,4 +1,4 @@
-package com.anik.capstone.model;
+package com.anik.capstone.model.borrowing;
 
 public enum BorrowingStatus {
     BORROWED,

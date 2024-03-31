@@ -3,29 +3,21 @@ package com.anik.capstone.bookDetails;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.anik.capstone.BR;
 import com.anik.capstone.R;
-import com.anik.capstone.databinding.DateViewBinding;
-import com.anik.capstone.databinding.EditableTextViewBinding;
-import com.anik.capstone.databinding.HeaderBinding;
 import com.anik.capstone.databinding.ListItemDateViewBinding;
 import com.anik.capstone.databinding.ListItemEditableTextViewBinding;
 import com.anik.capstone.databinding.ListItemHeaderViewBinding;
 import com.anik.capstone.databinding.ListItemSpinnerViewBinding;
 import com.anik.capstone.databinding.ListItemStarRatingViewBinding;
 import com.anik.capstone.databinding.ListItemThumbnailViewBinding;
-import com.anik.capstone.databinding.SpinnerViewBinding;
-import com.anik.capstone.databinding.StarRatingViewBinding;
 import com.anik.capstone.model.BookDetailsModel;
-import com.anik.capstone.widgets.HeaderView;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerView.ViewHolder> {
@@ -54,136 +46,168 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         switch (BookDetailsModel.ItemViewType.values()[viewType]) {
             case HEADER:
-                return new HeaderViewHolder(R.layout.list_item_header_view, parent);
+                ListItemHeaderViewBinding headerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_header_view, parent, false);
+                return new HeaderViewHolder(headerViewBinding);
             case EDITABLE_TEXT:
-                return new EditableTextViewHolder(R.layout.list_item_editable_text_view, parent);
+                ListItemEditableTextViewBinding editableTextViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_editable_text_view, parent, false);
+                return new EditableTextViewHolder(editableTextViewBinding);
             case DATE:
-                return new DateViewHolder(R.layout.list_item_date_view, parent);
+                ListItemDateViewBinding dateViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_date_view, parent, false);
+                return new DateViewHolder(dateViewBinding);
             case SPINNER:
-                return new SpinnerViewHolder(R.layout.list_item_spinner_view, parent);
+                ListItemSpinnerViewBinding spinnerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_spinner_view, parent, false);
+                return new SpinnerViewHolder(spinnerViewBinding);
             case STAR_RATING:
-                return new StarRatingViewHolder(R.layout.list_item_star_rating_view, parent);
+                ListItemStarRatingViewBinding starRatingViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_star_rating_view, parent, false);
+                return new StarRatingViewHolder(starRatingViewBinding);
             case THUMBNAIL:
-                return new ThumbnailViewHolder(R.layout.list_item_thumbnail_view, parent);
+                ListItemThumbnailViewBinding thumbnailViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_thumbnail_view, parent, false);
+                return new ThumbnailViewHolder(thumbnailViewBinding);
             default:
-                throw new IllegalArgumentException("Invalid view type");
+                throw new IllegalArgumentException("Invalid view type: " + viewType);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ThumbnailViewHolder) {
-            ((ThumbnailViewHolder) holder).bind(getItem(position), position);
-        } else if (holder instanceof HeaderViewHolder) {
-            ((HeaderViewHolder) holder).bind(getItem(position), position);
+        BookDetailsModel item = getItem(position);
+        switch (item.getItemViewType()) {
+            case HEADER:
+                ((HeaderViewHolder) holder).bind(item);
+                break;
+            case EDITABLE_TEXT:
+                ((EditableTextViewHolder) holder).bind(item);
+                break;
+            case DATE:
+                ((DateViewHolder) holder).bind(item);
+                break;
+            case SPINNER:
+                ((SpinnerViewHolder) holder).bind(item);
+                break;
+            case STAR_RATING:
+                ((StarRatingViewHolder) holder).bind(item);
+                break;
+            case THUMBNAIL:
+                ((ThumbnailViewHolder) holder).bind(item);
+                break;
         }
-        else if (holder instanceof EditableTextViewHolder) {
-            ((EditableTextViewHolder) holder).bind(getItem(position), position);
-        }
-        else if (holder instanceof SpinnerViewHolder) {
-            ((SpinnerViewHolder) holder).bind(getItem(position), position);
-        }
-        else if (holder instanceof DateViewHolder) {
-            ((DateViewHolder) holder).bind(getItem(position), position);
-        }
-        else if (holder instanceof StarRatingViewHolder) {
-            ((StarRatingViewHolder) holder).bind(getItem(position), position);
-        }
-
     }
 
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
+    public class BaseViewHolder extends RecyclerView.ViewHolder {
+
+        public BaseViewHolder(@NonNull ViewDataBinding binding) {
+            super(binding.getRoot());
+        }
+
+        public void bind(BookDetailsModel bookDetailsModel) {}
+    }
+
+    public class HeaderViewHolder extends BaseViewHolder {
         private final ListItemHeaderViewBinding binding;
 
-        public HeaderViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemHeaderViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        public HeaderViewHolder(@NonNull ListItemHeaderViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+
+        @Override
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemHeaderView.setHeaderName(bookDetailsModel.getTitle());
+                binding.executePendingBindings();
             }
         }
     }
 
-    class EditableTextViewHolder extends RecyclerView.ViewHolder {
+    public class EditableTextViewHolder extends BaseViewHolder {
         private final ListItemEditableTextViewBinding binding;
 
-        public EditableTextViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemEditableTextViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        public EditableTextViewHolder(@NonNull ListItemEditableTextViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+        @Override
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemEditableView.setIsEditable(bookDetailsModel.getIsEditable());
                 binding.itemEditableView.setText(bookDetailsModel.getValue());
+                binding.executePendingBindings();
             }
         }
     }
 
-    class DateViewHolder extends RecyclerView.ViewHolder {
+    public class DateViewHolder extends BaseViewHolder {
         private final ListItemDateViewBinding binding;
 
-        public DateViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemDateViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        public DateViewHolder(@NonNull ListItemDateViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+        @Override
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemDateView.setIsEditable(bookDetailsModel.getIsEditable());
                 binding.itemDateView.setDate(bookDetailsModel.getDate());
+                binding.executePendingBindings();
             }
         }
     }
 
-    class SpinnerViewHolder extends RecyclerView.ViewHolder {
+    public class SpinnerViewHolder extends BaseViewHolder {
         private final ListItemSpinnerViewBinding binding;
 
-        public SpinnerViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemSpinnerViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        public SpinnerViewHolder(@NonNull ListItemSpinnerViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemSpinnerView.setIsEditable(bookDetailsModel.getIsEditable());
                 binding.itemSpinnerView.setSelected(bookDetailsModel.getSelectedValue());
+                binding.executePendingBindings();
             }
         }
     }
 
-    class StarRatingViewHolder extends RecyclerView.ViewHolder {
+    public class StarRatingViewHolder extends BaseViewHolder {
         private final ListItemStarRatingViewBinding binding;
 
-        public StarRatingViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemStarRatingViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        public StarRatingViewHolder(@NonNull ListItemStarRatingViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+        @Override
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemStarRatingView.setIsEditable(bookDetailsModel.getIsEditable());
                 binding.itemStarRatingView.setRating(bookDetailsModel.getRating());
                 binding.itemStarRatingView.setRatingType(bookDetailsModel.getTitle());
+                binding.executePendingBindings();
             }
         }
     }
 
-    class ThumbnailViewHolder extends RecyclerView.ViewHolder {
+    public class ThumbnailViewHolder extends BaseViewHolder {
         private final ListItemThumbnailViewBinding binding;
-        public ThumbnailViewHolder(@LayoutRes int layoutRes, ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false));
-            binding = ListItemThumbnailViewBinding.bind(itemView);
+
+        public ThumbnailViewHolder(@NonNull ListItemThumbnailViewBinding binding) {
+            super(binding);
+            this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel, int position) {
+        @Override
+        public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.setThumbnailUrl(bookDetailsModel.getThumbnailUrl());
+                binding.executePendingBindings();
             }
         }
     }

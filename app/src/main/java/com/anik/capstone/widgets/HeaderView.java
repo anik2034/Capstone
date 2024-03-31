@@ -20,19 +20,19 @@ public class HeaderView extends FrameLayout {
     public HeaderView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
-
     }
 
     public HeaderView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-
-    }
-    public void setHeaderName(String name){
-        headerBinding.setHeaderName(name);
     }
 
     public void init() {
         headerBinding = HeaderBinding.inflate(LayoutInflater.from(getContext()), this, true);
     }
+
+    public void setHeaderName(String name){
+        headerBinding.setHeaderName(name);
+    }
+
 }

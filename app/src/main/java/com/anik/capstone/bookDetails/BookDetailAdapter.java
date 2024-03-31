@@ -18,47 +18,37 @@ import com.anik.capstone.databinding.EditableTextViewBinding;
 import com.anik.capstone.databinding.HeaderBinding;
 import com.anik.capstone.databinding.SpinnerViewBinding;
 import com.anik.capstone.databinding.StarRatingViewBinding;
+import com.anik.capstone.model.BookDetailModel;
 
-import java.util.List;
 
+public class BookDetailAdapter extends ListAdapter<BookDetailModel, RecyclerView.ViewHolder> {
 
-public class CustomAdapter extends ListAdapter<ItemType, RecyclerView.ViewHolder> {
-
-    private static final DiffUtil.ItemCallback<ItemType> DIFF_CALLBACK = new DiffUtil.ItemCallback<ItemType>() {
+    private static final DiffUtil.ItemCallback<BookDetailModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookDetailModel>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull ItemType oldItem, @NonNull ItemType newItem) {
-            return oldItem.equals(newItem);
+        public boolean areItemsTheSame(@NonNull BookDetailModel oldItem, @NonNull BookDetailModel newItem) {
+            return oldItem.getItemViewType().equals(newItem.getItemViewType());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ItemType oldItem, @NonNull ItemType newItem) {
+        public boolean areContentsTheSame(@NonNull BookDetailModel oldItem, @NonNull BookDetailModel newItem) {
             return oldItem.equals(newItem);
         }
     };
 
-    private List<Object> data;
-    private boolean isEditable;
-
-
-    public CustomAdapter(List<Object> data, boolean isEditable) {
+    public BookDetailAdapter() {
         super(DIFF_CALLBACK);
-        this.data = data;
-        this.isEditable = isEditable;
-
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).ordinal();
+        return getItem(position).getItemViewType().ordinal();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
-        switch (ItemType.values()[viewType]) {
+        switch (BookDetailModel.ItemViewType.values()[viewType]) {
             case HEADER:
                 return new BaseViewHolder(R.layout.header, parent);
             case EDITABLE_TEXT:
@@ -66,9 +56,11 @@ public class CustomAdapter extends ListAdapter<ItemType, RecyclerView.ViewHolder
             case DATE:
                 return new BaseViewHolder(R.layout.date_view, parent);
             case SPINNER:
-                return new BaseViewHolder(R.layout.spinner_view, parent);
+                return new BaseViewHolder(R.layout.list_item_book_detail_spinner, parent);
             case STAR_RATING:
                 return new BaseViewHolder(R.layout.star_rating_view, parent);
+            case THUMBNAIL:
+                return new ThumbnailViewHolder(R.layout.list_item_thumbnail_view, parent);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
@@ -91,15 +83,14 @@ public class CustomAdapter extends ListAdapter<ItemType, RecyclerView.ViewHolder
             binding = DataBindingUtil.bind(itemView);
         }
 
-        public void bind(ItemType itemType, int position) {
-            Object currentData = data.get(position);
+        public void bind(BookDetailModel bookDetailModel, int position) {
             if (binding != null) {
                 if (binding instanceof HeaderBinding) {
-                    binding.setVariable(BR.headerName, currentData);
+                    binding.setVariable(BR.headerName, bookDetailModel.getTitle());
 
                 } else if (binding instanceof EditableTextViewBinding) {
                     binding.setVariable(BR.text, currentData);
-                    binding.setVariable(BR.isEditable, isEditable);
+                    binding.setVariable(BR.isEditable, bookDetailModel.isEditable());
 
                 } else if (binding instanceof SpinnerViewBinding) {
                     binding.setVariable(BR.item, currentData.toString());
@@ -115,6 +106,17 @@ public class CustomAdapter extends ListAdapter<ItemType, RecyclerView.ViewHolder
                 }
                 binding.executePendingBindings();
             }
+        }
+    }
+
+    class ThumbnailViewHolder extends BaseViewHolder {
+        public ThumbnailViewHolder(int layoutRes, ViewGroup parent) {
+            super(layoutRes, parent);
+        }
+
+        @Override
+        public void bind(ItemType itemType, int position) {
+            super.bind(itemType, position);
         }
     }
 }

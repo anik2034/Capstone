@@ -99,7 +99,7 @@ public class BookDetailsFragment extends Fragment {
             items.add(ItemType.STAR_RATING);
         }
 
-        CustomAdapter adapter = new CustomAdapter(list, bookDetailsViewModel.isNewBook.getValue());
+        BookDetailAdapter adapter = new BookDetailAdapter(list, bookDetailsViewModel.isNewBook.getValue());
         fragmentBookDetailsBinding.recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
         fragmentBookDetailsBinding.recyclerView2.setAdapter(adapter);
 

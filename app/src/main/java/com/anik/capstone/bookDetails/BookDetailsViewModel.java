@@ -36,8 +36,6 @@ public class BookDetailsViewModel extends ViewModel {
         _isNewBook.setValue(isNewBook);
         _bookDetailsList.setValue(bookModelToBookDetailsList());
     }
-
-
     private List<BookDetailsModel> bookModelToBookDetailsList() {
         List<BookDetailsModel> list = new ArrayList<>();
 
@@ -81,7 +79,7 @@ public class BookDetailsViewModel extends ViewModel {
             list.add(valueBorrowingStatus);
             if (borrowingModel.getName() != null) {
                 BookDetailsModel valueBorrowingName = new BookDetailsModel();
-                setEditableText(valueBorrowingName,borrowingModel.getName(),_isNewBook.getValue());
+                setEditableText(valueBorrowingName, borrowingModel.getName(), _isNewBook.getValue());
                 list.add(valueBorrowingName);
             }
             if (borrowingModel.getDate() != null) {
@@ -94,31 +92,31 @@ public class BookDetailsViewModel extends ViewModel {
         }
         if (ratingModel != null) {
             BookDetailsModel headerRating = new BookDetailsModel();
-            setHeader(headerRating,"Rating");
+            setHeader(headerRating, "Rating");
             list.add(headerRating);
 
             BookDetailsModel valueEmotionalImpact = new BookDetailsModel();
-            setStarRating(valueEmotionalImpact,"Emotional Impact",ratingModel.getEmotionalImpact(), _isNewBook.getValue());
+            setStarRating(valueEmotionalImpact, "Emotional Impact", ratingModel.getEmotionalImpact(), _isNewBook.getValue());
             list.add(valueEmotionalImpact);
 
             BookDetailsModel valueCharacter = new BookDetailsModel();
-            setStarRating(valueCharacter,"Character",ratingModel.getCharacter(), _isNewBook.getValue());
-            list.add(valueEmotionalImpact);
+            setStarRating(valueCharacter, "Characters", ratingModel.getCharacter(), _isNewBook.getValue());
+            list.add(valueCharacter);
 
             BookDetailsModel valuePacing = new BookDetailsModel();
-            setStarRating(valuePacing,"Pacing",ratingModel.getPacing(), _isNewBook.getValue());
+            setStarRating(valuePacing, "Pacing", ratingModel.getPacing(), _isNewBook.getValue());
             list.add(valuePacing);
 
             BookDetailsModel valueStoryLine = new BookDetailsModel();
-            setStarRating(valueStoryLine,"Story Line",ratingModel.getStoryline(), _isNewBook.getValue());
+            setStarRating(valueStoryLine, "Story Line", ratingModel.getStoryline(), _isNewBook.getValue());
             list.add(valueStoryLine);
 
             BookDetailsModel valueWritingStyle = new BookDetailsModel();
-            setStarRating(valueWritingStyle,"Writing Style",ratingModel.getWritingStyle(), _isNewBook.getValue());
+            setStarRating(valueWritingStyle, "Writing Style", ratingModel.getWritingStyle(), _isNewBook.getValue());
             list.add(valueWritingStyle);
 
             BookDetailsModel valueOverall = new BookDetailsModel();
-            setStarRating(valueOverall,"Overall Rating",ratingModel.getOverallRating(), _isNewBook.getValue());
+            setStarRating(valueOverall, "Overall Rating", ratingModel.getOverallRating(), _isNewBook.getValue());
             list.add(valueOverall);
         }
         return list;
@@ -142,12 +140,14 @@ public class BookDetailsViewModel extends ViewModel {
         header.setItemViewType(BookDetailsModel.ItemViewType.HEADER);
     }
 
-    private void setStarRating(BookDetailsModel starRating, String title, float rating, boolean isEditable){
+    private void setStarRating(BookDetailsModel starRating, String title, float rating, boolean isEditable) {
         starRating.setItemViewType(BookDetailsModel.ItemViewType.STAR_RATING);
         starRating.setTitle(title);
         starRating.setRating(rating);
         starRating.setIsEditable(isEditable);
     }
 
-
+    public void onItemClicked(BookDetailsModel item){
+        item.setIsEditable(true);
+    }
 }

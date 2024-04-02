@@ -21,4 +21,14 @@
         <item>Title</item>
         <item>ISBN</item>
     </string-array>
+    <string-array name="borrowing_options">
+        <item>Borrowed</item>
+        <item>Not Borrowed</item>
+    </string-array>
+    <string-array name="reading_options">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Paused</item>
+        <item>Finished</item>
+    </string-array>
 </resources>

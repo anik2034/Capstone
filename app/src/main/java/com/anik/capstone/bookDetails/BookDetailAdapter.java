@@ -11,6 +11,7 @@ import com.anik.capstone.databinding.ListItemSpinnerViewBinding;
 import com.anik.capstone.databinding.ListItemStarRatingViewBinding;
 import com.anik.capstone.databinding.ListItemThumbnailViewBinding;
 import com.anik.capstone.model.BookDetailsModel;
+import com.anik.capstone.widgets.StarRatingView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -21,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerView.ViewHolder> {
-
+    private ViewHolderClickListener clickListener;
     private static final DiffUtil.ItemCallback<BookDetailsModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookDetailsModel>() {
 
         @Override
@@ -35,8 +36,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
     };
 
-    public BookDetailAdapter() {
+    public BookDetailAdapter(ViewHolderClickListener clickListener) {
         super(DIFF_CALLBACK);
+        this.clickListener = clickListener;
+
     }
 
     @Override
@@ -54,16 +57,16 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
                 return new HeaderViewHolder(headerViewBinding);
             case EDITABLE_TEXT:
                 ListItemEditableTextViewBinding editableTextViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_editable_text_view, parent, false);
-                return new EditableTextViewHolder(editableTextViewBinding);
+                return new EditableTextViewHolder(editableTextViewBinding, clickListener);
             case DATE:
                 ListItemDateViewBinding dateViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_date_view, parent, false);
-                return new DateViewHolder(dateViewBinding);
+                return new DateViewHolder(dateViewBinding, clickListener);
             case SPINNER:
                 ListItemSpinnerViewBinding spinnerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_spinner_view, parent, false);
-                return new SpinnerViewHolder(spinnerViewBinding);
+                return new SpinnerViewHolder(spinnerViewBinding, clickListener);
             case STAR_RATING:
                 ListItemStarRatingViewBinding starRatingViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_star_rating_view, parent, false);
-                return new StarRatingViewHolder(starRatingViewBinding);
+                return new StarRatingViewHolder(starRatingViewBinding, clickListener);
             case THUMBNAIL:
                 ListItemThumbnailViewBinding thumbnailViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_thumbnail_view, parent, false);
                 return new ThumbnailViewHolder(thumbnailViewBinding);
@@ -126,9 +129,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
     public class EditableTextViewHolder extends BaseViewHolder {
         private final ListItemEditableTextViewBinding binding;
 
-        public EditableTextViewHolder(@NonNull ListItemEditableTextViewBinding binding) {
+        public EditableTextViewHolder(@NonNull ListItemEditableTextViewBinding binding, ViewHolderClickListener clickListener) {
             super(binding);
             this.binding = binding;
+            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
+
         }
 
         @Override
@@ -144,9 +149,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
     public class DateViewHolder extends BaseViewHolder {
         private final ListItemDateViewBinding binding;
 
-        public DateViewHolder(@NonNull ListItemDateViewBinding binding) {
+        public DateViewHolder(@NonNull ListItemDateViewBinding binding,  ViewHolderClickListener clickListener) {
             super(binding);
             this.binding = binding;
+            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
+
         }
 
         @Override
@@ -162,9 +169,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
     public class SpinnerViewHolder extends BaseViewHolder {
         private final ListItemSpinnerViewBinding binding;
 
-        public SpinnerViewHolder(@NonNull ListItemSpinnerViewBinding binding) {
+        public SpinnerViewHolder(@NonNull ListItemSpinnerViewBinding binding, ViewHolderClickListener clickListener) {
             super(binding);
             this.binding = binding;
+            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
+
         }
 
         public void bind(BookDetailsModel bookDetailsModel) {
@@ -179,9 +188,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
     public class StarRatingViewHolder extends BaseViewHolder {
         private final ListItemStarRatingViewBinding binding;
 
-        public StarRatingViewHolder(@NonNull ListItemStarRatingViewBinding binding) {
+        public StarRatingViewHolder(@NonNull ListItemStarRatingViewBinding binding, ViewHolderClickListener clickListener) {
+
             super(binding);
             this.binding = binding;
+            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
         }
 
         @Override
@@ -210,5 +221,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
                 binding.executePendingBindings();
             }
         }
+    }
+
+    interface ViewHolderClickListener {
+        void onItemClick(int position);
+
     }
 }

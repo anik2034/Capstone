@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public class DateView extends FrameLayout {
 
-    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String DATE_PATTERN = "dd/MM/yyyy";
     private DateViewBinding dateViewBinding;
     private TextView editableResultTextView;
     private Calendar selectedDate;
@@ -59,6 +59,7 @@ public class DateView extends FrameLayout {
 
     private void updateDateText() {
         dateViewBinding.setDate(sdf.format(selectedDate.getTime()));
+        dateViewBinding.executePendingBindings();
     }
 
     public String getDate() {
@@ -67,7 +68,7 @@ public class DateView extends FrameLayout {
 
     public void setDate(String dateString) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
+            sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
             selectedDate.setTime(sdf.parse(dateString));
             updateDateText();
         } catch (ParseException e) {

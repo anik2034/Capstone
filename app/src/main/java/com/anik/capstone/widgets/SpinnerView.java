@@ -14,7 +14,6 @@ import com.anik.capstone.databinding.SpinnerViewBinding;
 
 public class SpinnerView extends FrameLayout {
 
-    private Spinner spinner;
     private SpinnerViewBinding spinnerViewBinding;
 
     public SpinnerView(@NonNull Context context) {
@@ -34,16 +33,16 @@ public class SpinnerView extends FrameLayout {
 
     private void init() {
         spinnerViewBinding = SpinnerViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        spinner = spinnerViewBinding.spinner;
+       // spinner = spinnerViewBinding.spinner;
     }
 
-    public void setOptions(int optionsId) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getContext(),
-                optionsId, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-    }
+//    public void setOptions(int optionsId) {
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+//                getContext(),
+//                optionsId, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(adapter);
+//    }
 
     public String getSelected() {
         return spinnerViewBinding.getItem();

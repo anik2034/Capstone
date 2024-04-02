@@ -3,20 +3,17 @@ package com.anik.capstone.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
-
 import com.anik.capstone.databinding.StarRatingViewBinding;
+
+import androidx.annotation.Nullable;
 
 public class StarRatingView extends FrameLayout {
 
     private StarRatingViewBinding starRatingViewBinding;
-
-
+    private StartRatingViewListener listener;
 
     public StarRatingView(Context context) {
         super(context);
@@ -37,6 +34,11 @@ public class StarRatingView extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     private void init() {
         starRatingViewBinding = StarRatingViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        starRatingViewBinding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (listener != null) {
+                listener.onRatingChanged(rating);
+            }
+        });
     }
 
     public float getRating() {
@@ -60,7 +62,13 @@ public class StarRatingView extends FrameLayout {
 
     public void setIsEditable(boolean isEditable) {
         starRatingViewBinding.setIsEditable(isEditable);
-
     }
 
+    public void setListener(StartRatingViewListener listener) {
+        this.listener = listener;
+    }
+
+    public interface StartRatingViewListener {
+        void onRatingChanged(float rating);
+    }
 }

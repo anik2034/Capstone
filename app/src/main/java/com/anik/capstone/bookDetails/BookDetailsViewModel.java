@@ -18,44 +18,48 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class BookDetailsViewModel extends ViewModel {
-
-    private final MutableLiveData<BookModel> _bookModel = new MutableLiveData<>();
+    
     private final MutableLiveData<List<BookDetailsModel>> _bookDetailsList = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
-    public LiveData<BookModel> bookModel = _bookModel;
     public LiveData<List<BookDetailsModel>> bookDetailsList = _bookDetailsList;
-    public LiveData<Boolean> isNewBook = _isNewBook;
-
-
+    private final MutableLiveData<String> _bookTitle = new MutableLiveData<>();
+    public LiveData<String> bookTitle = _bookTitle;
+    private final MutableLiveData<String> _bookAuthor = new MutableLiveData<>();
+    public LiveData<String> bookAuthor = _bookAuthor;
+    private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
+    public LiveData<Integer> updateDetailItem = _updateDetailItem;
+    
+    private final List<BookDetailsModel> bookDetailsModelList = new ArrayList<>();
+    
     @Inject
     public BookDetailsViewModel() {
     }
 
-    public void init(BookModel bookModel, Boolean isNewBook) {
-        _bookModel.setValue(bookModel);
-        _isNewBook.setValue(isNewBook);
-        _bookDetailsList.setValue(bookModelToBookDetailsList());
+    public void init(BookModel bookModel, boolean isNewBook) {
+        setBookDetail(bookModel);
+        createBookDetailsList(bookModel, isNewBook);
     }
-    private List<BookDetailsModel> bookModelToBookDetailsList() {
-        List<BookDetailsModel> list = new ArrayList<>();
+    
+    private void setBookDetail(BookModel bookModel) {
+        _bookTitle.setValue(bookModel.getTitle());
+        _bookAuthor.setValue(bookModel.getAuthor());
+    }
 
-        BookModel bookModel = _bookModel.getValue();
+    private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
         BorrowingModel borrowingModel = bookModel.getBorrowingModel();
         RatingModel ratingModel = bookModel.getRating();
         if (bookModel.getCoverUrl() != null) {
             BookDetailsModel valueUrl = new BookDetailsModel();
             valueUrl.setThumbnailUrl(bookModel.getCoverUrl());
             valueUrl.setItemViewType(BookDetailsModel.ItemViewType.THUMBNAIL);
-            list.add(valueUrl);
-
+            bookDetailsModelList.add(valueUrl);
         }
         if (bookModel.getGenre() != null) {
             BookDetailsModel headerGenre = new BookDetailsModel();
             BookDetailsModel valueGenre = new BookDetailsModel();
             setHeader(headerGenre, "Genre");
-            setEditableText(valueGenre, bookModel.getGenre(), _isNewBook.getValue());
-            list.add(headerGenre);
-            list.add(valueGenre);
+            setEditableText(valueGenre, bookModel.getGenre(), isNewBook);
+            bookDetailsModelList.add(headerGenre);
+            bookDetailsModelList.add(valueGenre);
         }
         if (bookModel.getCoverUrl() != null) {
             BookDetailsModel valueUrl = new BookDetailsModel();
@@ -66,62 +70,61 @@ public class BookDetailsViewModel extends ViewModel {
             BookDetailsModel headerReadingStatus = new BookDetailsModel();
             BookDetailsModel valueReadingStatus = new BookDetailsModel();
             setHeader(headerReadingStatus, "Reading Status");
-            setSelectedValue(valueReadingStatus, bookModel.getReadingStatus().name(), _isNewBook.getValue());
-            list.add(headerReadingStatus);
-            list.add(valueReadingStatus);
+            setSelectedValue(valueReadingStatus, bookModel.getReadingStatus().name(), isNewBook);
+            bookDetailsModelList.add(headerReadingStatus);
+            bookDetailsModelList.add(valueReadingStatus);
         }
         if (borrowingModel != null) {
             BookDetailsModel headerBorrowingStatus = new BookDetailsModel();
             BookDetailsModel valueBorrowingStatus = new BookDetailsModel();
             setHeader(headerBorrowingStatus, "Borrowing Status");
-            setSelectedValue(valueBorrowingStatus, borrowingModel.getBorrowingStatus().name(), _isNewBook.getValue());
-            list.add(headerBorrowingStatus);
-            list.add(valueBorrowingStatus);
+            setSelectedValue(valueBorrowingStatus, borrowingModel.getBorrowingStatus().name(), isNewBook);
+            bookDetailsModelList.add(headerBorrowingStatus);
+            bookDetailsModelList.add(valueBorrowingStatus);
             if (borrowingModel.getName() != null) {
                 BookDetailsModel valueBorrowingName = new BookDetailsModel();
-                setEditableText(valueBorrowingName, borrowingModel.getName(), _isNewBook.getValue());
-                list.add(valueBorrowingName);
+                setEditableText(valueBorrowingName, borrowingModel.getName(), isNewBook);
+                bookDetailsModelList.add(valueBorrowingName);
             }
             if (borrowingModel.getDate() != null) {
                 BookDetailsModel valueBorrowingDate = new BookDetailsModel();
                 valueBorrowingDate.setItemViewType(BookDetailsModel.ItemViewType.DATE);
                 valueBorrowingDate.setDate(borrowingModel.getDate());
-                valueBorrowingDate.setIsEditable(_isNewBook.getValue());
-                list.add(valueBorrowingDate);
+                valueBorrowingDate.setIsEditable(isNewBook);
+                bookDetailsModelList.add(valueBorrowingDate);
             }
         }
         if (ratingModel != null) {
             BookDetailsModel headerRating = new BookDetailsModel();
             setHeader(headerRating, "Rating");
-            list.add(headerRating);
+            bookDetailsModelList.add(headerRating);
 
             BookDetailsModel valueEmotionalImpact = new BookDetailsModel();
-            setStarRating(valueEmotionalImpact, "Emotional Impact", ratingModel.getEmotionalImpact(), _isNewBook.getValue());
-            list.add(valueEmotionalImpact);
+            setStarRating(valueEmotionalImpact, "Emotional Impact", ratingModel.getEmotionalImpact(), isNewBook);
+            bookDetailsModelList.add(valueEmotionalImpact);
 
             BookDetailsModel valueCharacter = new BookDetailsModel();
-            setStarRating(valueCharacter, "Characters", ratingModel.getCharacter(), _isNewBook.getValue());
-            list.add(valueCharacter);
+            setStarRating(valueCharacter, "Characters", ratingModel.getCharacter(), isNewBook);
+            bookDetailsModelList.add(valueCharacter);
 
             BookDetailsModel valuePacing = new BookDetailsModel();
-            setStarRating(valuePacing, "Pacing", ratingModel.getPacing(), _isNewBook.getValue());
-            list.add(valuePacing);
+            setStarRating(valuePacing, "Pacing", ratingModel.getPacing(), isNewBook);
+            bookDetailsModelList.add(valuePacing);
 
             BookDetailsModel valueStoryLine = new BookDetailsModel();
-            setStarRating(valueStoryLine, "Story Line", ratingModel.getStoryline(), _isNewBook.getValue());
-            list.add(valueStoryLine);
+            setStarRating(valueStoryLine, "Story Line", ratingModel.getStoryline(), isNewBook);
+            bookDetailsModelList.add(valueStoryLine);
 
             BookDetailsModel valueWritingStyle = new BookDetailsModel();
-            setStarRating(valueWritingStyle, "Writing Style", ratingModel.getWritingStyle(), _isNewBook.getValue());
-            list.add(valueWritingStyle);
+            setStarRating(valueWritingStyle, "Writing Style", ratingModel.getWritingStyle(), isNewBook);
+            bookDetailsModelList.add(valueWritingStyle);
 
             BookDetailsModel valueOverall = new BookDetailsModel();
-            setStarRating(valueOverall, "Overall Rating", ratingModel.getOverallRating(), _isNewBook.getValue());
-            list.add(valueOverall);
+            setStarRating(valueOverall, "Overall Rating", ratingModel.getOverallRating(), isNewBook);
+            bookDetailsModelList.add(valueOverall);
         }
-        return list;
+        _bookDetailsList.setValue(bookDetailsModelList);
     }
-
 
     private void setEditableText(BookDetailsModel editableText, String value, boolean isEditable) {
         editableText.setItemViewType(BookDetailsModel.ItemViewType.EDITABLE_TEXT);
@@ -147,7 +150,16 @@ public class BookDetailsViewModel extends ViewModel {
         starRating.setIsEditable(isEditable);
     }
 
-    public void onItemClicked(BookDetailsModel item){
-        item.setIsEditable(true);
+    public void onItemClicked(int position) {
+        if (_bookDetailsList.getValue() != null) {
+            BookDetailsModel item = bookDetailsModelList.get(position);
+            item.setIsEditable(true);
+            _bookDetailsList.setValue(bookDetailsModelList);
+            _updateDetailItem.setValue(position);
+        }
+    }
+
+    public void onRatingChanged(float rating, BookDetailsModel bookDetailsModel) {
+
     }
 }

@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
 import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
-import com.anik.capstone.widgets.StarRatingView;
+
+import java.util.ArrayList;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class BookDetailsFragment extends Fragment implements BookDetailAdapter.ViewHolderClickListener {
+public class BookDetailsFragment extends Fragment implements BookDetailAdapter.OnBookDetailItemClickListener {
     public static final String ARG_BOOK_MODEL = "ARG_BOOK_MODEl";
     public static final String ARG_SEARCH_DATA = "ARG_SEARCH_DATA";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
@@ -61,15 +62,28 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.V
         adapter = new BookDetailAdapter(this);
         fragmentBookDetailsBinding.recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
         fragmentBookDetailsBinding.recyclerView2.setAdapter(adapter);
+
         bookDetailsViewModel.bookDetailsList.observe(getViewLifecycleOwner(), bookDetailsModels -> {
-            adapter.submitList(bookDetailsModels);
+            adapter.submitList(new ArrayList<>(bookDetailsModels));
+        });
+
+        bookDetailsViewModel.updateDetailItem.observe(getViewLifecycleOwner(), position -> {
+            adapter.notifyItemChanged(position);
         });
     }
 
     @Override
     public void onItemClick(int position) {
-        BookDetailsModel item = adapter.getCurrentList().get(position);
-        bookDetailsViewModel.onItemClicked(item);
-        adapter.notifyItemChanged(position);
+        bookDetailsViewModel.onItemClicked(position);
+    }
+
+    @Override
+    public void onRatingChanged(float rating, BookDetailsModel bookDetailsModel) {
+        bookDetailsViewModel.onRatingChanged(rating, bookDetailsModel);
+    }
+
+    @Override
+    public void onTextChanged(String newText, BookDetailsModel bookDetailsModel) {
+
     }
 }

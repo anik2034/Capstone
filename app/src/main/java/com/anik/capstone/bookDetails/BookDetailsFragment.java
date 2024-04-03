@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
-import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
 
 import java.util.ArrayList;
@@ -78,12 +77,22 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
     }
 
     @Override
-    public void onRatingChanged(float rating, BookDetailsModel bookDetailsModel) {
-        bookDetailsViewModel.onRatingChanged(rating, bookDetailsModel);
+    public void onRatingChanged(float rating, int position) {
+        bookDetailsViewModel.onRatingChanged(rating, position);
     }
 
     @Override
-    public void onTextChanged(String newText, BookDetailsModel bookDetailsModel) {
+    public void onTextChanged(String newText, int position) {
+        bookDetailsViewModel.onTextChanged(newText, position);
+    }
 
+    @Override
+    public void onDateChanged(String date, int position) {
+        bookDetailsViewModel.onDateChanged(date, position);
+    }
+
+    @Override
+    public void onOptionChanged(String selected, int position) {
+        bookDetailsViewModel.onOptionChanged(selected, position);
     }
 }

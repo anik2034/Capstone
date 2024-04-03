@@ -3,16 +3,6 @@ package com.anik.capstone.bookDetails;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.anik.capstone.R;
-import com.anik.capstone.databinding.ListItemDateViewBinding;
-import com.anik.capstone.databinding.ListItemEditableTextViewBinding;
-import com.anik.capstone.databinding.ListItemHeaderViewBinding;
-import com.anik.capstone.databinding.ListItemSpinnerViewBinding;
-import com.anik.capstone.databinding.ListItemStarRatingViewBinding;
-import com.anik.capstone.databinding.ListItemThumbnailViewBinding;
-import com.anik.capstone.model.BookDetailsModel;
-import com.anik.capstone.widgets.StarRatingView;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -20,9 +10,17 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anik.capstone.R;
+import com.anik.capstone.databinding.ListItemDateViewBinding;
+import com.anik.capstone.databinding.ListItemEditableTextViewBinding;
+import com.anik.capstone.databinding.ListItemHeaderViewBinding;
+import com.anik.capstone.databinding.ListItemOptionsViewBinding;
+import com.anik.capstone.databinding.ListItemStarRatingViewBinding;
+import com.anik.capstone.databinding.ListItemThumbnailViewBinding;
+import com.anik.capstone.model.BookDetailsModel;
+
 
 public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerView.ViewHolder> {
-    final OnBookDetailItemClickListener clickListener;
     private static final DiffUtil.ItemCallback<BookDetailsModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookDetailsModel>() {
 
         @Override
@@ -32,9 +30,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
         @Override
         public boolean areContentsTheSame(@NonNull BookDetailsModel oldItem, @NonNull BookDetailsModel newItem) {
-            return oldItem.getItemViewType().equals(newItem.getItemViewType()) && oldItem.getIsEditable() == newItem.getIsEditable();
+            return oldItem.getItemViewType().equals(newItem.getItemViewType()) && oldItem.isEditable() == newItem.isEditable();
         }
     };
+    final OnBookDetailItemClickListener clickListener;
 
     public BookDetailAdapter(OnBookDetailItemClickListener clickListener) {
         super(DIFF_CALLBACK);
@@ -62,8 +61,8 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
                 ListItemDateViewBinding dateViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_date_view, parent, false);
                 return new DateViewHolder(dateViewBinding, clickListener);
             case SPINNER:
-                ListItemSpinnerViewBinding spinnerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_spinner_view, parent, false);
-                return new SpinnerViewHolder(spinnerViewBinding, clickListener);
+                ListItemOptionsViewBinding spinnerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_options_view, parent, false);
+                return new OptionsViewHolder(spinnerViewBinding, clickListener);
             case STAR_RATING:
                 ListItemStarRatingViewBinding starRatingViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_star_rating_view, parent, false);
                 return new StarRatingViewHolder(starRatingViewBinding, clickListener);
@@ -89,7 +88,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
                 ((DateViewHolder) holder).bind(item);
                 break;
             case SPINNER:
-                ((SpinnerViewHolder) holder).bind(item);
+                ((OptionsViewHolder) holder).bind(item);
                 break;
             case STAR_RATING:
                 ((StarRatingViewHolder) holder).bind(item);
@@ -106,7 +105,8 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             super(binding.getRoot());
         }
 
-        public void bind(BookDetailsModel bookDetailsModel) {}
+        public void bind(BookDetailsModel bookDetailsModel) {
+        }
     }
 
     public class HeaderViewHolder extends BaseViewHolder {
@@ -139,8 +139,9 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         @Override
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
-                binding.itemEditableView.setIsEditable(bookDetailsModel.getIsEditable());
+                binding.itemEditableView.setIsEditable(bookDetailsModel.isEditable());
                 binding.itemEditableView.setText(bookDetailsModel.getValue());
+                binding.itemEditableView.setListener(text -> clickListener.onTextChanged(text, getAdapterPosition()));
                 binding.executePendingBindings();
             }
         }
@@ -159,17 +160,18 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         @Override
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
-                binding.itemDateView.setIsEditable(bookDetailsModel.getIsEditable());
+                binding.itemDateView.setIsEditable(bookDetailsModel.isEditable());
                 binding.itemDateView.setDate(bookDetailsModel.getDate());
+                binding.itemDateView.setListener(date -> clickListener.onDateChanged(date, getAdapterPosition()));
                 binding.executePendingBindings();
             }
         }
     }
 
-    public class SpinnerViewHolder extends BaseViewHolder {
-        private final ListItemSpinnerViewBinding binding;
+    public class OptionsViewHolder extends BaseViewHolder {
+        private final ListItemOptionsViewBinding binding;
 
-        public SpinnerViewHolder(@NonNull ListItemSpinnerViewBinding binding, OnBookDetailItemClickListener clickListener) {
+        public OptionsViewHolder(@NonNull ListItemOptionsViewBinding binding, OnBookDetailItemClickListener clickListener) {
             super(binding);
             this.binding = binding;
             itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
@@ -178,8 +180,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
-                binding.itemSpinnerView.setIsEditable(bookDetailsModel.getIsEditable());
-                binding.itemSpinnerView.setSelected(bookDetailsModel.getSelectedValue());
+                binding.itemOptionsView.setIsEditable(bookDetailsModel.isEditable());
+                binding.itemOptionsView.setSelected(bookDetailsModel.getSelectedValue());
+                binding.itemOptionsView.setOptions(bookDetailsModel.getOptions());
+                binding.itemOptionsView.setListener(selected -> clickListener.onOptionChanged(selected, getAdapterPosition()));
                 binding.executePendingBindings();
             }
         }
@@ -197,10 +201,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         @Override
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
-                binding.itemStarRatingView.setIsEditable(bookDetailsModel.getIsEditable());
+                binding.itemStarRatingView.setIsEditable(bookDetailsModel.isEditable());
                 binding.itemStarRatingView.setRating(bookDetailsModel.getRating());
                 binding.itemStarRatingView.setRatingType(bookDetailsModel.getTitle());
-                binding.itemStarRatingView.setListener(rating -> clickListener.onRatingChanged(rating, bookDetailsModel));
+                binding.itemStarRatingView.setListener(rating -> clickListener.onRatingChanged(rating, getAdapterPosition()));
                 binding.executePendingBindings();
             }
         }
@@ -222,10 +226,15 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             }
         }
     }
-
     public interface OnBookDetailItemClickListener {
         void onItemClick(int position);
-        void onRatingChanged(float rating, BookDetailsModel bookDetailsModel);
-        void onTextChanged(String newText, BookDetailsModel bookDetailsModel);
+
+        void onRatingChanged(float rating, int position);
+
+        void onTextChanged(String newText, int position);
+
+        void onDateChanged(String date, int position);
+
+        void onOptionChanged(String selected, int position);
     }
 }

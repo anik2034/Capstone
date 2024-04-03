@@ -4,8 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.anik.capstone.databinding.DateViewBinding;
 
@@ -14,13 +14,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DateView extends FrameLayout {
+public class DateView extends FrameLayout implements DatePickerDialog.OnDateSetListener {
 
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private DateViewBinding dateViewBinding;
-    private TextView editableResultTextView;
     private Calendar selectedDate;
     private SimpleDateFormat sdf;
+    private DateViewListener listener;
 
     public DateView(Context context) {
         super(context);
@@ -40,26 +40,21 @@ public class DateView extends FrameLayout {
     private void init() {
         sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
         dateViewBinding = DateViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        editableResultTextView = dateViewBinding.editableResultTextView;
 
         selectedDate = Calendar.getInstance();
 
-        editableResultTextView.setOnClickListener(v -> showDatePickerDialog());
+        dateViewBinding.resultTextView.setOnClickListener(v -> {
+            showDatePickerDialog();
+        });
     }
 
     private void showDatePickerDialog() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
-            selectedDate.set(Calendar.YEAR, year);
-            selectedDate.set(Calendar.MONTH, month);
-            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateDateText();
-        }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                this,
+                selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
-    }
 
-    private void updateDateText() {
-        dateViewBinding.setDate(sdf.format(selectedDate.getTime()));
-        dateViewBinding.executePendingBindings();
     }
 
     public String getDate() {
@@ -68,9 +63,9 @@ public class DateView extends FrameLayout {
 
     public void setDate(String dateString) {
         try {
-            sdf = new SimpleDateFormat(DATE_PATTERN, Locale.getDefault());
             selectedDate.setTime(sdf.parse(dateString));
-            updateDateText();
+            dateViewBinding.setDate(dateString);
+            dateViewBinding.executePendingBindings();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -82,5 +77,20 @@ public class DateView extends FrameLayout {
 
     public void setIsEditable(boolean isEditable) {
         dateViewBinding.setIsEditable(isEditable);
+    }
+
+    public void setListener(DateViewListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        setDate(dayOfMonth + "/" + month + "/" + year);
+        listener.onDateChanged(dateViewBinding.getDate());
+    }
+
+
+    public interface DateViewListener {
+        void onDateChanged(String date);
     }
 }

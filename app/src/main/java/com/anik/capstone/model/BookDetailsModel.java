@@ -1,5 +1,6 @@
 package com.anik.capstone.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class BookDetailsModel {
@@ -11,6 +12,7 @@ public class BookDetailsModel {
     private ItemViewType itemViewType;
     private String thumbnailUrl;
     private boolean isEditable;
+    private List<String> options;
 
     public String getTitle() {
         return title;
@@ -68,12 +70,20 @@ public class BookDetailsModel {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public boolean getIsEditable() {
+    public boolean isEditable() {
         return isEditable;
     }
 
-    public void setIsEditable(boolean editable) {
+    public void setEditable(boolean editable) {
         isEditable = editable;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 
     @Override
@@ -81,12 +91,12 @@ public class BookDetailsModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsModel that = (BookDetailsModel) o;
-        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl);
+        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(options, that.options);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, itemViewType, thumbnailUrl, isEditable);
+        return Objects.hash(title, value, selectedValue, rating, date, itemViewType, thumbnailUrl, isEditable, options);
     }
 
     public enum ItemViewType {

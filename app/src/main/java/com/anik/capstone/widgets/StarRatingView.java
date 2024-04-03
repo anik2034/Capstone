@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.anik.capstone.databinding.StarRatingViewBinding;
@@ -34,9 +35,9 @@ public class StarRatingView extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     private void init() {
         starRatingViewBinding = StarRatingViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        starRatingViewBinding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (listener != null) {
-                listener.onRatingChanged(rating);
+        starRatingViewBinding.saveImageButton.setOnClickListener(v -> {
+            if(listener != null){
+                listener.onRatingChanged(starRatingViewBinding.ratingBar.getRating());
             }
         });
     }

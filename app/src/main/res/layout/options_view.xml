@@ -6,7 +6,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="isEditable" type="boolean" />
-        <variable name="item" type="String" />
+        <variable name="selected" type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,10 +19,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
-            android:text="@{item}"
+            android:text="@{selected}"
+            android:textSize="16sp"
             android:visibility="@{isEditable ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,16 @@
     <string name="permission_dialog_title">Permission Required</string>
     <string name="permission_dialog_body">This app needs camera permission for barcode scanning.
         Please grant the permission in the app settings, otherwise continue with manual input.</string>
+    <string name="genre">Genre</string>
+    <string name="reading_status">Reading Status</string>
+    <string name="borrowing_status">Borrowing Status</string>
+    <string name="rating">Rating</string>
+    <string name="emotional_impact">Emotional Impact</string>
+    <string name="characters">Characters</string>
+    <string name="pacing">Pacing</string>
+    <string name="story_line">Story Line</string>
+    <string name="writing_style">Writing Style</string>
+    <string name="overall_rating">Overall Rating</string>
 
     <string-array name="search_options">
         <item>Title</item>

@@ -36,6 +36,9 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
+    private MutableLiveData<Boolean> _onNavigate =  new MutableLiveData<>();
+    public LiveData<Boolean> onNavigate = _onNavigate;
+
 
     @Inject
     protected BookListViewModel(ResourceHelper resourceHelper) {
@@ -46,6 +49,7 @@ public class BookListViewModel extends ViewModel {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
         _layoutViewType.setValue(layoutViewType);
+        _onNavigate.setValue(false);
 
         loadBooks();
     }

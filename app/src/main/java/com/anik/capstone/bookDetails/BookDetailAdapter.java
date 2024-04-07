@@ -103,6 +103,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
         public BaseViewHolder(@NonNull ViewDataBinding binding) {
             super(binding.getRoot());
+            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
         }
 
         public void bind(BookDetailsModel bookDetailsModel) {
@@ -132,8 +133,6 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         public EditableTextViewHolder(@NonNull ListItemEditableTextViewBinding binding, OnBookDetailItemClickListener clickListener) {
             super(binding);
             this.binding = binding;
-            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
-
         }
 
         @Override
@@ -153,8 +152,6 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         public DateViewHolder(@NonNull ListItemDateViewBinding binding, OnBookDetailItemClickListener clickListener) {
             super(binding);
             this.binding = binding;
-            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
-
         }
 
         @Override
@@ -174,15 +171,13 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         public OptionsViewHolder(@NonNull ListItemOptionsViewBinding binding, OnBookDetailItemClickListener clickListener) {
             super(binding);
             this.binding = binding;
-            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
-
         }
 
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemOptionsView.setIsEditable(bookDetailsModel.isEditable());
                 binding.itemOptionsView.setSelected(bookDetailsModel.getSelectedValue());
-                binding.itemOptionsView.setOptions(bookDetailsModel.getOptions());
+                binding.itemOptionsView.setOptions(bookDetailsModel.getSingleSelection());
                 binding.itemOptionsView.setListener(selected -> clickListener.onOptionChanged(selected, getAdapterPosition()));
                 binding.executePendingBindings();
             }
@@ -195,7 +190,6 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         public StarRatingViewHolder(@NonNull ListItemStarRatingViewBinding binding, OnBookDetailItemClickListener clickListener) {
             super(binding);
             this.binding = binding;
-            itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
         }
 
         @Override

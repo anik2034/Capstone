@@ -94,7 +94,9 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
     }
     @Override
     public void onItemClick(BookModel bookModel) {
-        ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModel, false);
+        bookListViewModel.onNavigate.observe(getViewLifecycleOwner(), onNavigate ->{
+            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModel, onNavigate);
+        });
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

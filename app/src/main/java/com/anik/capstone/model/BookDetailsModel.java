@@ -12,7 +12,7 @@ public class BookDetailsModel {
     private ItemViewType itemViewType;
     private String thumbnailUrl;
     private boolean isEditable;
-    private List<String> options;
+    private List<String> singleSelection;
 
     public String getTitle() {
         return title;
@@ -78,12 +78,12 @@ public class BookDetailsModel {
         isEditable = editable;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public List<String> getSingleSelection() {
+        return singleSelection;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setSingleSelection(List<String> singleSelection) {
+        this.singleSelection = singleSelection;
     }
 
     @Override
@@ -91,12 +91,12 @@ public class BookDetailsModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsModel that = (BookDetailsModel) o;
-        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(options, that.options);
+        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, itemViewType, thumbnailUrl, isEditable, options);
+        return Objects.hash(title, value, selectedValue, rating, date, itemViewType, thumbnailUrl, isEditable, singleSelection);
     }
 
     public enum ItemViewType {

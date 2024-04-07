@@ -144,7 +144,7 @@ public class BookDetailsViewModel extends ViewModel {
 
     private void setSelectedValue(BookDetailsModel options, List<String> optionsList, String selected, boolean isEditable) {
         options.setItemViewType(BookDetailsModel.ItemViewType.SPINNER);
-        options.setOptions(optionsList);
+        options.setSingleSelection(optionsList);
         options.setSelectedValue(selected);
         options.setEditable(isEditable);
     }
@@ -162,50 +162,43 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onItemClicked(int position) {
-        if (_bookDetailsList.getValue() != null) {
-            BookDetailsModel item = bookDetailsModelList.get(position);
-            item.setEditable(true);
-            _bookDetailsList.setValue(bookDetailsModelList);
-            _updateDetailItem.setValue(position);
-        }
+        updateBookDetails(position, true, null, null, null, null);
     }
 
     public void onRatingChanged(float rating, int position) {
-        if (_bookDetailsList.getValue() != null) {
-            BookDetailsModel item = bookDetailsModelList.get(position);
-            item.setEditable(false);
-            item.setRating(rating);
-            _bookDetailsList.setValue(bookDetailsModelList);
-            _updateDetailItem.setValue(position);
-        }
+     updateBookDetails(position,false, rating, null, null, null);
     }
 
 
     public void onTextChanged(String text, int position) {
-        if (_bookDetailsList.getValue() != null) {
-            BookDetailsModel item = bookDetailsModelList.get(position);
-            item.setEditable(false);
-            item.setValue(text);
-            _bookDetailsList.setValue(bookDetailsModelList);
-            _updateDetailItem.setValue(position);
-        }
+        updateBookDetails(position,false, null, text, null, null);
     }
 
     public void onDateChanged(String date, int position) {
-        if (_bookDetailsList.getValue() != null) {
-            BookDetailsModel item = bookDetailsModelList.get(position);
-            item.setEditable(false);
-            item.setDate(date);
-            _bookDetailsList.setValue(bookDetailsModelList);
-            _updateDetailItem.setValue(position);
-        }
+        updateBookDetails(position,false, null, null, date, null);
+
     }
 
     public void onOptionChanged(String selected, int position) {
-        if (_bookDetailsList.getValue() != null) {
+        updateBookDetails(position,false, null, null, null, selected);
+
+    }
+    private void updateBookDetails(int position, boolean editable, Float rating, String text, String date, String selected) {
+        if (_bookDetailsList.getValue() != null && position >= 0 && position < bookDetailsModelList.size()) {
             BookDetailsModel item = bookDetailsModelList.get(position);
-            item.setEditable(false);
-            item.setSelectedValue(selected);
+            item.setEditable(editable);
+            if (rating != null) {
+                item.setRating(rating);
+            }
+            if (text != null) {
+                item.setValue(text);
+            }
+            if (date != null) {
+                item.setDate(date);
+            }
+            if (selected != null) {
+                item.setSelectedValue(selected);
+            }
             _bookDetailsList.setValue(bookDetailsModelList);
             _updateDetailItem.setValue(position);
         }

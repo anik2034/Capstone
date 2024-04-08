@@ -81,6 +81,9 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
             adapter.submitList(books);
         });
 
+        bookListViewModel.onNavigate.observe(getViewLifecycleOwner(), navigateData ->
+            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, navigateData.bookModel, navigateData.isNewBook));
+
         bookListViewModel.layoutViewType.observe(getViewLifecycleOwner(), layoutViewType -> {
             switch (layoutViewType) {
                 case GRID:
@@ -94,9 +97,7 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
     }
     @Override
     public void onItemClick(BookModel bookModel) {
-        bookListViewModel.onNavigate.observe(getViewLifecycleOwner(), onNavigate ->{
-            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModel, onNavigate);
-        });
+        bookListViewModel.onItemClick(bookModel);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

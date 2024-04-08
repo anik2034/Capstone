@@ -184,7 +184,7 @@ public class BookDetailsViewModel extends ViewModel {
 
     }
     private void updateBookDetails(int position, boolean editable, Float rating, String text, String date, String selected) {
-        if (_bookDetailsList.getValue() != null && position >= 0 && position < bookDetailsModelList.size()) {
+        if (position >= 0 && position < bookDetailsModelList.size()) {
             BookDetailsModel item = bookDetailsModelList.get(position);
             item.setEditable(editable);
             if (rating != null) {

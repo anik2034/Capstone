@@ -59,8 +59,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
 
 
         adapter = new BookDetailAdapter(this);
-        fragmentBookDetailsBinding.recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
-        fragmentBookDetailsBinding.recyclerView2.setAdapter(adapter);
+        fragmentBookDetailsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        fragmentBookDetailsBinding.recyclerView.setAdapter(adapter);
 
         bookDetailsViewModel.bookDetailsList.observe(getViewLifecycleOwner(), bookDetailsModels -> {
             adapter.submitList(new ArrayList<>(bookDetailsModels));

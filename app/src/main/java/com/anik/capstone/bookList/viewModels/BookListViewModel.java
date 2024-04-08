@@ -36,8 +36,8 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
-    private MutableLiveData<Boolean> _onNavigate =  new MutableLiveData<>();
-    public LiveData<Boolean> onNavigate = _onNavigate;
+    private MutableLiveData<NavigateData> _onNavigate =  new MutableLiveData<>();
+    public LiveData<NavigateData> onNavigate = _onNavigate;
 
 
     @Inject
@@ -49,7 +49,6 @@ public class BookListViewModel extends ViewModel {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
         _layoutViewType.setValue(layoutViewType);
-        _onNavigate.setValue(false);
 
         loadBooks();
     }
@@ -70,4 +69,19 @@ public class BookListViewModel extends ViewModel {
     public void loadBooks() {
 
     }
+
+    public void onItemClick(BookModel bookModel) {
+        _onNavigate.setValue(new NavigateData(bookModel, false));
+    }
+
+    public class NavigateData {
+        public final BookModel bookModel;
+        public final boolean isNewBook;
+
+        public NavigateData(BookModel bookModel, boolean isNewBook) {
+            this.bookModel = bookModel;
+            this.isNewBook = isNewBook;
+        }
+    }
 }
+

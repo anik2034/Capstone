@@ -18,11 +18,13 @@ import com.anik.capstone.bookList.viewModels.RecommendationsViewModel;
 import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
+import com.anik.capstone.home.HomeActivity;
+import com.anik.capstone.model.BookModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class BookListFragment extends Fragment {
+public class BookListFragment extends Fragment implements  BookRecyclerAdapter.OnItemClickListener{
     public static final String ARG_DISPLAY_TYPE = "ARG_DISPLAY_TYPE";
     private static final int GRID_COLUMN_COUNT = 3;
     private BookListViewModel bookListViewModel;
@@ -70,7 +72,7 @@ public class BookListFragment extends Fragment {
 
         fragmentBookListBinding.setViewModel(bookListViewModel);
 
-        adapter = new BookRecyclerAdapter();
+        adapter = new BookRecyclerAdapter(this);
 
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
@@ -78,6 +80,9 @@ public class BookListFragment extends Fragment {
         bookListViewModel.books.observe(getViewLifecycleOwner(), books -> {
             adapter.submitList(books);
         });
+
+        bookListViewModel.onNavigate.observe(getViewLifecycleOwner(), navigateData ->
+            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, navigateData.bookModel, navigateData.isNewBook));
 
         bookListViewModel.layoutViewType.observe(getViewLifecycleOwner(), layoutViewType -> {
             switch (layoutViewType) {
@@ -89,6 +94,10 @@ public class BookListFragment extends Fragment {
                     break;
             }
         });
+    }
+    @Override
+    public void onItemClick(BookModel bookModel) {
+        bookListViewModel.onItemClick(bookModel);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

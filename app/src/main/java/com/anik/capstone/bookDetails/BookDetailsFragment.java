@@ -50,6 +50,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         bookDetailsViewModel = new ViewModelProvider(this).get(BookDetailsViewModel.class);
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(ARG_SEARCH_DATA) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
+            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_DATA));
             //create book model based on search
             // bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_DATA), bundle.getBoolean(ARG_IS_NEW_BOOK));
         } else if (bundle != null && bundle.containsKey(ARG_BOOK_MODEL) && bundle.containsKey(ARG_IS_NEW_BOOK)) {

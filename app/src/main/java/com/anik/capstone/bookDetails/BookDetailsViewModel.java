@@ -5,7 +5,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.anik.capstone.BookResponse;
+import com.anik.capstone.BookService;
 import com.anik.capstone.R;
+import com.anik.capstone.RetrofitClient;
 import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ReadingStatus;
@@ -20,6 +23,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @HiltViewModel
 public class BookDetailsViewModel extends ViewModel {
@@ -202,5 +208,29 @@ public class BookDetailsViewModel extends ViewModel {
             _bookDetailsList.setValue(bookDetailsModelList);
             _updateDetailItem.setValue(position);
         }
+    }
+
+    public void search(String query){
+        BookService bookService = RetrofitClient.getClient().create(BookService.class);
+
+        Call<BookResponse> call = bookService.search(query);
+
+        call.enqueue(new Callback<BookResponse>() {
+            @Override
+            public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {
+                if (response.isSuccessful()) {
+                    // Handle successful response
+                    BookResponse bookModel = response.body();
+                    // Process the single item
+                } else {
+                    // Handle error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BookResponse> call, Throwable t) {
+                // Handle failure
+            }
+        });;
     }
 }

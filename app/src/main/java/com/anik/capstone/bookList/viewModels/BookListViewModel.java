@@ -74,7 +74,7 @@ public class BookListViewModel extends ViewModel {
         _onNavigate.setValue(new NavigateData(bookModel, false));
     }
 
-    public class NavigateData {
+    public static class NavigateData {
         public final BookModel bookModel;
         public final boolean isNewBook;
 

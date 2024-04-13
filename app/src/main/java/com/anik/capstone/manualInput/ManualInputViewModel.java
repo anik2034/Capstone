@@ -4,13 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.anik.capstone.BookService;
+import com.anik.capstone.RetrofitClient;
 import com.anik.capstone.addNewBook.BarcodeScannerViewModel;
 import com.anik.capstone.home.DisplayType;
+import com.anik.capstone.model.BookModel;
 import com.anik.capstone.util.ResourceHelper;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @HiltViewModel
 public class ManualInputViewModel extends ViewModel {
@@ -48,4 +54,8 @@ public class ManualInputViewModel extends ViewModel {
     public void onSearchButtonClicked(String searchQuery) {
         _nextScreen.setValue(new BarcodeScannerViewModel.NextScreenData(DisplayType.BOOK_DETAILS, searchQuery));
     }
+
+
+
+
 }

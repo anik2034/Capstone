@@ -1,4 +1,4 @@
-package com.anik.capstone;
+package com.anik.capstone.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,4 +17,6 @@ public class RetrofitClient {
         }
         return retrofit;
     }
+
+    public static BookService bookService = RetrofitClient.getClient().create(BookService.class);
 }

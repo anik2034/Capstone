@@ -1,6 +1,6 @@
-package com.anik.capstone;
+package com.anik.capstone.network;
 
-import com.anik.capstone.model.BookModel;
+import com.anik.capstone.network.responses.BookResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

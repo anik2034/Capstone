@@ -1,14 +1,16 @@
 package com.anik.capstone.bookDetails;
 
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.anik.capstone.BookResponse;
-import com.anik.capstone.BookService;
+import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.R;
-import com.anik.capstone.RetrofitClient;
+import com.anik.capstone.network.RetrofitClient;
 import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ReadingStatus;
@@ -211,13 +213,12 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void search(String query){
-        BookService bookService = RetrofitClient.getClient().create(BookService.class);
-
-        Call<BookResponse> call = bookService.search(query);
+        Call<BookResponse> call = RetrofitClient.bookService.search(query);
 
         call.enqueue(new Callback<BookResponse>() {
             @Override
-            public void onResponse(Call<BookResponse> call, Response<BookResponse> response) {
+            public void onResponse(@NonNull Call<BookResponse> call, @NonNull Response<BookResponse> response) {
+                Log.i(BookDetailsModel.class.getSimpleName(), "onResponse: " + response.body());
                 if (response.isSuccessful()) {
                     // Handle successful response
                     BookResponse bookModel = response.body();
@@ -228,7 +229,8 @@ public class BookDetailsViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<BookResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
+                Log.e(BookDetailsModel.class.getSimpleName(), "onFailure: " + t.getMessage());
                 // Handle failure
             }
         });;

@@ -48,15 +48,5 @@
             android:text="@{bookModel.author}"
             app:layout_constraintStart_toEndOf="@+id/coverImageView"
             app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
-
-        <TextView
-            android:id="@+id/genreTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@{bookModel.genre}"
-            app:layout_constraintStart_toEndOf="@+id/coverImageView"
-            app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

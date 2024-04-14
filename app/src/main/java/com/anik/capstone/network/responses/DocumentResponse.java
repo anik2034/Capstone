@@ -11,11 +11,25 @@ public class DocumentResponse {
     private List<String> subjectList;
     @SerializedName("title")
     private String title;
+    @SerializedName("isbn")
+    private List<String> isbnList;
 
-    public DocumentResponse(List<String> authorList, List<String> subjectList, String title) {
+    @SerializedName("cover_i")
+    private int coverId;
+    public DocumentResponse(List<String> authorList, List<String> subjectList, String title, List<String> isbnList, int coverId) {
         this.authorList = authorList;
         this.subjectList = subjectList;
         this.title = title;
+        this.isbnList = isbnList;
+        this.coverId = coverId;
+    }
+
+    public List<String> getIsbnList() {
+        return isbnList;
+    }
+
+    public void setIsbnList(List<String> isbnList) {
+        this.isbnList = isbnList;
     }
 
     public List<String> getAuthorList() {
@@ -34,11 +48,19 @@ public class DocumentResponse {
         this.subjectList = subjectList;
     }
 
-    public String getTitleList() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitleList(String title) {
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getCoverId() {
+        return coverId;
+    }
+
+    public void setCoverId(int coverId) {
+        this.coverId = coverId;
     }
 }

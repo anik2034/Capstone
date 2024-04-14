@@ -6,12 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
+import com.anik.capstone.home.HomeActivity;
 import com.anik.capstone.model.BookModel;
+import com.anik.capstone.network.BookSearchCallback;
 
 import java.util.ArrayList;
 
@@ -20,16 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class BookDetailsFragment extends Fragment implements BookDetailAdapter.OnBookDetailItemClickListener {
     public static final String ARG_BOOK_MODEL = "ARG_BOOK_MODEl";
-    public static final String ARG_SEARCH_DATA = "ARG_SEARCH_DATA";
+    public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
+    public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailAdapter adapter;
 
 
-    public static BookDetailsFragment newInstance(String ISBN, boolean isNewBook, BookModel bookModel) {
+    public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, BookModel bookModel) {
         Bundle args = new Bundle();
-        args.putString(ARG_BOOK_MODEL, ISBN);
+        args.putString(searchType, data);
         args.putSerializable(ARG_BOOK_MODEL, bookModel);
         args.putBoolean(ARG_IS_NEW_BOOK, isNewBook);
         BookDetailsFragment fragment = new BookDetailsFragment();
@@ -49,15 +54,38 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         fragmentBookDetailsBinding.setLifecycleOwner(this);
         bookDetailsViewModel = new ViewModelProvider(this).get(BookDetailsViewModel.class);
         Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(ARG_SEARCH_DATA) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_DATA));
-            //create book model based on search
-            // bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_DATA), bundle.getBoolean(ARG_IS_NEW_BOOK));
+        fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
+
+        if (bundle != null && bundle.containsKey(ARG_SEARCH_ISBN) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
+            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_ISBN), ARG_SEARCH_ISBN, new BookSearchCallback() {
+                @Override
+                public void onBookFound(BookModel bookModel) {
+                    bookDetailsViewModel.init(bookModel, bundle.getBoolean(ARG_IS_NEW_BOOK));
+                }
+
+                @Override
+                public void onSearchFailed() {
+                    showBookNotFoundDialog();
+                }
+            });
+
+        } else if (bundle != null && bundle.containsKey(ARG_SEARCH_TITLE) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
+            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_TITLE), ARG_SEARCH_TITLE, new BookSearchCallback() {
+                @Override
+                public void onBookFound(BookModel bookModel) {
+                    bookDetailsViewModel.init(bookModel, bundle.getBoolean(ARG_IS_NEW_BOOK));
+
+                }
+
+                @Override
+                public void onSearchFailed() {
+                    showBookNotFoundDialog();
+                }
+            });
+
         } else if (bundle != null && bundle.containsKey(ARG_BOOK_MODEL) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
             bookDetailsViewModel.init((BookModel) bundle.getSerializable(ARG_BOOK_MODEL), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
-        fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
-
 
         adapter = new BookDetailAdapter(this);
         fragmentBookDetailsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -70,6 +98,26 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         bookDetailsViewModel.updateDetailItem.observe(getViewLifecycleOwner(), position -> {
             adapter.notifyItemChanged(position);
         });
+    }
+
+    private void showBookNotFoundDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle(R.string.book_not_found);
+        builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
+
+
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(null, true));
+
+        builder.setNegativeButton(R.string.no, (dialog, which) -> {
+            dialog.dismiss();
+            ((HomeActivity) getActivity()).back();
+            ((HomeActivity) getActivity()).back();
+
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

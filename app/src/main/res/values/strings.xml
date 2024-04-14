@@ -26,6 +26,13 @@
     <string name="story_line">Story Line</string>
     <string name="writing_style">Writing Style</string>
     <string name="overall_rating">Overall Rating</string>
+    <string name="title">Title</string>
+    <string name="isbn">ISBN</string>
+    <string name="book_not_found">Book Not Found</string>
+    <string name="sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it">Sorry, we couldn\'t find your book. Would you like to manually add it</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="borrowed_by">Borrowed by</string>
 
     <string-array name="search_options">
         <item>Title</item>

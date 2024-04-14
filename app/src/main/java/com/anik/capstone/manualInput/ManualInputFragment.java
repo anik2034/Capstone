@@ -8,8 +8,6 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
+import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.databinding.FragmentManualInputBinding;
 import com.anik.capstone.home.HomeActivity;
 
@@ -26,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class ManualInputFragment extends Fragment {
     private ManualInputViewModel manualInputViewModel;
     private FragmentManualInputBinding fragmentManualInputBinding;
+    private String searchType;
 
     public static ManualInputFragment newInstance() {
         return new ManualInputFragment();
@@ -43,18 +43,36 @@ public class ManualInputFragment extends Fragment {
         fragmentManualInputBinding.setLifecycleOwner(this);
         manualInputViewModel = new ViewModelProvider(this).get(ManualInputViewModel.class);
         manualInputViewModel.init();
-        setUpSpinner();
+
 
         fragmentManualInputBinding.cameraImageButton.setOnClickListener(v -> manualInputViewModel.onCameraButtonClicked()
         );
 
-        fragmentManualInputBinding.searchButton.setOnClickListener(v ->
-                manualInputViewModel.onSearchButtonClicked(fragmentManualInputBinding.searchEditText.getText().toString()));
+        fragmentManualInputBinding.searchButton.setOnClickListener(v -> {
+            if (manualInputViewModel.searchType.getValue() != null) {
+                manualInputViewModel.onSearchButtonClicked(fragmentManualInputBinding.searchEditText.getText().toString());
+            } else {
+                showSearchTypeDialog();
+            }
+
+
+        });
 
         manualInputViewModel.onShowPermissionRequestDialog.observe(getViewLifecycleOwner(), onShowPermissionRequestDialog -> {
             if (onShowPermissionRequestDialog) {
                 showPermissionRequestDialog();
             }
+        });
+
+        fragmentManualInputBinding.isbnRadioButton.setOnClickListener(v -> {
+            manualInputViewModel.onSearchTypeClicked(BookDetailsFragment.ARG_SEARCH_ISBN);
+        });
+        fragmentManualInputBinding.titleRadioButton.setOnClickListener(v -> {
+            manualInputViewModel.onSearchTypeClicked(BookDetailsFragment.ARG_SEARCH_TITLE);
+        });
+
+        manualInputViewModel.searchType.observe(getViewLifecycleOwner(), searchType -> {
+            this.searchType = searchType;
         });
 
         manualInputViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
@@ -71,22 +89,11 @@ public class ManualInputFragment extends Fragment {
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true, searchType);
         });
 
     }
 
-    private void setUpSpinner() {
-        Spinner searchOption = fragmentManualInputBinding.searchBySpinner;
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.search_options,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        searchOption.setAdapter(adapter);
-
-    }
 
     private void showPermissionRequestDialog() {
         Context context = requireContext();
@@ -105,6 +112,24 @@ public class ManualInputFragment extends Fragment {
         });
 
         builder.setNegativeButton(R.string.cancel_option, (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showSearchTypeDialog() {
+        Context context = requireContext();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle("Search Type Required");
+        builder.setMessage("Please select the search type");
+
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
 
         AlertDialog dialog = builder.create();
         dialog.show();

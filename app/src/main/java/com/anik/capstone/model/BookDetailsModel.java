@@ -103,7 +103,7 @@ public class BookDetailsModel {
         HEADER,
         EDITABLE_TEXT,
         DATE,
-        SPINNER,
+        POP_UP,
         STAR_RATING,
         THUMBNAIL
     }

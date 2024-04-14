@@ -60,7 +60,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             case DATE:
                 ListItemDateViewBinding dateViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_date_view, parent, false);
                 return new DateViewHolder(dateViewBinding, clickListener);
-            case SPINNER:
+            case POP_UP:
                 ListItemOptionsViewBinding spinnerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_options_view, parent, false);
                 return new OptionsViewHolder(spinnerViewBinding, clickListener);
             case STAR_RATING:
@@ -87,7 +87,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             case DATE:
                 ((DateViewHolder) holder).bind(item);
                 break;
-            case SPINNER:
+            case POP_UP:
                 ((OptionsViewHolder) holder).bind(item);
                 break;
             case STAR_RATING:

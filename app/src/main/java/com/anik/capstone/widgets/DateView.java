@@ -67,7 +67,8 @@ public class DateView extends FrameLayout implements DatePickerDialog.OnDateSetL
             dateViewBinding.setDate(dateString);
             dateViewBinding.executePendingBindings();
         } catch (ParseException e) {
-            e.printStackTrace();
+            dateViewBinding.setDate(DATE_PATTERN);
+
         }
     }
 

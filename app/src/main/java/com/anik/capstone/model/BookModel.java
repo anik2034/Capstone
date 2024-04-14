@@ -15,49 +15,54 @@ public class BookModel implements Serializable {
     private String coverUrl;
     private String author;
     private String title;
-    private String genre;
+    private List<String> genres;
     private ReadingStatus readingStatus;
     private BorrowingModel borrowing;
     private RatingModel rating;
 
-
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
         this.title = title;
-        this.genre = genre;
+        this.genres = genres;
         this.readingStatus = readingStatus;
         this.borrowing = borrowing;
         this.rating = rating;
     }
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
         this.title = title;
-        this.genre = genre;
-        this.readingStatus = readingStatus;
+        this.genres = genres;
+    }
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, RatingModel rating) {
+        this.ISBN = ISBN;
+        this.coverUrl = coverUrl;
+        this.author = author;
+        this.title = title;
+        this.genres = genres;
+        this.rating = rating;
     }
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
         this.title = title;
-        this.genre = genre;
-    }
-
-    public BookModel(String ISBN, String coverUrl, String author, String title, String genre, ReadingStatus readingStatus, BorrowingModel borrowing) {
-        this.ISBN = ISBN;
-        this.coverUrl = coverUrl;
-        this.author = author;
-        this.title = title;
-        this.genre = genre;
+        this.genres = genres;
         this.readingStatus = readingStatus;
         this.borrowing = borrowing;
-        this.rating = new RatingModel();
+    }
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
     public String getCoverUrl() {
@@ -84,12 +89,12 @@ public class BookModel implements Serializable {
         this.title = title;
     }
 
-    public String getGenre() {
-        return genre;
+    public List<String> getGenres() {
+        return genres;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 
     public ReadingStatus getReadingStatus() {
@@ -100,20 +105,12 @@ public class BookModel implements Serializable {
         this.readingStatus = readingStatus;
     }
 
-    public BorrowingModel getBorrowingModel() {
+    public BorrowingModel getBorrowing() {
         return borrowing;
     }
 
-    public void setBorrowingModel(BorrowingModel borrowing) {
+    public void setBorrowing(BorrowingModel borrowing) {
         this.borrowing = borrowing;
-    }
-
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
     }
 
     public RatingModel getRating() {
@@ -122,14 +119,5 @@ public class BookModel implements Serializable {
 
     public void setRating(RatingModel rating) {
         this.rating = rating;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookModel bookModel = (BookModel) o;
-        return Objects.equals(ISBN, bookModel.ISBN) && Objects.equals(coverUrl, bookModel.coverUrl) && Objects.equals(author, bookModel.author) && Objects.equals(title, bookModel.title) && Objects.equals(genre, bookModel.genre) && readingStatus == bookModel.readingStatus && borrowing == bookModel.borrowing;
     }
 }

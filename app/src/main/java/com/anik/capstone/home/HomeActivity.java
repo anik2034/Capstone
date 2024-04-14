@@ -86,11 +86,15 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, String searchType) {
         Bundle args = new Bundle();
-        args.putString(BookDetailsFragment.ARG_SEARCH_DATA, searchData);
+        args.putString(searchType, searchData);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
         navController.navigate(fragmentId, args);
+    }
+
+    public void back(){
+        navController.popBackStack();
     }
 
 

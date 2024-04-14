@@ -15,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class ManualInputViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
 
+    private MutableLiveData<String> _searchType =  new MutableLiveData<>();
+    public LiveData<String> searchType = _searchType;
     private final MutableLiveData<BarcodeScannerViewModel.NextScreenData> _nextScreen = new MutableLiveData<>();
     public LiveData<BarcodeScannerViewModel.NextScreenData> nextScreen = _nextScreen;
 
@@ -45,7 +47,12 @@ public class ManualInputViewModel extends ViewModel {
     }
 
     public void onSearchButtonClicked(String searchQuery) {
+
         _nextScreen.setValue(new BarcodeScannerViewModel.NextScreenData(DisplayType.BOOK_DETAILS, searchQuery));
+    }
+
+    public void onSearchTypeClicked(String searchType){
+        _searchType.setValue(searchType);
     }
 
 }

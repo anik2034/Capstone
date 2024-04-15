@@ -74,7 +74,6 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
                 @Override
                 public void onBookFound(BookModel bookModel) {
                     bookDetailsViewModel.init(bookModel, bundle.getBoolean(ARG_IS_NEW_BOOK));
-
                 }
 
                 @Override
@@ -86,6 +85,10 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         } else if (bundle != null && bundle.containsKey(ARG_BOOK_MODEL) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
             bookDetailsViewModel.init((BookModel) bundle.getSerializable(ARG_BOOK_MODEL), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
+
+        bookDetailsViewModel.progressBarVisibility.observe(getViewLifecycleOwner(), progressBarVisibility ->{
+            fragmentBookDetailsBinding.progressBar.setVisibility(progressBarVisibility);
+        });
 
         adapter = new BookDetailAdapter(this);
         fragmentBookDetailsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -1,10 +1,14 @@
 package com.anik.capstone.bookDetails;
 
 
+import android.opengl.Visibility;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookDetailsModel;
@@ -36,6 +40,10 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<BookDetailsModel>> _bookDetailsList = new MutableLiveData<>();
     public LiveData<List<BookDetailsModel>> bookDetailsList = _bookDetailsList;
 
+    private final MutableLiveData<Integer> _progressBarVisibility = new MutableLiveData<>();
+    public LiveData<Integer> progressBarVisibility = _progressBarVisibility;
+
+
     private final MutableLiveData<String> _bookTitle = new MutableLiveData<>();
     public LiveData<String> bookTitle = _bookTitle;
 
@@ -54,6 +62,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void init(BookModel bookModel, boolean isNewBook) {
+        _progressBarVisibility.setValue(View.GONE);
         setBookDetail(bookModel);
         createBookDetailsList(bookModel, isNewBook);
     }
@@ -233,6 +242,7 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void search(String query, String searchType, BookSearchCallback callback) {
         Call<BookResponse> call = null;
+        _progressBarVisibility.setValue(View.VISIBLE);
         if (searchType.equals(BookDetailsFragment.ARG_SEARCH_ISBN)) {
             call = RetrofitClient.bookService.searchByISBN(query);
         } else if (searchType.equals(BookDetailsFragment.ARG_SEARCH_TITLE)) {
@@ -243,6 +253,7 @@ public class BookDetailsViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<BookResponse> call, @NonNull Response<BookResponse> response) {
                 BookResponse bookResponse = response.body();
+                _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel bookModel = BookMaker.convertToBook(bookResponse);
                     callback.onBookFound(bookModel);

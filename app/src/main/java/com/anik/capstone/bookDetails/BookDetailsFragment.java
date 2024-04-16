@@ -1,10 +1,17 @@
 package com.anik.capstone.bookDetails;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -15,7 +22,6 @@ import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
 import com.anik.capstone.home.HomeActivity;
 import com.anik.capstone.model.BookModel;
-import com.anik.capstone.network.BookSearchCallback;
 
 import java.util.ArrayList;
 
@@ -27,10 +33,10 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
     public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
     public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
+    private static final int GALLERY_REQUEST_CODE = 103;
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailAdapter adapter;
-
 
     public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, BookModel bookModel) {
         Bundle args = new Bundle();
@@ -57,37 +63,19 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
 
         if (bundle != null && bundle.containsKey(ARG_SEARCH_ISBN) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_ISBN), ARG_SEARCH_ISBN, new BookSearchCallback() {
-                @Override
-                public void onBookFound(BookModel bookModel) {
-                    bookDetailsViewModel.init(bookModel, bundle.getBoolean(ARG_IS_NEW_BOOK));
-                }
-
-                @Override
-                public void onSearchFailed() {
-                    showBookNotFoundDialog();
-                }
-            });
-
+            bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_ISBN), SearchType.SEARCH_BY_ISBN);
         } else if (bundle != null && bundle.containsKey(ARG_SEARCH_TITLE) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.search(bundle.getString(ARG_SEARCH_TITLE), ARG_SEARCH_TITLE, new BookSearchCallback() {
-                @Override
-                public void onBookFound(BookModel bookModel) {
-                    bookDetailsViewModel.init(bookModel, bundle.getBoolean(ARG_IS_NEW_BOOK));
-                }
-
-                @Override
-                public void onSearchFailed() {
-                    showBookNotFoundDialog();
-                }
-            });
+            bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_TITLE), SearchType.SEARCH_BY_TITLE);
 
         } else if (bundle != null && bundle.containsKey(ARG_BOOK_MODEL) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
             bookDetailsViewModel.init((BookModel) bundle.getSerializable(ARG_BOOK_MODEL), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
 
-        bookDetailsViewModel.progressBarVisibility.observe(getViewLifecycleOwner(), progressBarVisibility ->{
-            fragmentBookDetailsBinding.progressBar.setVisibility(progressBarVisibility);
+        bookDetailsViewModel.searchedBook.observe(getViewLifecycleOwner(), searchedBook -> {
+            bookDetailsViewModel.init(searchedBook, bundle.getBoolean(ARG_IS_NEW_BOOK));
+        });
+        bookDetailsViewModel.isSuccessful.observe(getViewLifecycleOwner(), isSuccessful -> {
+            if (!isSuccessful) showBookNotFoundDialog();
         });
 
         adapter = new BookDetailAdapter(this);
@@ -109,17 +97,15 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         builder.setTitle(R.string.book_not_found);
         builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
 
-
         builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(null, true));
-
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
             dialog.dismiss();
-            ((HomeActivity) getActivity()).back();
             ((HomeActivity) getActivity()).back();
 
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
         dialog.show();
     }
 

@@ -8,7 +8,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit;
 
-    public static Retrofit getClient() {
+    public Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -18,5 +18,5 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    public static BookService bookService = RetrofitClient.getClient().create(BookService.class);
+    public BookService bookService = this.getClient().create(BookService.class);
 }

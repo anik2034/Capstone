@@ -3,6 +3,8 @@ package com.anik.capstone.home;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -12,6 +14,7 @@ import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
 import com.anik.capstone.model.BookModel;
+import com.anik.capstone.util.NextScreenData;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -19,7 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
-
+    private final MutableLiveData<NextScreenData> _nextScreen = new MutableLiveData<>();
+    public LiveData<NextScreenData> nextScreen = _nextScreen;
     private NavController navController;
 
     @Override

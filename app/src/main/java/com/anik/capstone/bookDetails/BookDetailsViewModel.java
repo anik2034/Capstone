@@ -1,7 +1,6 @@
 package com.anik.capstone.bookDetails;
 
 
-import android.opengl.Visibility;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -9,18 +8,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-
 import com.anik.capstone.R;
+import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ReadingStatus;
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.borrowing.BorrowingStatus;
 import com.anik.capstone.model.rating.RatingModel;
-import com.anik.capstone.network.BookSearchCallback;
 import com.anik.capstone.network.RetrofitClient;
 import com.anik.capstone.network.responses.BookMaker;
 import com.anik.capstone.network.responses.BookResponse;
+import com.anik.capstone.util.NextScreenData;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
@@ -43,44 +42,59 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _progressBarVisibility = new MutableLiveData<>();
     public LiveData<Integer> progressBarVisibility = _progressBarVisibility;
 
-
-    private final MutableLiveData<String> _bookTitle = new MutableLiveData<>();
-    public LiveData<String> bookTitle = _bookTitle;
-
-    private final MutableLiveData<String> _bookAuthor = new MutableLiveData<>();
-    public LiveData<String> bookAuthor = _bookAuthor;
+    private final MutableLiveData<Boolean> _isSuccessful = new MutableLiveData<>();
+    public LiveData<Boolean> isSuccessful = _isSuccessful;
 
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
+    private final MutableLiveData<BookModel> _searchedBook = new MutableLiveData<>();
+    public LiveData<BookModel> searchedBook = _searchedBook;
+
+    private final MutableLiveData<Boolean> _onShowPermissionRequestDialog = new MutableLiveData<>();
+    public LiveData<Boolean> onShowPermissionRequestDialog = _onShowPermissionRequestDialog;
+
+    private final MutableLiveData<Boolean> _galleryStart = new MutableLiveData<>();
+    public LiveData<Boolean> galleryStart = _galleryStart;
+
     private ResourceHelper resourceHelper;
     private final List<BookDetailsModel> bookDetailsModelList = new ArrayList<>();
+    private final BookMaker bookMaker;
+    private final RetrofitClient retrofitClient;
 
     @Inject
-    public BookDetailsViewModel(ResourceHelper resourceHelper) {
+    public BookDetailsViewModel(ResourceHelper resourceHelper, BookMaker bookMaker, RetrofitClient retrofitClient) {
         this.resourceHelper = resourceHelper;
+        this.bookMaker = bookMaker;
+        this.retrofitClient = retrofitClient;
+
     }
 
     public void init(BookModel bookModel, boolean isNewBook) {
         _progressBarVisibility.setValue(View.GONE);
-        setBookDetail(bookModel);
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    private void setBookDetail(BookModel bookModel) {
-        if (bookModel != null) {
-            _bookTitle.setValue(bookModel.getTitle());
-            _bookAuthor.setValue(bookModel.getAuthor());
-        }
+    public void init(String query, SearchType searchType) {
+        _progressBarVisibility.setValue(View.GONE);
+        search(query, searchType);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
-        BorrowingModel borrowingModel = new BorrowingModel(BorrowingStatus.NOT_BORROWED, resourceHelper.getString(R.string.borrowed_by), "");
+        BorrowingModel borrowingModel = new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
         ReadingStatus readingStatus = ReadingStatus.NOT_STARTED;
         RatingModel ratingModel = new RatingModel();
         String url = "sample";
+        String title = "Title";
+        String author = "Author";
         List<String> genres = Arrays.asList("Genre 1", "Genre 2");
         if (bookModel != null) {
+            if (bookModel.getTitle() != null) {
+                title = bookModel.getTitle();
+            }
+            if (bookModel.getAuthor() != null) {
+                author = bookModel.getAuthor();
+            }
             if (bookModel.getCoverUrl() != null) {
                 url = bookModel.getCoverUrl();
             }
@@ -92,14 +106,23 @@ public class BookDetailsViewModel extends ViewModel {
             }
             if (bookModel.getBorrowing() != null) {
                 borrowingModel = bookModel.getBorrowing();
-                if(borrowingModel.getBorrowingStatus() == null) borrowingModel.setBorrowingStatus(BorrowingStatus.NOT_BORROWED);
-                if(borrowingModel.getDate() == null) borrowingModel.setDate("");
-                if(borrowingModel.getName() == null) borrowingModel.setName(resourceHelper.getString(R.string.borrowed_by));
+                if (borrowingModel.getBorrowingStatus() == null)
+                    borrowingModel.setBorrowingStatus(BorrowingStatus.NOT_BORROWED);
+                if (borrowingModel.getDate() == null) borrowingModel.setDate("");
+                if (borrowingModel.getName() == null)
+                    borrowingModel.setName("");
             }
             if (bookModel.getRating() != null) {
                 ratingModel = bookModel.getRating();
             }
         }
+        BookDetailsModel valueTitle = new BookDetailsModel();
+        setEditableText(valueTitle, true, title, isNewBook);
+        bookDetailsModelList.add(valueTitle);
+
+        BookDetailsModel valueAuthor = new BookDetailsModel();
+        setEditableText(valueAuthor, true, author, isNewBook);
+        bookDetailsModelList.add(valueAuthor);
 
         BookDetailsModel valueUrl = new BookDetailsModel();
         valueUrl.setThumbnailUrl(url);
@@ -110,7 +133,7 @@ public class BookDetailsViewModel extends ViewModel {
             BookDetailsModel headerGenre = new BookDetailsModel();
             BookDetailsModel valueGenre = new BookDetailsModel();
             setHeader(headerGenre, resourceHelper.getString(R.string.genre));
-            setEditableText(valueGenre, genre, isNewBook);
+            setEditableText(valueGenre, false, genre, isNewBook);
             bookDetailsModelList.add(headerGenre);
             bookDetailsModelList.add(valueGenre);
         }
@@ -129,8 +152,12 @@ public class BookDetailsViewModel extends ViewModel {
         bookDetailsModelList.add(headerBorrowingStatus);
         bookDetailsModelList.add(valueBorrowingStatus);
 
+        BookDetailsModel headerBorrowingDetails = new BookDetailsModel();
+        setHeader(headerBorrowingDetails, "Borrowing Details");
+
         BookDetailsModel valueBorrowingName = new BookDetailsModel();
-        setEditableText(valueBorrowingName, borrowingModel.getName(), isNewBook);
+        setEditableText(valueBorrowingName, false, borrowingModel.getName(), isNewBook);
+        bookDetailsModelList.add(headerBorrowingDetails);
         bookDetailsModelList.add(valueBorrowingName);
 
         BookDetailsModel valueBorrowingDate = new BookDetailsModel();
@@ -171,8 +198,9 @@ public class BookDetailsViewModel extends ViewModel {
 
     }
 
-    private void setEditableText(BookDetailsModel editableText, String value, boolean isEditable) {
+    private void setEditableText(BookDetailsModel editableText, boolean isCenter, String value, boolean isEditable) {
         editableText.setItemViewType(BookDetailsModel.ItemViewType.EDITABLE_TEXT);
+        editableText.setCenter(isCenter);
         editableText.setValue(value);
         editableText.setEditable(isEditable);
     }
@@ -240,32 +268,38 @@ public class BookDetailsViewModel extends ViewModel {
         }
     }
 
-    public void search(String query, String searchType, BookSearchCallback callback) {
+
+    private void search(String query, SearchType searchType) {
         Call<BookResponse> call = null;
         _progressBarVisibility.setValue(View.VISIBLE);
-        if (searchType.equals(BookDetailsFragment.ARG_SEARCH_ISBN)) {
-            call = RetrofitClient.bookService.searchByISBN(query);
-        } else if (searchType.equals(BookDetailsFragment.ARG_SEARCH_TITLE)) {
-            call = RetrofitClient.bookService.searchByTitle(query);
+        switch (searchType) {
+            case SEARCH_BY_ISBN:
+                call = retrofitClient.bookService.searchByISBN(query);
+                break;
+            case SEARCH_BY_TITLE:
+                call = retrofitClient.bookService.searchByTitle(query);
+                break;
         }
-
         call.enqueue(new Callback<BookResponse>() {
             @Override
             public void onResponse(@NonNull Call<BookResponse> call, @NonNull Response<BookResponse> response) {
                 BookResponse bookResponse = response.body();
                 _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
-                    BookModel bookModel = BookMaker.convertToBook(bookResponse);
-                    callback.onBookFound(bookModel);
+                    BookModel searchedBook = bookMaker.convertToBook(bookResponse);
+                    _searchedBook.setValue(searchedBook); // Update LiveData
+                    _isSuccessful.setValue(true);
                 } else {
-                    callback.onSearchFailed();
+                    _isSuccessful.setValue(false);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
-                callback.onSearchFailed();
+                _isSuccessful.setValue(false);
             }
         });
     }
+
 }
+

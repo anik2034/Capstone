@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 import com.anik.capstone.bookList.LayoutViewType;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.util.ResourceHelper;
+import com.anik.capstone.util.SingleLiveData;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,7 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
-    private MutableLiveData<NavigateData> _onNavigate =  new MutableLiveData<>();
+    private SingleLiveData<NavigateData> _onNavigate =  new SingleLiveData<>();
     public LiveData<NavigateData> onNavigate = _onNavigate;
 
 
@@ -74,7 +75,7 @@ public class BookListViewModel extends ViewModel {
         _onNavigate.setValue(new NavigateData(bookModel, false));
     }
 
-    public static class NavigateData {
+    public  class NavigateData {
         public final BookModel bookModel;
         public final boolean isNewBook;
 

@@ -64,14 +64,6 @@ public class OptionsView extends FrameLayout {
         optionsViewBinding.setSelected(selected);
     }
 
-    public boolean getIsEditable() {
-        return optionsViewBinding.getIsEditable();
-    }
-
-    public void setIsEditable(boolean isEditable) {
-        optionsViewBinding.setIsEditable(isEditable);
-    }
-
     public void setListener(OptionsViewListener listener) {
         this.listener = listener;
     }

@@ -1,5 +1,6 @@
 package com.anik.capstone.bookDetails;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -139,6 +140,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
                 binding.itemEditableView.setIsEditable(bookDetailsModel.isEditable());
+                binding.itemEditableView.setCenter(bookDetailsModel.isCenter());
                 binding.itemEditableView.setText(bookDetailsModel.getValue());
                 binding.itemEditableView.setListener(text -> clickListener.onTextChanged(text, getAdapterPosition()));
                 binding.executePendingBindings();
@@ -175,7 +177,6 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
         public void bind(BookDetailsModel bookDetailsModel) {
             if (binding != null) {
-                binding.itemOptionsView.setIsEditable(bookDetailsModel.isEditable());
                 binding.itemOptionsView.setSelected(bookDetailsModel.getSelectedValue());
                 binding.itemOptionsView.setOptions(bookDetailsModel.getSingleSelection());
                 binding.itemOptionsView.setListener(selected -> clickListener.onOptionChanged(selected, getAdapterPosition()));
@@ -231,4 +232,6 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
         void onOptionChanged(String selected, int position);
     }
+
+
 }

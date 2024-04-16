@@ -1,5 +1,8 @@
 package com.anik.capstone.manualInput;
 
+import static com.anik.capstone.home.DisplayType.BARCODE_SCANNER;
+import static com.anik.capstone.home.DisplayType.BOOK_DETAILS;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -55,7 +58,6 @@ public class ManualInputFragment extends Fragment {
                 showSearchTypeDialog();
             }
 
-
         });
 
         manualInputViewModel.onShowPermissionRequestDialog.observe(getViewLifecycleOwner(), onShowPermissionRequestDialog -> {
@@ -101,7 +103,7 @@ public class ManualInputFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         builder.setTitle(R.string.permission_dialog_title);
-        builder.setMessage(R.string.permission_dialog_body);
+        builder.setMessage(R.string.camera_permission_dialog_body);
 
 
         builder.setPositiveButton(R.string.settings_option, (dialog, which) -> {
@@ -118,18 +120,14 @@ public class ManualInputFragment extends Fragment {
     }
 
     private void showSearchTypeDialog() {
-        Context context = requireContext();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-        builder.setTitle("Search Type Required");
-        builder.setMessage("Please select the search type");
+        builder.setTitle(R.string.search_type_required);
+        builder.setMessage(R.string.please_select_the_search_type);
 
-
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             dialog.dismiss();
         });
-
 
         AlertDialog dialog = builder.create();
         dialog.show();

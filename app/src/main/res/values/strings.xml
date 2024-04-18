@@ -14,8 +14,10 @@
     <string name="settings_option">Go to Settings</string>
     <string name="cancel_option">Cancel</string>
     <string name="permission_dialog_title">Permission Required</string>
-    <string name="permission_dialog_body">This app needs camera permission for barcode scanning.
+    <string name="camera_permission_dialog_body">This app needs camera permission for barcode scanning.
         Please grant the permission in the app settings, otherwise continue with manual input.</string>
+    <string name="gallery_permission_dialog_body">This app needs gallery permission for barcode scanning.
+        Please grant the permission in the app settings, otherwise continue with sample cover.</string>
     <string name="genre">Genre</string>
     <string name="reading_status">Reading Status</string>
     <string name="borrowing_status">Borrowing Status</string>
@@ -26,6 +28,16 @@
     <string name="story_line">Story Line</string>
     <string name="writing_style">Writing Style</string>
     <string name="overall_rating">Overall Rating</string>
+    <string name="title">Title</string>
+    <string name="isbn">ISBN</string>
+    <string name="book_not_found">Book Not Found</string>
+    <string name="sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it">Sorry, we couldn\'t find your book. Would you like to manually add it</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="borrowed_by">Borrowed by</string>
+    <string name="search_type_required">Search Type Required</string>
+    <string name="please_select_the_search_type">Please select the search type</string>
+    <string name="ok">OK</string>
 
     <string-array name="search_options">
         <item>Title</item>

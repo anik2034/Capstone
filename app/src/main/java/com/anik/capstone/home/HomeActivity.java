@@ -19,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private HomeViewModel viewModel;
-
     private NavController navController;
 
     @Override
@@ -86,11 +85,15 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, String searchType) {
         Bundle args = new Bundle();
-        args.putString(BookDetailsFragment.ARG_BOOK_MODEL, searchData);
+        args.putString(searchType, searchData);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
         navController.navigate(fragmentId, args);
+    }
+
+    public void back() {
+        navController.popBackStack();
     }
 
 

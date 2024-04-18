@@ -36,6 +36,7 @@ public class EditableTextView extends FrameLayout {
     }
 
     public void init() {
+        setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
         imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         editableTextViewBinding = EditableTextViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
         editableTextViewBinding.saveImageButton.setOnClickListener(v -> save());
@@ -53,7 +54,6 @@ public class EditableTextView extends FrameLayout {
             imm.hideSoftInputFromWindow(getWindowToken(), 0);
         }
     }
-
     public String getText() {
         return editableTextViewBinding.getText();
     }
@@ -70,6 +70,13 @@ public class EditableTextView extends FrameLayout {
         editableTextViewBinding.setIsEditable(isEditable);
     }
 
+    public void setCenter(boolean isCenter){
+        editableTextViewBinding.setIsCenter(isCenter);
+    }
+
+    public boolean getCenter(){
+        return editableTextViewBinding.getIsCenter();
+    }
 
     public void setListener(EditableTextViewListener listener) {
         this.listener = listener;

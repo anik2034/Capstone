@@ -1,5 +1,7 @@
 package com.anik.capstone.model;
 
+import android.widget.TextView;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +11,7 @@ public class BookDetailsModel {
     private String selectedValue;
     private float rating;
     private String date;
+    private boolean isCenter;
     private ItemViewType itemViewType;
     private String thumbnailUrl;
     private boolean isEditable;
@@ -86,24 +89,32 @@ public class BookDetailsModel {
         this.singleSelection = singleSelection;
     }
 
+    public boolean isCenter() {
+        return isCenter;
+    }
+
+    public void setCenter(boolean center) {
+        isCenter = center;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsModel that = (BookDetailsModel) o;
-        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
+        return Float.compare(rating, that.rating) == 0 && isCenter == that.isCenter && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, itemViewType, thumbnailUrl, isEditable, singleSelection);
+        return Objects.hash(title, value, selectedValue, rating, date, isCenter, itemViewType, thumbnailUrl, isEditable, singleSelection);
     }
 
     public enum ItemViewType {
         HEADER,
         EDITABLE_TEXT,
         DATE,
-        SPINNER,
+        POP_UP,
         STAR_RATING,
         THUMBNAIL
     }

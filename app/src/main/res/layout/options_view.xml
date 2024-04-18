@@ -5,7 +5,6 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="isEditable" type="boolean" />
         <variable name="selected" type="String" />
     </data>
 
@@ -23,7 +22,6 @@
             android:layout_marginBottom="4dp"
             android:text="@{selected}"
             android:textSize="16sp"
-            android:visibility="@{isEditable ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

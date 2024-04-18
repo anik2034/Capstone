@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.anik.capstone.home.DisplayType;
+import com.anik.capstone.home.NextScreenData;
+import com.anik.capstone.util.SingleLiveData;
 
 import javax.inject.Inject;
 
@@ -13,10 +15,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class BarcodeScannerViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _cameraStart = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> _permissionRequest = new MutableLiveData<>();
-    private final MutableLiveData<NextScreenData> _nextScreen = new MutableLiveData<>();
     public LiveData<Boolean> cameraStart = _cameraStart;
+
+    private final MutableLiveData<Boolean> _permissionRequest = new MutableLiveData<>();
     public LiveData<Boolean> permissionRequest = _permissionRequest;
+
+    private final SingleLiveData<NextScreenData> _nextScreen = new SingleLiveData<>();
     public LiveData<NextScreenData> nextScreen = _nextScreen;
 
 
@@ -43,23 +47,5 @@ public class BarcodeScannerViewModel extends ViewModel {
 
     public void onManualInputButtonClicked() {
         _nextScreen.setValue(new NextScreenData(DisplayType.MANUAL_INPUT, null));
-    }
-
-    public static class NextScreenData {
-        private final DisplayType nextScreen;
-        private final String data;
-
-        public NextScreenData(DisplayType nextScreen, String data) {
-            this.nextScreen = nextScreen;
-            this.data = data;
-        }
-
-        public DisplayType getNextScreen() {
-            return nextScreen;
-        }
-
-        public String getData() {
-            return data;
-        }
     }
 }

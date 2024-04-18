@@ -37,7 +37,7 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
-    private SingleLiveData<NavigateData> _onNavigate =  new SingleLiveData<>();
+    private SingleLiveData<NavigateData> _onNavigate = new SingleLiveData<>();
     public LiveData<NavigateData> onNavigate = _onNavigate;
 
 
@@ -75,7 +75,7 @@ public class BookListViewModel extends ViewModel {
         _onNavigate.setValue(new NavigateData(bookModel, false));
     }
 
-    public  class NavigateData {
+    public class NavigateData {
         public final BookModel bookModel;
         public final boolean isNewBook;
 

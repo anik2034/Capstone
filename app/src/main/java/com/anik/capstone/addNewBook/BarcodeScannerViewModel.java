@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.anik.capstone.home.DisplayType;
-import com.anik.capstone.util.NextScreenData;
+import com.anik.capstone.home.NextScreenData;
 import com.anik.capstone.util.SingleLiveData;
 
 import javax.inject.Inject;

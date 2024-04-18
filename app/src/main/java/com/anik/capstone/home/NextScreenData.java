@@ -1,4 +1,4 @@
-package com.anik.capstone.util;
+package com.anik.capstone.home;
 
 import com.anik.capstone.home.DisplayType;
 

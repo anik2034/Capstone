@@ -1,8 +1,5 @@
 package com.anik.capstone.addNewBook;
 
-import static com.anik.capstone.home.DisplayType.BOOK_DETAILS;
-import static com.anik.capstone.home.DisplayType.MANUAL_INPUT;
-
 import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;

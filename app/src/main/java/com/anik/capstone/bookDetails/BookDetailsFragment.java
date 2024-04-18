@@ -1,17 +1,10 @@
 package com.anik.capstone.bookDetails;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -33,7 +26,6 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
     public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
     public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
-    private static final int GALLERY_REQUEST_CODE = 103;
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailAdapter adapter;
@@ -74,8 +66,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
         bookDetailsViewModel.searchedBook.observe(getViewLifecycleOwner(), searchedBook -> {
             bookDetailsViewModel.init(searchedBook, bundle.getBoolean(ARG_IS_NEW_BOOK));
         });
-        bookDetailsViewModel.isSuccessful.observe(getViewLifecycleOwner(), isSuccessful -> {
-            if (!isSuccessful) showBookNotFoundDialog();
+        bookDetailsViewModel.onShowBookNotFound.observe(getViewLifecycleOwner(), onShowBookNotFound -> {
+            if (!onShowBookNotFound) showBookNotFoundDialog();
         });
 
         adapter = new BookDetailAdapter(this);

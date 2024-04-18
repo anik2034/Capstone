@@ -1,8 +1,5 @@
 package com.anik.capstone.manualInput;
 
-import static com.anik.capstone.home.DisplayType.BARCODE_SCANNER;
-import static com.anik.capstone.home.DisplayType.BOOK_DETAILS;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;

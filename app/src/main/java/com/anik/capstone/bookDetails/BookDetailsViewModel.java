@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.anik.capstone.R;
-import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.model.BookDetailsModel;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ReadingStatus;
@@ -19,7 +18,6 @@ import com.anik.capstone.model.rating.RatingModel;
 import com.anik.capstone.network.RetrofitClient;
 import com.anik.capstone.network.responses.BookMaker;
 import com.anik.capstone.network.responses.BookResponse;
-import com.anik.capstone.util.NextScreenData;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
@@ -42,21 +40,14 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _progressBarVisibility = new MutableLiveData<>();
     public LiveData<Integer> progressBarVisibility = _progressBarVisibility;
 
-    private final MutableLiveData<Boolean> _isSuccessful = new MutableLiveData<>();
-    public LiveData<Boolean> isSuccessful = _isSuccessful;
+    private final MutableLiveData<Boolean> _onShowBookNotFound = new MutableLiveData<>();
+    public LiveData<Boolean> onShowBookNotFound = _onShowBookNotFound;
 
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
     private final MutableLiveData<BookModel> _searchedBook = new MutableLiveData<>();
     public LiveData<BookModel> searchedBook = _searchedBook;
-
-    private final MutableLiveData<Boolean> _onShowPermissionRequestDialog = new MutableLiveData<>();
-    public LiveData<Boolean> onShowPermissionRequestDialog = _onShowPermissionRequestDialog;
-
-    private final MutableLiveData<Boolean> _galleryStart = new MutableLiveData<>();
-    public LiveData<Boolean> galleryStart = _galleryStart;
-
     private ResourceHelper resourceHelper;
     private final List<BookDetailsModel> bookDetailsModelList = new ArrayList<>();
     private final BookMaker bookMaker;
@@ -288,18 +279,17 @@ public class BookDetailsViewModel extends ViewModel {
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookMaker.convertToBook(bookResponse);
                     _searchedBook.setValue(searchedBook); // Update LiveData
-                    _isSuccessful.setValue(true);
+                    _onShowBookNotFound.setValue(true);
                 } else {
-                    _isSuccessful.setValue(false);
+                    _onShowBookNotFound.setValue(false);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
-                _isSuccessful.setValue(false);
+                _onShowBookNotFound.setValue(false);
             }
         });
     }
-
 }
 

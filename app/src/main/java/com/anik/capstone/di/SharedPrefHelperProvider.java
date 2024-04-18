@@ -1,6 +1,8 @@
-package com.anik.capstone.util;
+package com.anik.capstone.di;
 
 import android.content.Context;
+
+import com.anik.capstone.util.SharedPrefHelper;
 
 import javax.inject.Singleton;
 
@@ -12,10 +14,10 @@ import dagger.hilt.components.SingletonComponent;
 
 @Module
 @InstallIn(SingletonComponent.class)
-public class ResourceHelperProvider {
+public class SharedPrefHelperProvider {
     @Singleton
     @Provides
-    public static ResourceHelper resourceHelper(@ApplicationContext Context context) {
-        return new ResourceHelper(context);
+    public static SharedPrefHelper sharedPrefHelper(@ApplicationContext Context context) {
+        return new SharedPrefHelper(context);
     }
 }

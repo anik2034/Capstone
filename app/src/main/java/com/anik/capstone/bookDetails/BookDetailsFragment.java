@@ -21,14 +21,14 @@ import java.util.ArrayList;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class BookDetailsFragment extends Fragment implements BookDetailAdapter.OnBookDetailItemClickListener {
+public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.OnBookDetailItemClickListener {
     public static final String ARG_BOOK_MODEL = "ARG_BOOK_MODEl";
     public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
     public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
-    private BookDetailAdapter adapter;
+    private BookDetailsAdapter adapter;
 
     public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, BookModel bookModel) {
         Bundle args = new Bundle();
@@ -67,7 +67,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
             if (onShowBookNotFound) showBookNotFoundDialog();
         });
 
-        adapter = new BookDetailAdapter(this);
+        adapter = new BookDetailsAdapter(this);
         fragmentBookDetailsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fragmentBookDetailsBinding.recyclerView.setAdapter(adapter);
 

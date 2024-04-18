@@ -2,13 +2,9 @@ package com.anik.capstone.model;
 
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.rating.RatingModel;
-import com.google.gson.annotations.SerializedName;
-
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
-
 
 public class BookModel implements Serializable {
     private String ISBN;
@@ -37,14 +33,6 @@ public class BookModel implements Serializable {
         this.author = author;
         this.title = title;
         this.genres = genres;
-    }
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, RatingModel rating) {
-        this.ISBN = ISBN;
-        this.coverUrl = coverUrl;
-        this.author = author;
-        this.title = title;
-        this.genres = genres;
-        this.rating = rating;
     }
 
     public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing) {

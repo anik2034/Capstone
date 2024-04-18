@@ -1,15 +1,7 @@
 package com.anik.capstone.bookDetails;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.ListItemDateViewBinding;
@@ -18,25 +10,31 @@ import com.anik.capstone.databinding.ListItemHeaderViewBinding;
 import com.anik.capstone.databinding.ListItemOptionsViewBinding;
 import com.anik.capstone.databinding.ListItemStarRatingViewBinding;
 import com.anik.capstone.databinding.ListItemThumbnailViewBinding;
-import com.anik.capstone.model.BookDetailsModel;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 
-public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerView.ViewHolder> {
-    private static final DiffUtil.ItemCallback<BookDetailsModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookDetailsModel>() {
+public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerView.ViewHolder> {
+    private static final DiffUtil.ItemCallback<BookDetailsItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookDetailsItem>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull BookDetailsModel oldItem, @NonNull BookDetailsModel newItem) {
+        public boolean areItemsTheSame(@NonNull BookDetailsItem oldItem, @NonNull BookDetailsItem newItem) {
             return oldItem.equals(newItem);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull BookDetailsModel oldItem, @NonNull BookDetailsModel newItem) {
+        public boolean areContentsTheSame(@NonNull BookDetailsItem oldItem, @NonNull BookDetailsItem newItem) {
             return oldItem.getItemViewType().equals(newItem.getItemViewType()) && oldItem.isEditable() == newItem.isEditable();
         }
     };
     final OnBookDetailItemClickListener clickListener;
 
-    public BookDetailAdapter(OnBookDetailItemClickListener clickListener) {
+    public BookDetailsAdapter(OnBookDetailItemClickListener clickListener) {
         super(DIFF_CALLBACK);
         this.clickListener = clickListener;
 
@@ -51,7 +49,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        switch (BookDetailsModel.ItemViewType.values()[viewType]) {
+        switch (BookDetailsItem.ItemViewType.values()[viewType]) {
             case HEADER:
                 ListItemHeaderViewBinding headerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_header_view, parent, false);
                 return new HeaderViewHolder(headerViewBinding);
@@ -77,7 +75,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        BookDetailsModel item = getItem(position);
+        BookDetailsItem item = getItem(position);
         switch (item.getItemViewType()) {
             case HEADER:
                 ((HeaderViewHolder) holder).bind(item);
@@ -107,7 +105,7 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             itemView.setOnClickListener(v -> clickListener.onItemClick(getAdapterPosition()));
         }
 
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
         }
     }
 
@@ -120,9 +118,9 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
 
         @Override
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.itemHeaderView.setHeaderName(bookDetailsModel.getTitle());
+                binding.itemHeaderView.setHeaderName(bookDetailsItem.getTitle());
                 binding.executePendingBindings();
             }
         }
@@ -137,11 +135,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
 
         @Override
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.itemEditableView.setIsEditable(bookDetailsModel.isEditable());
-                binding.itemEditableView.setCenter(bookDetailsModel.isCenter());
-                binding.itemEditableView.setText(bookDetailsModel.getValue());
+                binding.itemEditableView.setIsEditable(bookDetailsItem.isEditable());
+                binding.itemEditableView.setCenter(bookDetailsItem.isCenter());
+                binding.itemEditableView.setText(bookDetailsItem.getValue());
                 binding.itemEditableView.setListener(text -> clickListener.onTextChanged(text, getAdapterPosition()));
                 binding.executePendingBindings();
             }
@@ -157,10 +155,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
 
         @Override
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.itemDateView.setIsEditable(bookDetailsModel.isEditable());
-                binding.itemDateView.setDate(bookDetailsModel.getDate());
+                binding.itemDateView.setIsEditable(bookDetailsItem.isEditable());
+                binding.itemDateView.setDate(bookDetailsItem.getDate());
                 binding.itemDateView.setListener(date -> clickListener.onDateChanged(date, getAdapterPosition()));
                 binding.executePendingBindings();
             }
@@ -175,10 +173,10 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
             this.binding = binding;
         }
 
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.itemOptionsView.setSelected(bookDetailsModel.getSelectedValue());
-                binding.itemOptionsView.setOptions(bookDetailsModel.getSingleSelection());
+                binding.itemOptionsView.setSelected(bookDetailsItem.getSelectedValue());
+                binding.itemOptionsView.setOptions(bookDetailsItem.getSingleSelection());
                 binding.itemOptionsView.setListener(selected -> clickListener.onOptionChanged(selected, getAdapterPosition()));
                 binding.executePendingBindings();
             }
@@ -194,11 +192,11 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
 
         @Override
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.itemStarRatingView.setIsEditable(bookDetailsModel.isEditable());
-                binding.itemStarRatingView.setRating(bookDetailsModel.getRating());
-                binding.itemStarRatingView.setRatingType(bookDetailsModel.getTitle());
+                binding.itemStarRatingView.setIsEditable(bookDetailsItem.isEditable());
+                binding.itemStarRatingView.setRating(bookDetailsItem.getRating());
+                binding.itemStarRatingView.setRatingType(bookDetailsItem.getTitle());
                 binding.itemStarRatingView.setListener(rating -> clickListener.onRatingChanged(rating, getAdapterPosition()));
                 binding.executePendingBindings();
             }
@@ -214,13 +212,14 @@ public class BookDetailAdapter extends ListAdapter<BookDetailsModel, RecyclerVie
         }
 
         @Override
-        public void bind(BookDetailsModel bookDetailsModel) {
+        public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
-                binding.setThumbnailUrl(bookDetailsModel.getThumbnailUrl());
+                binding.setThumbnailUrl(bookDetailsItem.getThumbnailUrl());
                 binding.executePendingBindings();
             }
         }
     }
+
     public interface OnBookDetailItemClickListener {
         void onItemClick(int position);
 

@@ -1,11 +1,9 @@
-package com.anik.capstone.model;
-
-import android.widget.TextView;
+package com.anik.capstone.bookDetails;
 
 import java.util.List;
 import java.util.Objects;
 
-public class BookDetailsModel {
+public class BookDetailsItem {
     private String title;
     private String value;
     private String selectedValue;
@@ -101,7 +99,7 @@ public class BookDetailsModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BookDetailsModel that = (BookDetailsModel) o;
+        BookDetailsItem that = (BookDetailsItem) o;
         return Float.compare(rating, that.rating) == 0 && isCenter == that.isCenter && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
     }
 

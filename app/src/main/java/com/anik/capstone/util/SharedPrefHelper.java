@@ -10,7 +10,7 @@ public class SharedPrefHelper {
     private static final String PREF_CAMERA_PERMISSION_REQUESTED = "camera_permission_requested";
     private final SharedPreferences sharedPreferences;
 
-    SharedPrefHelper(Context context) {
+    public SharedPrefHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(SharedPrefHelper.CAPSTONE_PREFERENCES, MODE_PRIVATE);
     }
 

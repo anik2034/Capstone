@@ -1,16 +1,17 @@
-package com.anik.capstone.network.responses;
+package com.anik.capstone.model;
 
-import com.anik.capstone.model.BookModel;
+import com.anik.capstone.network.responses.BookResponse;
+import com.anik.capstone.network.responses.DocumentResponse;
 import com.anik.capstone.util.GenreHelper;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class BookMaker {
+public class BookModelCreator {
 
     @Inject
-    public BookMaker() {
+    public BookModelCreator() {
     }
 
     public BookModel convertToBook(BookResponse bookResponse) {

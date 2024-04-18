@@ -56,16 +56,13 @@ public class BookDetailsViewModel extends ViewModel {
         this.resourceHelper = resourceHelper;
         this.bookMaker = bookMaker;
         this.retrofitClient = retrofitClient;
-
     }
 
     public void init(BookModel bookModel, boolean isNewBook) {
-        _progressBarVisibility.setValue(View.GONE);
         createBookDetailsList(bookModel, isNewBook);
     }
 
     public void init(String query, SearchType searchType) {
-        _progressBarVisibility.setValue(View.GONE);
         search(query, searchType);
     }
 
@@ -228,12 +225,10 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void onDateChanged(String date, int position) {
         updateBookDetails(position, false, null, null, date, null);
-
     }
 
     public void onOptionChanged(String selected, int position) {
         updateBookDetails(position, false, null, null, null, selected);
-
     }
 
     private void updateBookDetails(int position, boolean editable, Float rating, String text, String date, String selected) {
@@ -276,7 +271,7 @@ public class BookDetailsViewModel extends ViewModel {
                 _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookMaker.convertToBook(bookResponse);
-                    init(searchedBook, true);
+                    createBookDetailsList(searchedBook, true);
                 } else {
                     _onShowBookNotFound.setValue(true);
                 }

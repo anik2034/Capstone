@@ -63,11 +63,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailAdapter.O
             bookDetailsViewModel.init((BookModel) bundle.getSerializable(ARG_BOOK_MODEL), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
 
-        bookDetailsViewModel.searchedBook.observe(getViewLifecycleOwner(), searchedBook -> {
-            bookDetailsViewModel.init(searchedBook, bundle.getBoolean(ARG_IS_NEW_BOOK));
-        });
         bookDetailsViewModel.onShowBookNotFound.observe(getViewLifecycleOwner(), onShowBookNotFound -> {
-            if (!onShowBookNotFound) showBookNotFoundDialog();
+            if (onShowBookNotFound) showBookNotFoundDialog();
         });
 
         adapter = new BookDetailAdapter(this);

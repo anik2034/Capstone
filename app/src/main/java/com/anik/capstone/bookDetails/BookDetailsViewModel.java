@@ -46,8 +46,6 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
-    private final MutableLiveData<BookModel> _searchedBook = new MutableLiveData<>();
-    public LiveData<BookModel> searchedBook = _searchedBook;
     private ResourceHelper resourceHelper;
     private final List<BookDetailsModel> bookDetailsModelList = new ArrayList<>();
     private final BookMaker bookMaker;
@@ -278,16 +276,14 @@ public class BookDetailsViewModel extends ViewModel {
                 _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookMaker.convertToBook(bookResponse);
-                    _searchedBook.setValue(searchedBook); // Update LiveData
-                    _onShowBookNotFound.setValue(true);
+                    init(searchedBook, true);
                 } else {
-                    _onShowBookNotFound.setValue(false);
+                    _onShowBookNotFound.setValue(true);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
-                _onShowBookNotFound.setValue(false);
             }
         });
     }

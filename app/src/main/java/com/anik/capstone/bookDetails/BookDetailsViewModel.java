@@ -1,33 +1,23 @@
 package com.anik.capstone.bookDetails;
 
-
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
-import com.anik.capstone.model.ReadingStatus;
-import com.anik.capstone.model.borrowing.BorrowingModel;
-import com.anik.capstone.model.borrowing.BorrowingStatus;
-import com.anik.capstone.model.rating.RatingModel;
 import com.anik.capstone.network.RetrofitClient;
 import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import db.BookDao;
-import db.BookDatabase;
+import db.BookRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,32 +28,44 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<BookDetailsItem>> _bookDetailsList = new MutableLiveData<>();
     public LiveData<List<BookDetailsItem>> bookDetailsList = _bookDetailsList;
 
-    private final MutableLiveData<Integer> _progressBarVisibility = new MutableLiveData<>();
-    public LiveData<Integer> progressBarVisibility = _progressBarVisibility;
+    private final MutableLiveData<Boolean> _isProgressBarVisible = new MutableLiveData<>();
+    public LiveData<Boolean> isProgressBarVisible = _isProgressBarVisible;
 
     private final MutableLiveData<Boolean> _onShowBookNotFound = new MutableLiveData<>();
     public LiveData<Boolean> onShowBookNotFound = _onShowBookNotFound;
 
+    private final MutableLiveData<String> _onShowErrorMessage = new MutableLiveData<>();
+    public LiveData<String> onShowErrorMessage = _onShowErrorMessage;
+
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
-    private final ResourceHelper resourceHelper;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
+
+    private final ResourceHelper resourceHelper;
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
-    private BookDao bookDao;
+    private final BookRepository bookRepository;
+    private final BookDetailsItemCreator bookDetailsItemCreator;
 
     @Inject
-    public BookDetailsViewModel(ResourceHelper resourceHelper, BookModelCreator bookModelCreator, RetrofitClient retrofitClient, BookDatabase bookDatabase) {
+    public BookDetailsViewModel(
+            ResourceHelper resourceHelper,
+            BookModelCreator bookModelCreator,
+            RetrofitClient retrofitClient,
+            BookRepository bookRepository,
+            BookDetailsItemCreator bookDetailsItemCreator
+    ) {
         this.resourceHelper = resourceHelper;
         this.bookModelCreator = bookModelCreator;
         this.retrofitClient = retrofitClient;
-        this.bookDao = bookDatabase.bookDao();
+        this.bookRepository = bookRepository;
+        this.bookDetailsItemCreator = bookDetailsItemCreator;
     }
 
     public void init(int id, boolean isNewBook) {
         BookModel bookModel = null;
-        if(id > 0) bookModel = bookDao.getBookById(id);
+        if (id >= 0) bookModel = bookRepository.getBookById(id);
         createBookDetailsList(bookModel, isNewBook);
     }
 
@@ -72,147 +74,8 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
-        BorrowingModel borrowingModel = new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
-        ReadingStatus readingStatus = ReadingStatus.NOT_STARTED;
-        RatingModel ratingModel = new RatingModel();
-        String url = "sample";
-        String title = "Title";
-        String author = "Author";
-        List<String> genres = Arrays.asList("Genre 1", "Genre 2");
-        if (bookModel != null) {
-            if (bookModel.getTitle() != null) {
-                title = bookModel.getTitle();
-            }
-            if (bookModel.getAuthor() != null) {
-                author = bookModel.getAuthor();
-            }
-            if (bookModel.getCoverUrl() != null) {
-                url = bookModel.getCoverUrl();
-            }
-            if (bookModel.getGenres() != null) {
-                genres = bookModel.getGenres();
-            }
-            if (bookModel.getReadingStatus() != null) {
-                readingStatus = bookModel.getReadingStatus();
-            }
-            if (bookModel.getBorrowing() != null) {
-                borrowingModel = bookModel.getBorrowing();
-                if (borrowingModel.getBorrowingStatus() == null)
-                    borrowingModel.setBorrowingStatus(BorrowingStatus.NOT_BORROWED);
-                if (borrowingModel.getDate() == null) borrowingModel.setDate("");
-                if (borrowingModel.getName() == null)
-                    borrowingModel.setName("");
-            }
-            if (bookModel.getRating() != null) {
-                ratingModel = bookModel.getRating();
-            }
-        }
-        BookDetailsItem valueTitle = new BookDetailsItem();
-        setEditableText(valueTitle, true, title, isNewBook);
-        bookDetailsItemList.add(valueTitle);
-
-        BookDetailsItem valueAuthor = new BookDetailsItem();
-        setEditableText(valueAuthor, true, author, isNewBook);
-        bookDetailsItemList.add(valueAuthor);
-
-        BookDetailsItem valueUrl = new BookDetailsItem();
-        valueUrl.setThumbnailUrl(url);
-        valueUrl.setItemViewType(BookDetailsItem.ItemViewType.THUMBNAIL);
-        bookDetailsItemList.add(valueUrl);
-
-        for (String genre : genres) {
-            BookDetailsItem headerGenre = new BookDetailsItem();
-            BookDetailsItem valueGenre = new BookDetailsItem();
-            setHeader(headerGenre, resourceHelper.getString(R.string.genre));
-            setEditableText(valueGenre, false, genre, isNewBook);
-            bookDetailsItemList.add(headerGenre);
-            bookDetailsItemList.add(valueGenre);
-        }
-
-        BookDetailsItem headerReadingStatus = new BookDetailsItem();
-        BookDetailsItem valueReadingStatus = new BookDetailsItem();
-        setHeader(headerReadingStatus, resourceHelper.getString(R.string.reading_status));
-        setSelectedValue(valueReadingStatus, ReadingStatus.getAllDisplayNames(), readingStatus.getDisplayName(), isNewBook);
-        bookDetailsItemList.add(headerReadingStatus);
-        bookDetailsItemList.add(valueReadingStatus);
-
-        BookDetailsItem headerBorrowingStatus = new BookDetailsItem();
-        BookDetailsItem valueBorrowingStatus = new BookDetailsItem();
-        setHeader(headerBorrowingStatus, resourceHelper.getString(R.string.borrowing_status));
-        setSelectedValue(valueBorrowingStatus, BorrowingStatus.getAllDisplayNames(), borrowingModel.getBorrowingStatus().getDisplayName(), isNewBook);
-        bookDetailsItemList.add(headerBorrowingStatus);
-        bookDetailsItemList.add(valueBorrowingStatus);
-
-        BookDetailsItem headerBorrowingDetails = new BookDetailsItem();
-        setHeader(headerBorrowingDetails, "Borrowing Details");
-
-        BookDetailsItem valueBorrowingName = new BookDetailsItem();
-        setEditableText(valueBorrowingName, false, borrowingModel.getName(), isNewBook);
-        bookDetailsItemList.add(headerBorrowingDetails);
-        bookDetailsItemList.add(valueBorrowingName);
-
-        BookDetailsItem valueBorrowingDate = new BookDetailsItem();
-        valueBorrowingDate.setItemViewType(BookDetailsItem.ItemViewType.DATE);
-        valueBorrowingDate.setDate(borrowingModel.getDate());
-        valueBorrowingDate.setEditable(isNewBook);
-        bookDetailsItemList.add(valueBorrowingDate);
-
-        BookDetailsItem headerRating = new BookDetailsItem();
-        setHeader(headerRating, resourceHelper.getString(R.string.rating));
-        bookDetailsItemList.add(headerRating);
-
-        BookDetailsItem valueEmotionalImpact = new BookDetailsItem();
-        setStarRating(valueEmotionalImpact, resourceHelper.getString(R.string.emotional_impact), ratingModel.getEmotionalImpact(), isNewBook);
-        bookDetailsItemList.add(valueEmotionalImpact);
-
-        BookDetailsItem valueCharacter = new BookDetailsItem();
-        setStarRating(valueCharacter, resourceHelper.getString(R.string.characters), ratingModel.getCharacter(), isNewBook);
-        bookDetailsItemList.add(valueCharacter);
-
-        BookDetailsItem valuePacing = new BookDetailsItem();
-        setStarRating(valuePacing, resourceHelper.getString(R.string.pacing), ratingModel.getPacing(), isNewBook);
-        bookDetailsItemList.add(valuePacing);
-
-        BookDetailsItem valueStoryLine = new BookDetailsItem();
-        setStarRating(valueStoryLine, resourceHelper.getString(R.string.story_line), ratingModel.getStoryline(), isNewBook);
-        bookDetailsItemList.add(valueStoryLine);
-
-        BookDetailsItem valueWritingStyle = new BookDetailsItem();
-        setStarRating(valueWritingStyle, resourceHelper.getString(R.string.writing_style), ratingModel.getWritingStyle(), isNewBook);
-        bookDetailsItemList.add(valueWritingStyle);
-
-        BookDetailsItem valueOverall = new BookDetailsItem();
-        setStarRating(valueOverall, resourceHelper.getString(R.string.overall_rating), ratingModel.getOverallRating(), isNewBook);
-        bookDetailsItemList.add(valueOverall);
-
+        bookDetailsItemList.addAll(bookDetailsItemCreator.create(bookModel, isNewBook));
         _bookDetailsList.setValue(bookDetailsItemList);
-
-    }
-
-    private void setEditableText(BookDetailsItem editableText, boolean isCenter, String value, boolean isEditable) {
-        editableText.setItemViewType(BookDetailsItem.ItemViewType.EDITABLE_TEXT);
-        editableText.setCenter(isCenter);
-        editableText.setValue(value);
-        editableText.setEditable(isEditable);
-    }
-
-    private void setSelectedValue(BookDetailsItem options, List<String> optionsList, String selected, boolean isEditable) {
-        options.setItemViewType(BookDetailsItem.ItemViewType.POP_UP);
-        options.setSingleSelection(optionsList);
-        options.setSelectedValue(selected);
-        options.setEditable(isEditable);
-    }
-
-    private void setHeader(BookDetailsItem header, String title) {
-        header.setTitle(title);
-        header.setItemViewType(BookDetailsItem.ItemViewType.HEADER);
-    }
-
-    private void setStarRating(BookDetailsItem starRating, String title, float rating, boolean isEditable) {
-        starRating.setItemViewType(BookDetailsItem.ItemViewType.STAR_RATING);
-        starRating.setTitle(title);
-        starRating.setRating(rating);
-        starRating.setEditable(isEditable);
     }
 
     public void onItemClicked(int position) {
@@ -222,7 +85,6 @@ public class BookDetailsViewModel extends ViewModel {
     public void onRatingChanged(float rating, int position) {
         updateBookDetails(position, false, rating, null, null, null);
     }
-
 
     public void onTextChanged(String text, int position) {
         updateBookDetails(position, false, null, text, null, null);
@@ -254,13 +116,29 @@ public class BookDetailsViewModel extends ViewModel {
             }
             _bookDetailsList.setValue(bookDetailsItemList);
             _updateDetailItem.setValue(position);
+            updateBook(item);
         }
     }
 
+    private void updateBook(BookDetailsItem item) {
+        BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
+        switch (item.getItemType()) {
+            case TITLE:
+                bookModel.setTitle(item.getValue());
+                break;
+            case AUTHOR:
+                bookModel.setAuthor(item.getValue()); // Correct get method
+                break;
+        }
+        int updatedItemsCount = bookRepository.updateBook(bookModel);
+        if (updatedItemsCount <= 0) {
+            showErrorMessage();
+        }
+    }
 
     private void search(String query, SearchType searchType) {
         Call<BookResponse> call = null;
-        _progressBarVisibility.setValue(View.VISIBLE);
+        _isProgressBarVisible.setValue(true);
         switch (searchType) {
             case SEARCH_BY_ISBN:
                 call = retrofitClient.bookService.searchByISBN(query);
@@ -272,12 +150,16 @@ public class BookDetailsViewModel extends ViewModel {
         call.enqueue(new Callback<BookResponse>() {
             @Override
             public void onResponse(@NonNull Call<BookResponse> call, @NonNull Response<BookResponse> response) {
+                _isProgressBarVisible.setValue(false);
                 BookResponse bookResponse = response.body();
-                _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
-                    bookDao.insertBook(searchedBook);
-                    createBookDetailsList(searchedBook, true);
+                    long insertedItemsCount = bookRepository.insertBook(searchedBook);
+                    if (insertedItemsCount > 0) {
+                        createBookDetailsList(searchedBook, true);
+                    } else {
+                        showErrorMessage();
+                    }
                 } else {
                     _onShowBookNotFound.setValue(true);
                 }
@@ -285,8 +167,14 @@ public class BookDetailsViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
+                _isProgressBarVisible.setValue(false);
+                showErrorMessage();
             }
         });
+    }
+
+    private void showErrorMessage() {
+        _onShowErrorMessage.setValue(resourceHelper.getString(R.string.something_went_wrong));
     }
 }
 

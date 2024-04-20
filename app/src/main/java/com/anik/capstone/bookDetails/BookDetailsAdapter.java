@@ -49,7 +49,7 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        switch (BookDetailsItem.ItemViewType.values()[viewType]) {
+        switch (BookDetailsItem.ViewType.values()[viewType]) {
             case HEADER:
                 ListItemHeaderViewBinding headerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_header_view, parent, false);
                 return new HeaderViewHolder(headerViewBinding);

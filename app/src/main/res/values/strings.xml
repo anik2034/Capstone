@@ -38,6 +38,7 @@
     <string name="search_type_required">Search Type Required</string>
     <string name="please_select_the_search_type">Please select the search type</string>
     <string name="ok">OK</string>
+    <string name="something_went_wrong">Something went wrong, please try again.</string>
 
     <string-array name="search_options">
         <item>Title</item>

@@ -10,10 +10,12 @@ public class BookDetailsItem {
     private float rating;
     private String date;
     private boolean isCenter;
-    private ItemViewType itemViewType;
+    private ViewType viewType;
+    private ItemType itemType;
     private String thumbnailUrl;
     private boolean isEditable;
     private List<String> singleSelection;
+    private int bookModelId;
 
     public String getTitle() {
         return title;
@@ -55,12 +57,12 @@ public class BookDetailsItem {
         this.date = date;
     }
 
-    public ItemViewType getItemViewType() {
-        return itemViewType;
+    public ViewType getItemViewType() {
+        return viewType;
     }
 
-    public void setItemViewType(ItemViewType itemViewType) {
-        this.itemViewType = itemViewType;
+    public void setItemViewType(ViewType viewType) {
+        this.viewType = viewType;
     }
 
     public String getThumbnailUrl() {
@@ -95,25 +97,55 @@ public class BookDetailsItem {
         isCenter = center;
     }
 
+    public int getBookModelId() {
+        return bookModelId;
+    }
+
+    public void setBookModelId(int bookModelId) {
+        this.bookModelId = bookModelId;
+    }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.viewType = viewType;
+    }
+
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsItem that = (BookDetailsItem) o;
-        return Float.compare(rating, that.rating) == 0 && isCenter == that.isCenter && isEditable == that.isEditable && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && itemViewType == that.itemViewType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
+        return Float.compare(rating, that.rating) == 0 && isCenter == that.isCenter && isEditable == that.isEditable && bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && viewType == that.viewType && itemType == that.itemType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, isCenter, itemViewType, thumbnailUrl, isEditable, singleSelection);
+        return Objects.hash(title, value, selectedValue, rating, date, isCenter, viewType, itemType, thumbnailUrl, isEditable, singleSelection, bookModelId);
     }
 
-    public enum ItemViewType {
+    public enum ViewType {
         HEADER,
         EDITABLE_TEXT,
         DATE,
         POP_UP,
         STAR_RATING,
+        THUMBNAIL
+    }
+
+    public enum ItemType {
+        TITLE,
+        AUTHOR,
         THUMBNAIL
     }
 }

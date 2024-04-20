@@ -1,8 +1,5 @@
 package com.anik.capstone.model;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.rating.RatingModel;
 
@@ -10,8 +7,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 @Entity(tableName = "books")
 public class BookModel implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String ISBN;

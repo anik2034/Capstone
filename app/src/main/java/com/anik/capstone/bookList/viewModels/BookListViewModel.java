@@ -1,17 +1,12 @@
 package com.anik.capstone.bookList.viewModels;
 
-import static com.anik.capstone.bookList.LayoutViewType.GRID;
-import static com.anik.capstone.bookList.LayoutViewType.ROW;
-
 import android.graphics.drawable.Drawable;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.bookList.BookListItem;
+import com.anik.capstone.bookList.BookListItemCreator;
 import com.anik.capstone.bookList.LayoutViewType;
 import com.anik.capstone.model.BookModel;
+import com.anik.capstone.model.ListType;
 import com.anik.capstone.util.ResourceHelper;
 import com.anik.capstone.util.SingleLiveData;
 
@@ -20,13 +15,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import db.BookDao;
-import db.BookDatabase;
+import db.BookRepository;
+
+import static com.anik.capstone.bookList.LayoutViewType.GRID;
+import static com.anik.capstone.bookList.LayoutViewType.ROW;
 
 @HiltViewModel
 public class BookListViewModel extends ViewModel {
-    private final ResourceHelper resourceHelper;
+    protected final ResourceHelper resourceHelper;
+    protected final BookRepository bookRepository;
+    protected final BookListItemCreator bookListItemCreator;
 
     private final MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
@@ -43,13 +45,15 @@ public class BookListViewModel extends ViewModel {
     private SingleLiveData<NavigateData> _onNavigate = new SingleLiveData<>();
     public LiveData<NavigateData> onNavigate = _onNavigate;
 
-    protected BookDao bookDao;
-
-
     @Inject
-    protected BookListViewModel(ResourceHelper resourceHelper, BookDatabase bookDatabase) {
+    protected BookListViewModel(
+            ResourceHelper resourceHelper,
+            BookRepository bookRepository,
+            BookListItemCreator bookListItemCreator
+    ) {
         this.resourceHelper = resourceHelper;
-        bookDao = bookDatabase.bookDao();
+        this.bookRepository = bookRepository;
+        this.bookListItemCreator = bookListItemCreator;
     }
 
     public void init(int titleResId, LayoutViewType layoutViewType) {
@@ -75,6 +79,12 @@ public class BookListViewModel extends ViewModel {
 
     public void loadBooks() {
 
+    }
+
+    public void loadBookFromDatabase(ListType listType) {
+        List<BookModel> bookModelList = bookRepository.getBooksByListType(listType);
+        List<BookListItem> bookListItems = bookListItemCreator.convert(bookModelList);
+        setBooks(bookListItems);
     }
 
     public void onItemClick(BookListItem bookListItem) {

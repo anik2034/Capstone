@@ -1,16 +1,15 @@
 package db;
 
-
-
-import androidx.room.TypeConverter;
-
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.rating.RatingModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.room.TypeConverter;
 
 public class Converters {
     private static Gson gson = new Gson();

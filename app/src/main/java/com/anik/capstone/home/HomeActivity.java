@@ -2,17 +2,15 @@ package com.anik.capstone.home;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
-import com.anik.capstone.model.BookModel;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -89,6 +87,7 @@ public class HomeActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putString(searchType, searchData);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        args.putInt(BookDetailsFragment.ARG_BOOK_ID, -1);
         navController.navigate(fragmentId, args);
     }
 

@@ -1,9 +1,5 @@
 package com.anik.capstone.bookList;
 
-import com.anik.capstone.model.BookModel;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class BookListItem {
@@ -49,14 +45,6 @@ public class BookListItem {
 
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
-    }
-
-    public static List<BookListItem> convert(List<BookModel> bookModelList){
-        List<BookListItem> bookListItemList = new ArrayList<>();
-        for(BookModel bookModel: bookModelList){
-            bookListItemList.add(new BookListItem(bookModel.getId(), bookModel.getTitle(), bookModel.getAuthor(),bookModel.getCoverUrl()));
-        }
-        return bookListItemList;
     }
 
     @Override

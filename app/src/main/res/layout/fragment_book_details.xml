@@ -5,7 +5,7 @@
     tools:context=".bookDetails.BookDetailsFragment">
 
     <data>
-
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="com.anik.capstone.bookDetails.BookDetailsViewModel" />
@@ -35,7 +35,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.progressBarVisibility}"
+            android:visibility="@{viewModel.isProgressBarVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
             app:layout_constraintEnd_toEndOf="@+id/recyclerView"
             app:layout_constraintStart_toStartOf="@+id/recyclerView"

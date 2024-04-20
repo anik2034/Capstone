@@ -11,8 +11,7 @@ import javax.inject.Inject;
 public class BookModelCreator {
 
     @Inject
-    public BookModelCreator() {
-    }
+    public BookModelCreator() {}
 
     public BookModel convertToBook(BookResponse bookResponse) {
         DocumentResponse documentResponse = bookResponse.getDocumentList().get(0);

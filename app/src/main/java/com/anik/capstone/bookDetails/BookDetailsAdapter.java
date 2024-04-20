@@ -140,7 +140,8 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
                 binding.itemEditableView.setIsEditable(bookDetailsItem.isEditable());
                 binding.itemEditableView.setCenter(bookDetailsItem.isCenter());
                 binding.itemEditableView.setText(bookDetailsItem.getValue());
-                binding.itemEditableView.setListener(text -> clickListener.onTextChanged(text, getAdapterPosition()));
+                String oldText = bookDetailsItem.getValue();
+                binding.itemEditableView.setListener(newText -> clickListener.onTextChanged(oldText, newText, getAdapterPosition()));
                 binding.executePendingBindings();
             }
         }
@@ -225,7 +226,7 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
 
         void onRatingChanged(float rating, int position);
 
-        void onTextChanged(String newText, int position);
+        void onTextChanged(String oldText, String newText, int position);
 
         void onDateChanged(String date, int position);
 

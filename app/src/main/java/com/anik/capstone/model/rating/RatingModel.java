@@ -64,6 +64,9 @@ public class RatingModel {
         overallRating = (emotionalImpact + character + pacing + storyline + writingStyle) / 5;
         return overallRating;
     }
+    public void setOverallRating(float overallRating) {
+        this.overallRating = overallRating;
+    }
 }
 
 

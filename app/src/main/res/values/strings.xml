@@ -39,6 +39,11 @@
     <string name="please_select_the_search_type">Please select the search type</string>
     <string name="ok">OK</string>
     <string name="something_went_wrong">Something went wrong, please try again.</string>
+    <string name="borrowing_details">Borrowing Details</string>
+    <string name="sample">sample</string>
+    <string name="author">Author</string>
+    <string name="genre_1">Genre 1</string>
+    <string name="genre_2">Genre 2</string>
 
     <string-array name="search_options">
         <item>Title</item>

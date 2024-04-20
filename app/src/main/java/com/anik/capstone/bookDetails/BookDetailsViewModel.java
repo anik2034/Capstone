@@ -1,8 +1,17 @@
 package com.anik.capstone.bookDetails;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
+import com.anik.capstone.model.ReadingStatus;
+import com.anik.capstone.model.borrowing.BorrowingModel;
+import com.anik.capstone.model.borrowing.BorrowingStatus;
+import com.anik.capstone.model.rating.RatingModel;
 import com.anik.capstone.network.RetrofitClient;
 import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.util.ResourceHelper;
@@ -12,10 +21,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import db.BookRepository;
 import retrofit2.Call;
@@ -79,34 +84,34 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onItemClicked(int position) {
-        updateBookDetails(position, true, null, null, null, null);
+        updateBookDetails(position, true, null, null, null,null, null);
     }
 
     public void onRatingChanged(float rating, int position) {
-        updateBookDetails(position, false, rating, null, null, null);
+        updateBookDetails(position, false, rating, null, null,null, null);
     }
 
-    public void onTextChanged(String text, int position) {
-        updateBookDetails(position, false, null, text, null, null);
+    public void onTextChanged(String oldText, String newText, int position) {
+        updateBookDetails(position, false, null, oldText, newText, null, null);
     }
 
     public void onDateChanged(String date, int position) {
-        updateBookDetails(position, false, null, null, date, null);
+        updateBookDetails(position, false, null, null,null, date, null);
     }
 
     public void onOptionChanged(String selected, int position) {
-        updateBookDetails(position, false, null, null, null, selected);
+        updateBookDetails(position, false, null, null,null, null, selected);
     }
 
-    private void updateBookDetails(int position, boolean editable, Float rating, String text, String date, String selected) {
+    private void updateBookDetails(int position, boolean editable, Float rating, String oldText, String newText, String date, String selected) {
         if (position >= 0 && position < bookDetailsItemList.size()) {
             BookDetailsItem item = bookDetailsItemList.get(position);
             item.setEditable(editable);
             if (rating != null) {
                 item.setRating(rating);
             }
-            if (text != null) {
-                item.setValue(text);
+            if (newText != null) {
+                item.setValue(newText);
             }
             if (date != null) {
                 item.setDate(date);
@@ -116,19 +121,70 @@ public class BookDetailsViewModel extends ViewModel {
             }
             _bookDetailsList.setValue(bookDetailsItemList);
             _updateDetailItem.setValue(position);
-            updateBook(item);
+            updateBook(item, oldText);
         }
     }
 
-    private void updateBook(BookDetailsItem item) {
+    private void updateBook(BookDetailsItem item, String oldText) {
         BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
+        BorrowingModel borrowingModel = bookModel.getBorrowing();
+        RatingModel ratingModel = bookModel.getRating();
+        ReadingStatus readingStatus = bookModel.getReadingStatus();
         switch (item.getItemType()) {
             case TITLE:
                 bookModel.setTitle(item.getValue());
                 break;
             case AUTHOR:
-                bookModel.setAuthor(item.getValue()); // Correct get method
+                bookModel.setAuthor(item.getValue());
                 break;
+            case THUMBNAIL:
+                bookModel.setCoverUrl(item.getThumbnailUrl());
+                break;
+            case GENRE:
+                List<String> genres = bookModel.getGenres();
+                genres.set(genres.indexOf(oldText), item.getValue());
+                bookModel.setGenres(genres);
+                break;
+            case BORROWING_STATUS:
+                borrowingModel.setBorrowingStatus(BorrowingStatus.getBorrowingStatus(item.getSelectedValue()));
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case BORROWED_BY:
+                borrowingModel.setName(item.getValue());
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case BORROWING_DATE:
+                borrowingModel.setDate(item.getDate());
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case READING_STATUS:
+                bookModel.setReadingStatus(ReadingStatus.getReadingStatus(item.getSelectedValue()));
+                break;
+            case RATING_EMOTIONAL_IMPACT:
+                ratingModel.setEmotionalImpact(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_CHARACTERS:
+                ratingModel.setCharacter(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_PACING:
+                ratingModel.setPacing(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_STORYLINE:
+                ratingModel.setStoryline(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_WRITING_STYLE:
+                ratingModel.setWritingStyle(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case OVERALL_RATING:
+                ratingModel.setOverallRating(ratingModel.getOverallRating());
+                bookModel.setRating(ratingModel);
+                break;
+
         }
         int updatedItemsCount = bookRepository.updateBook(bookModel);
         if (updatedItemsCount <= 0) {

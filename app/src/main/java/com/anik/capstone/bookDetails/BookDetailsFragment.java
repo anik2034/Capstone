@@ -89,7 +89,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         builder.setTitle(R.string.book_not_found);
         builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
 
-        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(0, true));
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(-1, true));
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
             dialog.dismiss();
             ((HomeActivity) getActivity()).back();
@@ -112,8 +112,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     }
 
     @Override
-    public void onTextChanged(String newText, int position) {
-        bookDetailsViewModel.onTextChanged(newText, position);
+    public void onTextChanged(String oldText, String newText, int position) {
+        bookDetailsViewModel.onTextChanged(oldText, newText, position);
     }
 
     @Override

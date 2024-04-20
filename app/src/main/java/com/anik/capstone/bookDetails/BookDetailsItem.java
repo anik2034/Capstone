@@ -146,6 +146,17 @@ public class BookDetailsItem {
     public enum ItemType {
         TITLE,
         AUTHOR,
-        THUMBNAIL
+        THUMBNAIL,
+        GENRE,
+        BORROWING_STATUS,
+        BORROWED_BY,
+        BORROWING_DATE,
+        READING_STATUS,
+        RATING_EMOTIONAL_IMPACT,
+        RATING_CHARACTERS,
+        RATING_PACING,
+        RATING_STORYLINE,
+        RATING_WRITING_STYLE,
+        OVERALL_RATING
     }
 }

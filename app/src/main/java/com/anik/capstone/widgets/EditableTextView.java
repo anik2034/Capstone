@@ -83,6 +83,6 @@ public class EditableTextView extends FrameLayout {
     }
 
     public interface EditableTextViewListener {
-        void onTextChanged(String text);
+        void onTextChanged(String nexText);
     }
 }

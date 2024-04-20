@@ -16,13 +16,13 @@
         tools:context=".home.HomeActivity">
 
         <fragment
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            app:defaultNavHost="true"
             android:id="@+id/fragmentContainerView"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:navGraph="@navigation/navigation"
-            android:layout_marginBottom="60dp" />
+            android:layout_marginBottom="95dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBar"

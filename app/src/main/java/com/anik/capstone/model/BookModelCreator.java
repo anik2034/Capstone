@@ -21,6 +21,6 @@ public class BookModelCreator {
         String author = documentResponse.getAuthorList().get(0);
         int coverId = documentResponse.getCoverId();
         List<String> genres = GenreHelper.getGenres(documentResponse.getSubjectList());
-        return new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg", author, title, genres);
+        return new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg", author, title, genres, ListType.LIBRARY);
     }
 }

@@ -78,9 +78,9 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, BookModel bookModel, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, int id, Boolean isNewBook) {
         Bundle args = new Bundle();
-        args.putSerializable(BookDetailsFragment.ARG_BOOK_MODEL, bookModel);
+        args.putInt(BookDetailsFragment.ARG_BOOK_ID, id);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
         navController.navigate(fragmentId, args);
     }

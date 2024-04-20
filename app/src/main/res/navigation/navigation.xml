@@ -45,8 +45,8 @@
             android:name="ARG_SEARCH_TITLE"
             app:argType="string" />
         <argument
-            android:name="ARG_BOOK_MODEL"
-            app:argType="string" />
+            android:name="ARG_BOOK_ID"
+            app:argType="integer" />
         <argument
             android:name="ARG_IS_NEW_BOOK"
             app:argType="boolean"/>

@@ -15,16 +15,16 @@ import com.anik.capstone.BR;
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 
-public class BookRecyclerAdapter extends ListAdapter<BookModel, RecyclerView.ViewHolder> {
+public class BookRecyclerAdapter extends ListAdapter<BookListItem, RecyclerView.ViewHolder> {
 
-    private static final DiffUtil.ItemCallback<BookModel> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookModel>() {
+    private static final DiffUtil.ItemCallback<BookListItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookListItem>() {
         @Override
-        public boolean areItemsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
-            return oldItem.getISBN().equals(newItem.getISBN());
+        public boolean areItemsTheSame(@NonNull BookListItem oldItem, @NonNull BookListItem newItem) {
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull BookModel oldItem, @NonNull BookModel newItem) {
+        public boolean areContentsTheSame(@NonNull BookListItem oldItem, @NonNull BookListItem newItem) {
             return oldItem.equals(newItem);
         }
     };
@@ -66,7 +66,7 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, RecyclerView.Vie
     }
 
     public interface OnItemClickListener {
-        void onItemClick(BookModel bookModel);
+        void onItemClick(BookListItem bookListItem);
     }
 
     static class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -78,9 +78,9 @@ public class BookRecyclerAdapter extends ListAdapter<BookModel, RecyclerView.Vie
             binding = DataBindingUtil.bind(itemView);
         }
 
-        public void bind(BookModel bookModel) {
+        public void bind(BookListItem bookListItem) {
             if (binding != null) {
-                binding.setVariable(BR.bookModel, bookModel);
+                binding.setVariable(BR.bookListItem, bookListItem);
                 binding.executePendingBindings();
             }
         }

@@ -26,6 +26,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import db.BookDao;
+import db.BookDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,15 +51,19 @@ public class BookDetailsViewModel extends ViewModel {
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
+    private BookDao bookDao;
 
     @Inject
-    public BookDetailsViewModel(ResourceHelper resourceHelper, BookModelCreator bookModelCreator, RetrofitClient retrofitClient) {
+    public BookDetailsViewModel(ResourceHelper resourceHelper, BookModelCreator bookModelCreator, RetrofitClient retrofitClient, BookDatabase bookDatabase) {
         this.resourceHelper = resourceHelper;
         this.bookModelCreator = bookModelCreator;
         this.retrofitClient = retrofitClient;
+        this.bookDao = bookDatabase.bookDao();
     }
 
-    public void init(BookModel bookModel, boolean isNewBook) {
+    public void init(int id, boolean isNewBook) {
+        BookModel bookModel = null;
+        if(id > 0) bookModel = bookDao.getBookById(id);
         createBookDetailsList(bookModel, isNewBook);
     }
 
@@ -270,6 +276,7 @@ public class BookDetailsViewModel extends ViewModel {
                 _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
+                    bookDao.insertBook(searchedBook);
                     createBookDetailsList(searchedBook, true);
                 } else {
                     _onShowBookNotFound.setValue(true);

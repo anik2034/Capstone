@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.anik.capstone.bookList.BookListItem;
 import com.anik.capstone.bookList.LayoutViewType;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.util.ResourceHelper;
@@ -20,6 +21,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import db.BookDao;
+import db.BookDatabase;
 
 @HiltViewModel
 public class BookListViewModel extends ViewModel {
@@ -28,8 +31,8 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
 
-    private final MutableLiveData<List<BookModel>> _books = new MutableLiveData<>();
-    public LiveData<List<BookModel>> books = _books;
+    private final MutableLiveData<List<BookListItem>> _books = new MutableLiveData<>();
+    public LiveData<List<BookListItem>> books = _books;
 
     private final MutableLiveData<Drawable> _icon = new MutableLiveData<>();
     public LiveData<Drawable> icon = _icon;
@@ -40,10 +43,13 @@ public class BookListViewModel extends ViewModel {
     private SingleLiveData<NavigateData> _onNavigate = new SingleLiveData<>();
     public LiveData<NavigateData> onNavigate = _onNavigate;
 
+    protected BookDao bookDao;
+
 
     @Inject
-    protected BookListViewModel(ResourceHelper resourceHelper) {
+    protected BookListViewModel(ResourceHelper resourceHelper, BookDatabase bookDatabase) {
         this.resourceHelper = resourceHelper;
+        bookDao = bookDatabase.bookDao();
     }
 
     public void init(int titleResId, LayoutViewType layoutViewType) {
@@ -63,7 +69,7 @@ public class BookListViewModel extends ViewModel {
         else if (_layoutViewType.getValue() == ROW) _layoutViewType.setValue(GRID);
     }
 
-    protected void setBooks(List<BookModel> books) {
+    protected void setBooks(List<BookListItem> books) {
         _books.setValue(books);
     }
 
@@ -71,16 +77,16 @@ public class BookListViewModel extends ViewModel {
 
     }
 
-    public void onItemClick(BookModel bookModel) {
-        _onNavigate.setValue(new NavigateData(bookModel, false));
+    public void onItemClick(BookListItem bookListItem) {
+        _onNavigate.setValue(new NavigateData(bookListItem.getId(), false));
     }
 
     public class NavigateData {
-        public final BookModel bookModel;
+        public final int id;
         public final boolean isNewBook;
 
-        public NavigateData(BookModel bookModel, boolean isNewBook) {
-            this.bookModel = bookModel;
+        public NavigateData(int id, boolean isNewBook) {
+            this.id = id;
             this.isNewBook = isNewBook;
         }
     }

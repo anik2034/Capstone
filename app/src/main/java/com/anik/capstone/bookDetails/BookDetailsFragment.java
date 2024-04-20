@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.OnBookDetailItemClickListener {
-    public static final String ARG_BOOK_MODEL = "ARG_BOOK_MODEl";
+    public static final String ARG_BOOK_ID = "ARG_BOOK_ID";
     public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
     public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
     public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
@@ -30,10 +30,10 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailsAdapter adapter;
 
-    public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, BookModel bookModel) {
+    public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, int id) {
         Bundle args = new Bundle();
         args.putString(searchType, data);
-        args.putSerializable(ARG_BOOK_MODEL, bookModel);
+        args.putInt(ARG_BOOK_ID,id);
         args.putBoolean(ARG_IS_NEW_BOOK, isNewBook);
         BookDetailsFragment fragment = new BookDetailsFragment();
         fragment.setArguments(args);
@@ -59,8 +59,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         } else if (bundle != null && bundle.containsKey(ARG_SEARCH_TITLE) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
             bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_TITLE), SearchType.SEARCH_BY_TITLE);
 
-        } else if (bundle != null && bundle.containsKey(ARG_BOOK_MODEL) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.init((BookModel) bundle.getSerializable(ARG_BOOK_MODEL), bundle.getBoolean(ARG_IS_NEW_BOOK));
+        } else if (bundle != null && bundle.containsKey(ARG_BOOK_ID) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
+            bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), bundle.getBoolean(ARG_IS_NEW_BOOK));
         }
 
         bookDetailsViewModel.onShowBookNotFound.observe(getViewLifecycleOwner(), onShowBookNotFound -> {
@@ -86,7 +86,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         builder.setTitle(R.string.book_not_found);
         builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
 
-        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(null, true));
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(0, true));
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
             dialog.dismiss();
             ((HomeActivity) getActivity()).back();

@@ -1,12 +1,19 @@
 package com.anik.capstone.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.rating.RatingModel;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
+@Entity(tableName = "books")
 public class BookModel implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String ISBN;
     private String coverUrl;
     private String author;
@@ -15,34 +22,15 @@ public class BookModel implements Serializable {
     private ReadingStatus readingStatus;
     private BorrowingModel borrowing;
     private RatingModel rating;
+    private ListType listType;
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ListType listType) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
         this.title = title;
         this.genres = genres;
-        this.readingStatus = readingStatus;
-        this.borrowing = borrowing;
-        this.rating = rating;
-    }
-
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres) {
-        this.ISBN = ISBN;
-        this.coverUrl = coverUrl;
-        this.author = author;
-        this.title = title;
-        this.genres = genres;
-    }
-
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing) {
-        this.ISBN = ISBN;
-        this.coverUrl = coverUrl;
-        this.author = author;
-        this.title = title;
-        this.genres = genres;
-        this.readingStatus = readingStatus;
-        this.borrowing = borrowing;
+        this.listType = listType;
     }
 
     public String getISBN() {
@@ -107,5 +95,34 @@ public class BookModel implements Serializable {
 
     public void setRating(RatingModel rating) {
         this.rating = rating;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ListType getListType() {
+        return listType;
+    }
+
+    public void setListType(ListType listType) {
+        this.listType = listType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookModel bookModel = (BookModel) o;
+        return id == bookModel.id && Objects.equals(ISBN, bookModel.ISBN) && Objects.equals(coverUrl, bookModel.coverUrl) && Objects.equals(author, bookModel.author) && Objects.equals(title, bookModel.title) && Objects.equals(genres, bookModel.genres) && readingStatus == bookModel.readingStatus && Objects.equals(borrowing, bookModel.borrowing) && Objects.equals(rating, bookModel.rating) && listType == bookModel.listType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, ISBN, coverUrl, author, title, genres, readingStatus, borrowing, rating, listType);
     }
 }

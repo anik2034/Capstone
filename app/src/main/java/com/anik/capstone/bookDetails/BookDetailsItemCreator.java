@@ -80,17 +80,20 @@ public class BookDetailsItemCreator {
         BookDetailsItem valueTitle = new BookDetailsItem();
         setEditableText(valueTitle, true, title, isNewBook);
         valueTitle.setBookModelId(bookModelId);
+
         valueTitle.setItemType(TITLE);
         bookDetailsItemList.add(valueTitle);
 
         BookDetailsItem valueAuthor = new BookDetailsItem();
         setEditableText(valueAuthor, true, author, isNewBook);
         valueAuthor.setItemType(AUTHOR);
+        valueAuthor.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueAuthor);
 
         BookDetailsItem valueUrl = new BookDetailsItem();
         valueUrl.setThumbnailUrl(url);
         valueUrl.setItemViewType(BookDetailsItem.ViewType.THUMBNAIL);
+        valueUrl.setBookModelId(bookModelId);
         valueUrl.setItemType(THUMBNAIL);
         bookDetailsItemList.add(valueUrl);
 
@@ -100,6 +103,7 @@ public class BookDetailsItemCreator {
             setHeader(headerGenre, resourceHelper.getString(R.string.genre));
             setEditableText(valueGenre, false, genre, isNewBook);
             valueGenre.setItemType(GENRE);
+            valueGenre.setBookModelId(bookModelId);
             bookDetailsItemList.add(headerGenre);
             bookDetailsItemList.add(valueGenre);
         }
@@ -109,6 +113,7 @@ public class BookDetailsItemCreator {
         setHeader(headerReadingStatus, resourceHelper.getString(R.string.reading_status));
         setSelectedValue(valueReadingStatus, ReadingStatus.getAllDisplayNames(), readingStatus.getDisplayName(), isNewBook);
         valueReadingStatus.setItemType(READING_STATUS);
+        valueReadingStatus.setBookModelId(bookModelId);
         bookDetailsItemList.add(headerReadingStatus);
         bookDetailsItemList.add(valueReadingStatus);
 
@@ -117,6 +122,7 @@ public class BookDetailsItemCreator {
         setHeader(headerBorrowingStatus, resourceHelper.getString(R.string.borrowing_status));
         setSelectedValue(valueBorrowingStatus, BorrowingStatus.getAllDisplayNames(), borrowingModel.getBorrowingStatus().getDisplayName(), isNewBook);
         valueBorrowingStatus.setItemType(BORROWING_STATUS);
+        valueBorrowingStatus.setBookModelId(bookModelId);
         bookDetailsItemList.add(headerBorrowingStatus);
         bookDetailsItemList.add(valueBorrowingStatus);
 
@@ -126,6 +132,7 @@ public class BookDetailsItemCreator {
         BookDetailsItem valueBorrowingName = new BookDetailsItem();
         setEditableText(valueBorrowingName, false, borrowingModel.getName(), isNewBook);
         valueBorrowingName.setItemType(BORROWED_BY);
+        valueBorrowingName.setBookModelId(bookModelId);
         bookDetailsItemList.add(headerBorrowingDetails);
         bookDetailsItemList.add(valueBorrowingName);
 
@@ -133,6 +140,7 @@ public class BookDetailsItemCreator {
         valueBorrowingDate.setItemViewType(BookDetailsItem.ViewType.DATE);
         valueBorrowingDate.setDate(borrowingModel.getDate());
         valueBorrowingDate.setEditable(isNewBook);
+        valueBorrowingDate.setBookModelId(bookModelId);
         valueBorrowingDate.setItemType(BORROWING_DATE);
         bookDetailsItemList.add(valueBorrowingDate);
 
@@ -143,31 +151,37 @@ public class BookDetailsItemCreator {
         BookDetailsItem valueEmotionalImpact = new BookDetailsItem();
         setStarRating(valueEmotionalImpact, resourceHelper.getString(R.string.emotional_impact), ratingModel.getEmotionalImpact(), isNewBook);
         valueEmotionalImpact.setItemType(RATING_EMOTIONAL_IMPACT);
+        valueEmotionalImpact.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueEmotionalImpact);
 
         BookDetailsItem valueCharacter = new BookDetailsItem();
         setStarRating(valueCharacter, resourceHelper.getString(R.string.characters), ratingModel.getCharacter(), isNewBook);
         valueCharacter.setItemType(RATING_CHARACTERS);
+        valueCharacter.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueCharacter);
 
         BookDetailsItem valuePacing = new BookDetailsItem();
         setStarRating(valuePacing, resourceHelper.getString(R.string.pacing), ratingModel.getPacing(), isNewBook);
         valuePacing.setItemType(RATING_PACING);
+        valuePacing.setBookModelId(bookModelId);
         bookDetailsItemList.add(valuePacing);
 
         BookDetailsItem valueStoryLine = new BookDetailsItem();
         setStarRating(valueStoryLine, resourceHelper.getString(R.string.story_line), ratingModel.getStoryline(), isNewBook);
         valueStoryLine.setItemType(RATING_STORYLINE);
+        valueStoryLine.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueStoryLine);
 
         BookDetailsItem valueWritingStyle = new BookDetailsItem();
         setStarRating(valueWritingStyle, resourceHelper.getString(R.string.writing_style), ratingModel.getWritingStyle(), isNewBook);
         valueWritingStyle.setItemType(RATING_WRITING_STYLE);
+        valueWritingStyle.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueWritingStyle);
 
         BookDetailsItem valueOverall = new BookDetailsItem();
         setStarRating(valueOverall, resourceHelper.getString(R.string.overall_rating), ratingModel.getOverallRating(), isNewBook);
         valueOverall.setItemType(OVERALL_RATING);
+        valueOverall.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueOverall);
 
         return bookDetailsItemList;

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.anik.capstone.bookDetails.SearchType;
 import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.NextScreenData;
 import com.anik.capstone.util.ResourceHelper;
@@ -17,8 +18,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class ManualInputViewModel extends ViewModel {
     private final ResourceHelper resourceHelper;
 
-    private MutableLiveData<String> _searchType = new MutableLiveData<>();
-    public LiveData<String> searchType = _searchType;
+    private MutableLiveData<SearchType> _searchType = new MutableLiveData<>();
+    public LiveData<SearchType> searchType = _searchType;
     private final SingleLiveData<NextScreenData> _nextScreen = new SingleLiveData<>();
     public LiveData<NextScreenData> nextScreen = _nextScreen;
 
@@ -31,6 +32,7 @@ public class ManualInputViewModel extends ViewModel {
     }
 
     public void init() {
+        _searchType.setValue(SearchType.SEARCH_BY_TITLE);
         checkCameraPermissions();
     }
 
@@ -52,7 +54,7 @@ public class ManualInputViewModel extends ViewModel {
         _nextScreen.setValue(new NextScreenData(DisplayType.BOOK_DETAILS, searchQuery));
     }
 
-    public void onSearchTypeClicked(String searchType) {
+    public void onSearchTypeClicked(SearchType searchType) {
         _searchType.setValue(searchType);
     }
 

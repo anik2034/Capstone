@@ -1,5 +1,8 @@
 package com.anik.capstone.model;
 
+import com.anik.capstone.model.borrowing.BorrowingModel;
+import com.anik.capstone.model.borrowing.BorrowingStatus;
+import com.anik.capstone.model.rating.RatingModel;
 import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.network.responses.DocumentResponse;
 import com.anik.capstone.util.GenreHelper;
@@ -20,6 +23,7 @@ public class BookModelCreator {
         String author = documentResponse.getAuthorList().get(0);
         int coverId = documentResponse.getCoverId();
         List<String> genres = GenreHelper.getGenres(documentResponse.getSubjectList());
-        return new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg", author, title, genres, ListType.LIBRARY);
+        return new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg",
+                author, title, genres,ReadingStatus.NOT_STARTED, new BorrowingModel(BorrowingStatus.NOT_BORROWED, "",""), new RatingModel(), ListType.LIBRARY);
     }
 }

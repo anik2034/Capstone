@@ -129,7 +129,6 @@ public class BookDetailsViewModel extends ViewModel {
         BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
         BorrowingModel borrowingModel = bookModel.getBorrowing();
         RatingModel ratingModel = bookModel.getRating();
-        ReadingStatus readingStatus = bookModel.getReadingStatus();
         switch (item.getItemType()) {
             case TITLE:
                 bookModel.setTitle(item.getValue());
@@ -211,6 +210,7 @@ public class BookDetailsViewModel extends ViewModel {
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
                     long insertedItemsCount = bookRepository.insertBook(searchedBook);
+                    searchedBook.setId((int)insertedItemsCount);
                     if (insertedItemsCount > 0) {
                         createBookDetailsList(searchedBook, true);
                     } else {

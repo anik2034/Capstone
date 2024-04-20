@@ -25,12 +25,15 @@ public class BookModel implements Serializable {
     private RatingModel rating;
     private ListType listType;
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ListType listType) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating, ListType listType) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
         this.title = title;
         this.genres = genres;
+        this.readingStatus = readingStatus;
+        this.borrowing = borrowing;
+        this.rating = rating;
         this.listType = listType;
     }
 

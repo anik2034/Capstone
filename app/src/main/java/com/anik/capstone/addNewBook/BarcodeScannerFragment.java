@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
+import com.anik.capstone.bookDetails.SearchType;
 import com.anik.capstone.databinding.FragmentBarcodeScannerBinding;
 import com.anik.capstone.home.HomeActivity;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -98,7 +99,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
                     break;
                 }
             }
-            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true, BookDetailsFragment.ARG_SEARCH_ISBN);
+            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true, SearchType.SEARCH_BY_ISBN);
         });
     }
 

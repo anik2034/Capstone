@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
+import com.anik.capstone.bookDetails.SearchType;
 import com.anik.capstone.bookList.BookListFragment;
 import com.anik.capstone.databinding.ActivityHomeBinding;
 
@@ -83,9 +84,9 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, String searchType) {
+    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, SearchType searchType) {
         Bundle args = new Bundle();
-        args.putString(searchType, searchData);
+        args.putString(searchType.getDisplayName(), searchData);
         args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
         args.putInt(BookDetailsFragment.ARG_BOOK_ID, -1);
         navController.navigate(fragmentId, args);

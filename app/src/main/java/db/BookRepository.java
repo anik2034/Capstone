@@ -32,7 +32,7 @@ public class BookRepository {
 
     public long insertBook(BookModel book) {
         try {
-            return bookDao.updateBook(book).get();
+            return bookDao.insertBook(book).get();
         } catch (ExecutionException | InterruptedException e) {
             return -1;
         }

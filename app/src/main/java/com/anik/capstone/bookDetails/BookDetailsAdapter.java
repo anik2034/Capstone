@@ -140,8 +140,10 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
                 binding.itemEditableView.setIsEditable(bookDetailsItem.isEditable());
                 binding.itemEditableView.setCenter(bookDetailsItem.isCenter());
                 binding.itemEditableView.setText(bookDetailsItem.getValue());
-                String oldText = bookDetailsItem.getValue();
-                binding.itemEditableView.setListener(newText -> clickListener.onTextChanged(oldText, newText, getAdapterPosition()));
+                binding.itemEditableView.setListener(newText -> {
+                    String oldText =  binding.itemEditableView.getText();
+                    clickListener.onTextChanged(oldText, newText, getAdapterPosition());
+                });
                 binding.executePendingBindings();
             }
         }

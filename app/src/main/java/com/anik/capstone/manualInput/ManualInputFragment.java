@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.BookDetailsFragment;
+import com.anik.capstone.bookDetails.SearchType;
 import com.anik.capstone.databinding.FragmentManualInputBinding;
 import com.anik.capstone.home.HomeActivity;
 
@@ -25,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class ManualInputFragment extends Fragment {
     private ManualInputViewModel manualInputViewModel;
     private FragmentManualInputBinding fragmentManualInputBinding;
-    private String searchType;
+    private SearchType searchType;
 
     public static ManualInputFragment newInstance() {
         return new ManualInputFragment();
@@ -64,10 +65,10 @@ public class ManualInputFragment extends Fragment {
         });
 
         fragmentManualInputBinding.isbnRadioButton.setOnClickListener(v -> {
-            manualInputViewModel.onSearchTypeClicked(BookDetailsFragment.ARG_SEARCH_ISBN);
+            manualInputViewModel.onSearchTypeClicked(SearchType.SEARCH_BY_ISBN);
         });
         fragmentManualInputBinding.titleRadioButton.setOnClickListener(v -> {
-            manualInputViewModel.onSearchTypeClicked(BookDetailsFragment.ARG_SEARCH_TITLE);
+            manualInputViewModel.onSearchTypeClicked(SearchType.SEARCH_BY_TITLE);
         });
 
         manualInputViewModel.searchType.observe(getViewLifecycleOwner(), searchType -> {

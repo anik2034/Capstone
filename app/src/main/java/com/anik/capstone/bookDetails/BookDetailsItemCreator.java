@@ -1,5 +1,19 @@
 package com.anik.capstone.bookDetails;
 
+import com.anik.capstone.R;
+import com.anik.capstone.model.BookModel;
+import com.anik.capstone.model.ReadingStatus;
+import com.anik.capstone.model.borrowing.BorrowingModel;
+import com.anik.capstone.model.borrowing.BorrowingStatus;
+import com.anik.capstone.model.rating.RatingModel;
+import com.anik.capstone.util.ResourceHelper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.AUTHOR;
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.BORROWED_BY;
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.BORROWING_DATE;
@@ -14,20 +28,6 @@ import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.RATING_WRIT
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.READING_STATUS;
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.THUMBNAIL;
 import static com.anik.capstone.bookDetails.BookDetailsItem.ItemType.TITLE;
-
-import com.anik.capstone.R;
-import com.anik.capstone.model.BookModel;
-import com.anik.capstone.model.ReadingStatus;
-import com.anik.capstone.model.borrowing.BorrowingModel;
-import com.anik.capstone.model.borrowing.BorrowingStatus;
-import com.anik.capstone.model.rating.RatingModel;
-import com.anik.capstone.util.ResourceHelper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
 
 public class BookDetailsItemCreator {
 
@@ -44,9 +44,9 @@ public class BookDetailsItemCreator {
         ReadingStatus readingStatus = ReadingStatus.NOT_STARTED;
         RatingModel ratingModel = new RatingModel();
         String url = resourceHelper.getString(R.string.sample);
-        String title = resourceHelper.getString(R.string.title);
-        String author = resourceHelper.getString(R.string.author);
-        List<String> genres = Arrays.asList(resourceHelper.getString(R.string.genre_1), resourceHelper.getString(R.string.genre_2));
+        String title = "";
+        String author = "";
+        List<String> genres = Arrays.asList("", "");
         int bookModelId = -1;
         if (bookModel != null) {
             if (bookModel.getTitle() != null) {
@@ -78,14 +78,14 @@ public class BookDetailsItemCreator {
             bookModelId = bookModel.getId();
         }
         BookDetailsItem valueTitle = new BookDetailsItem();
-        setEditableText(valueTitle, true, title, isNewBook);
+        setEditableText(valueTitle, title, resourceHelper.getString(R.string.title), isNewBook);
         valueTitle.setBookModelId(bookModelId);
 
         valueTitle.setItemType(TITLE);
         bookDetailsItemList.add(valueTitle);
 
         BookDetailsItem valueAuthor = new BookDetailsItem();
-        setEditableText(valueAuthor, true, author, isNewBook);
+        setEditableText(valueAuthor, author, resourceHelper.getString(R.string.author), isNewBook);
         valueAuthor.setItemType(AUTHOR);
         valueAuthor.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueAuthor);
@@ -101,7 +101,7 @@ public class BookDetailsItemCreator {
             BookDetailsItem headerGenre = new BookDetailsItem();
             BookDetailsItem valueGenre = new BookDetailsItem();
             setHeader(headerGenre, resourceHelper.getString(R.string.genre));
-            setEditableText(valueGenre, false, genre, isNewBook);
+            setEditableText(valueGenre, genre, resourceHelper.getString(R.string.genre), isNewBook);
             valueGenre.setItemType(GENRE);
             valueGenre.setBookModelId(bookModelId);
             bookDetailsItemList.add(headerGenre);
@@ -130,7 +130,7 @@ public class BookDetailsItemCreator {
         setHeader(headerBorrowingDetails, resourceHelper.getString(R.string.borrowing_details));
 
         BookDetailsItem valueBorrowingName = new BookDetailsItem();
-        setEditableText(valueBorrowingName, false, borrowingModel.getName(), isNewBook);
+        setEditableText(valueBorrowingName, borrowingModel.getName(), resourceHelper.getString(R.string.name), isNewBook);
         valueBorrowingName.setItemType(BORROWED_BY);
         valueBorrowingName.setBookModelId(bookModelId);
         bookDetailsItemList.add(headerBorrowingDetails);
@@ -187,10 +187,10 @@ public class BookDetailsItemCreator {
         return bookDetailsItemList;
     }
 
-    private void setEditableText(BookDetailsItem editableText, boolean isCenter, String value, boolean isEditable) {
+    private void setEditableText(BookDetailsItem editableText, String value, String hint, boolean isEditable) {
         editableText.setItemViewType(BookDetailsItem.ViewType.EDITABLE_TEXT);
-        editableText.setCenter(isCenter);
         editableText.setValue(value);
+        editableText.setHint(hint);
         editableText.setEditable(isEditable);
     }
 

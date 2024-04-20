@@ -1,10 +1,5 @@
 package com.anik.capstone.model;
 
-import androidx.annotation.NonNull;
-
-import com.anik.capstone.R;
-import com.anik.capstone.model.borrowing.BorrowingStatus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +26,18 @@ public enum ReadingStatus {
         }
         return displayNames;
     }
-    public static ReadingStatus getReadingStatus(String str){
+
+    public static ReadingStatus getReadingStatus(String str) {
         ReadingStatus readingStatus = null;
-        if(str.equals(NOT_STARTED.displayName)) readingStatus = NOT_STARTED;
-        else if(str.equals(IN_PROGRESS.displayName)) readingStatus = IN_PROGRESS;
-        else if(str.equals(PAUSED.displayName)) readingStatus = PAUSED;
-        else if(str.equals(FINISHED.displayName)) readingStatus = FINISHED;
+        if (str.equals(NOT_STARTED.displayName)) {
+            readingStatus = NOT_STARTED;
+        } else if (str.equals(IN_PROGRESS.displayName)) {
+            readingStatus = IN_PROGRESS;
+        } else if (str.equals(PAUSED.displayName)) {
+            readingStatus = PAUSED;
+        } else if (str.equals(FINISHED.displayName)) {
+            readingStatus = FINISHED;
+        }
         return readingStatus;
     }
 }

@@ -77,17 +77,16 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, int id, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, int bookModelId) {
         Bundle args = new Bundle();
-        args.putInt(BookDetailsFragment.ARG_BOOK_ID, id);
-        args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        args.putInt(BookDetailsFragment.ARG_BOOK_ID, bookModelId);
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, SearchType searchType) {
+    public void navigateTo(int fragmentId, String searchValue, SearchType searchType) {
         Bundle args = new Bundle();
-        args.putString(searchType.getDisplayName(), searchData);
-        args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        args.putString(BookDetailsFragment.ARG_SEARCH_TYPE, searchType.name());
+        args.putString(BookDetailsFragment.ARG_SEARCH_VALUE, searchValue);
         args.putInt(BookDetailsFragment.ARG_BOOK_ID, -1);
         navController.navigate(fragmentId, args);
     }
@@ -96,8 +95,4 @@ public class HomeActivity extends AppCompatActivity {
         navController.popBackStack();
     }
 
-
 }
-
-
-

@@ -23,23 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.OnBookDetailItemClickListener {
 
     public static final String ARG_BOOK_ID = "ARG_BOOK_ID";
-    public static final String ARG_SEARCH_ISBN = "ARG_SEARCH_ISBN";
-    public static final String ARG_SEARCH_TITLE = "ARG_SEARCH_TITLE";
-    public static final String ARG_IS_NEW_BOOK = "ARG_IS_NEW_BOOK";
+    public static final String ARG_SEARCH_TYPE = "ARG_SEARCH_TYPE";
+    public static final String ARG_SEARCH_VALUE = "ARG_SEARCH_VALUE";
 
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailsAdapter adapter;
-
-    public static BookDetailsFragment newInstance(String data, String searchType, boolean isNewBook, int id) {
-        Bundle args = new Bundle();
-        args.putString(searchType, data);
-        args.putInt(ARG_BOOK_ID, id);
-        args.putBoolean(ARG_IS_NEW_BOOK, isNewBook);
-        BookDetailsFragment fragment = new BookDetailsFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,13 +44,15 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         Bundle bundle = getArguments();
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
 
-        if (bundle != null && bundle.containsKey(ARG_SEARCH_ISBN) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_ISBN), SearchType.SEARCH_BY_ISBN);
-        } else if (bundle != null && bundle.containsKey(ARG_SEARCH_TITLE) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.init(bundle.getString(ARG_SEARCH_TITLE), SearchType.SEARCH_BY_TITLE);
-
-        } else if (bundle != null && bundle.containsKey(ARG_BOOK_ID) && bundle.containsKey(ARG_IS_NEW_BOOK)) {
-            bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), bundle.getBoolean(ARG_IS_NEW_BOOK));
+        if (bundle != null) {
+            if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
+                bookDetailsViewModel.init(
+                        SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
+                        bundle.getString(ARG_SEARCH_VALUE)
+                );
+            } else if (bundle.containsKey(ARG_BOOK_ID)) {
+                bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false);
+            }
         }
 
         bookDetailsViewModel.onShowBookNotFound.observe(getViewLifecycleOwner(), onShowBookNotFound -> {

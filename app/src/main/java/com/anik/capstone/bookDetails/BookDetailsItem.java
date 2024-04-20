@@ -9,13 +9,13 @@ public class BookDetailsItem {
     private String selectedValue;
     private float rating;
     private String date;
-    private boolean isCenter;
     private ViewType viewType;
     private ItemType itemType;
     private String thumbnailUrl;
     private boolean isEditable;
     private List<String> singleSelection;
     private int bookModelId;
+    private String hint;
 
     public String getTitle() {
         return title;
@@ -89,14 +89,6 @@ public class BookDetailsItem {
         this.singleSelection = singleSelection;
     }
 
-    public boolean isCenter() {
-        return isCenter;
-    }
-
-    public void setCenter(boolean center) {
-        isCenter = center;
-    }
-
     public int getBookModelId() {
         return bookModelId;
     }
@@ -121,17 +113,25 @@ public class BookDetailsItem {
         this.itemType = itemType;
     }
 
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsItem that = (BookDetailsItem) o;
-        return Float.compare(rating, that.rating) == 0 && isCenter == that.isCenter && isEditable == that.isEditable && bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && viewType == that.viewType && itemType == that.itemType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection);
+        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && viewType == that.viewType && itemType == that.itemType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection) && Objects.equals(hint, that.hint);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, isCenter, viewType, itemType, thumbnailUrl, isEditable, singleSelection, bookModelId);
+        return Objects.hash(title, value, selectedValue, rating, date, viewType, itemType, thumbnailUrl, isEditable, singleSelection, bookModelId, hint);
     }
 
     public enum ViewType {

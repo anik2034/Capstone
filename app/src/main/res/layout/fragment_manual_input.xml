@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".manualInput.ManualInputFragment">
+    tools:context=".newBook.ManualInputFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,19 +67,19 @@
             app:layout_constraintTop_toTopOf="@+id/textView">
 
             <RadioButton
-                android:id="@+id/titleRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:checked="true"
-                android:text="@string/title" />
-
-            <RadioButton
                 android:id="@+id/isbnRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:checked="true"
                 android:text="@string/isbn" />
+
+            <RadioButton
+                android:id="@+id/titleRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/title" />
 
         </RadioGroup>
 

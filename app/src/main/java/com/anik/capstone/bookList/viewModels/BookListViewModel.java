@@ -42,8 +42,8 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
-    private SingleLiveData<NavigateData> _onNavigate = new SingleLiveData<>();
-    public LiveData<NavigateData> onNavigate = _onNavigate;
+    private final SingleLiveData<Integer> _navigateToBookDetails = new SingleLiveData<>();
+    public LiveData<Integer> navigateToBookDetails = _navigateToBookDetails;
 
     @Inject
     protected BookListViewModel(
@@ -88,17 +88,7 @@ public class BookListViewModel extends ViewModel {
     }
 
     public void onItemClick(BookListItem bookListItem) {
-        _onNavigate.setValue(new NavigateData(bookListItem.getId(), false));
-    }
-
-    public class NavigateData {
-        public final int id;
-        public final boolean isNewBook;
-
-        public NavigateData(int id, boolean isNewBook) {
-            this.id = id;
-            this.isNewBook = isNewBook;
-        }
+        _navigateToBookDetails.setValue(bookListItem.getBookModelId());
     }
 }
 

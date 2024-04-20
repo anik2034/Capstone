@@ -35,15 +35,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="borrowed_by">Borrowed by</string>
-    <string name="search_type_required">Search Type Required</string>
-    <string name="please_select_the_search_type">Please select the search type</string>
     <string name="ok">OK</string>
     <string name="something_went_wrong">Something went wrong, please try again.</string>
+    <string name="enter_search_value">Please enter search value</string>
     <string name="borrowing_details">Borrowing Details</string>
     <string name="sample">sample</string>
     <string name="author">Author</string>
     <string name="genre_1">Genre 1</string>
     <string name="genre_2">Genre 2</string>
+    <string name="name">Name</string>
 
     <string-array name="search_options">
         <item>Title</item>

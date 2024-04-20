@@ -1,19 +1,19 @@
-package com.anik.capstone.addNewBook;
+package com.anik.capstone.newBook;
 
 import android.graphics.ImageFormat;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.OptIn;
-import androidx.camera.core.ExperimentalGetImage;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageProxy;
 
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
+import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
 
 public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
     private final BarcodeDataListener listener;

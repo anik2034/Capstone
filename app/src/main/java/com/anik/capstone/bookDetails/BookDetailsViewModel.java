@@ -1,10 +1,5 @@
 package com.anik.capstone.bookDetails;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
@@ -21,6 +16,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import db.BookRepository;
 import retrofit2.Call;
@@ -68,14 +67,14 @@ public class BookDetailsViewModel extends ViewModel {
         this.bookDetailsItemCreator = bookDetailsItemCreator;
     }
 
-    public void init(int id, boolean isNewBook) {
+    public void init(int bookModelId, boolean isNewBook) {
         BookModel bookModel = null;
-        if (id >= 0) bookModel = bookRepository.getBookById(id);
+        if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    public void init(String query, SearchType searchType) {
-        search(query, searchType);
+    public void init(SearchType searchType, String query) {
+        search(searchType, query);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
@@ -84,29 +83,33 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onItemClicked(int position) {
-        updateBookDetails(position, true, null, null, null,null, null);
+        BookDetailsItem bookDetailsItem = getItemByPosition(position);
+        if (bookDetailsItem != null) {
+            bookDetailsItem.setEditable(true);
+            updateBookDetailsItemList(position);
+        }
     }
 
     public void onRatingChanged(float rating, int position) {
-        updateBookDetails(position, false, rating, null, null,null, null);
+        updateBookDetails(position, rating, null, null,null, null);
     }
 
     public void onTextChanged(String oldText, String newText, int position) {
-        updateBookDetails(position, false, null, oldText, newText, null, null);
+        updateBookDetails(position, null, oldText, newText, null, null);
     }
 
     public void onDateChanged(String date, int position) {
-        updateBookDetails(position, false, null, null,null, date, null);
+        updateBookDetails(position, null, null,null, date, null);
     }
 
     public void onOptionChanged(String selected, int position) {
-        updateBookDetails(position, false, null, null,null, null, selected);
+        updateBookDetails(position, null, null,null, null, selected);
     }
 
-    private void updateBookDetails(int position, boolean editable, Float rating, String oldText, String newText, String date, String selected) {
-        if (position >= 0 && position < bookDetailsItemList.size()) {
-            BookDetailsItem item = bookDetailsItemList.get(position);
-            item.setEditable(editable);
+    private void updateBookDetails(int position, Float rating, String oldText, String newText, String date, String selected) {
+        BookDetailsItem item = getItemByPosition(position);
+        if (item != null) {
+            item.setEditable(false);
             if (rating != null) {
                 item.setRating(rating);
             }
@@ -119,10 +122,21 @@ public class BookDetailsViewModel extends ViewModel {
             if (selected != null) {
                 item.setSelectedValue(selected);
             }
-            _bookDetailsList.setValue(bookDetailsItemList);
-            _updateDetailItem.setValue(position);
+            updateBookDetailsItemList(position);
             updateBook(item, oldText);
         }
+    }
+
+    private BookDetailsItem getItemByPosition(int position) {
+        if (position >= 0 && position < bookDetailsItemList.size()) {
+            return bookDetailsItemList.get(position);
+        }
+        return null;
+    }
+
+    private void updateBookDetailsItemList(int position) {
+        _bookDetailsList.setValue(bookDetailsItemList);
+        _updateDetailItem.setValue(position);
     }
 
     private void updateBook(BookDetailsItem item, String oldText) {
@@ -141,8 +155,11 @@ public class BookDetailsViewModel extends ViewModel {
                 break;
             case GENRE:
                 List<String> genres = bookModel.getGenres();
-                genres.set(genres.indexOf(oldText), item.getValue());
-                bookModel.setGenres(genres);
+                int index = genres.indexOf(oldText);
+                if (index != -1) {
+                    genres.set(genres.indexOf(oldText), item.getValue());
+                    bookModel.setGenres(genres);
+                }
                 break;
             case BORROWING_STATUS:
                 borrowingModel.setBorrowingStatus(BorrowingStatus.getBorrowingStatus(item.getSelectedValue()));
@@ -191,14 +208,14 @@ public class BookDetailsViewModel extends ViewModel {
         }
     }
 
-    private void search(String query, SearchType searchType) {
+    private void search(SearchType searchType, String query) {
         Call<BookResponse> call = null;
         _isProgressBarVisible.setValue(true);
         switch (searchType) {
-            case SEARCH_BY_ISBN:
+            case ISBN:
                 call = retrofitClient.bookService.searchByISBN(query);
                 break;
-            case SEARCH_BY_TITLE:
+            case TITLE:
                 call = retrofitClient.bookService.searchByTitle(query);
                 break;
         }
@@ -209,10 +226,10 @@ public class BookDetailsViewModel extends ViewModel {
                 BookResponse bookResponse = response.body();
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
-                    long insertedItemsCount = bookRepository.insertBook(searchedBook);
-                    searchedBook.setId((int)insertedItemsCount);
-                    if (insertedItemsCount > 0) {
-                        createBookDetailsList(searchedBook, true);
+                    long insertedItemId = bookRepository.insertBook(searchedBook);
+                    if (insertedItemId > 0) {
+                        BookModel insertedBook = bookRepository.getBookById((int) insertedItemId);
+                        createBookDetailsList(insertedBook, true);
                     } else {
                         showErrorMessage();
                     }

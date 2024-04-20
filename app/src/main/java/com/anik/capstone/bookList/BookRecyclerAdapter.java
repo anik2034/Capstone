@@ -3,6 +3,9 @@ package com.anik.capstone.bookList;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.anik.capstone.BR;
+import com.anik.capstone.R;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -11,16 +14,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.anik.capstone.BR;
-import com.anik.capstone.R;
-import com.anik.capstone.model.BookModel;
-
 public class BookRecyclerAdapter extends ListAdapter<BookListItem, RecyclerView.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<BookListItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookListItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull BookListItem oldItem, @NonNull BookListItem newItem) {
-            return oldItem.getId() == newItem.getId();
+            return oldItem.getBookModelId() == newItem.getBookModelId();
         }
 
         @Override

@@ -25,10 +25,13 @@ public enum BorrowingStatus {
         return displayNames;
     }
 
-    public static BorrowingStatus getBorrowingStatus(String str){
+    public static BorrowingStatus getBorrowingStatus(String str) {
         BorrowingStatus borrowingStatus = null;
-       if(str.equals(BORROWED.displayName)) borrowingStatus = BORROWED;
-       else if(str.equals(NOT_BORROWED.displayName)) borrowingStatus = NOT_BORROWED;
-       return borrowingStatus;
+        if (str.equals(BORROWED.displayName)) {
+            borrowingStatus = BORROWED;
+        } else if (str.equals(NOT_BORROWED.displayName)) {
+            borrowingStatus = NOT_BORROWED;
+        }
+        return borrowingStatus;
     }
 }

@@ -1,30 +1,34 @@
-package com.anik.capstone.manualInput;
+package com.anik.capstone.newBook;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
+import com.anik.capstone.R;
 import com.anik.capstone.bookDetails.SearchType;
-import com.anik.capstone.home.DisplayType;
-import com.anik.capstone.home.NextScreenData;
 import com.anik.capstone.util.ResourceHelper;
 import com.anik.capstone.util.SingleLiveData;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class ManualInputViewModel extends ViewModel {
-    private final ResourceHelper resourceHelper;
 
-    private MutableLiveData<SearchType> _searchType = new MutableLiveData<>();
-    public LiveData<SearchType> searchType = _searchType;
-    private final SingleLiveData<NextScreenData> _nextScreen = new SingleLiveData<>();
-    public LiveData<NextScreenData> nextScreen = _nextScreen;
+    private final ResourceHelper resourceHelper;
+    private SearchType searchType = SearchType.ISBN;
+
+    private final SingleLiveData<Boolean> _navigateToBarcodeScanner = new SingleLiveData<>();
+    public LiveData<Boolean> navigateToBarcodeScanner = _navigateToBarcodeScanner;
+
+    private final SingleLiveData<BookDetailsData> _navigateToBookDetails = new SingleLiveData<>();
+    public LiveData<BookDetailsData> navigateToBookDetails = _navigateToBookDetails;
 
     private final MutableLiveData<Boolean> _onShowPermissionRequestDialog = new MutableLiveData<>();
     public LiveData<Boolean> onShowPermissionRequestDialog = _onShowPermissionRequestDialog;
+
+    private final MutableLiveData<String> _showEmptySearchErrorMessage = new MutableLiveData<>();
+    public LiveData<String> showEmptySearchErrorMessage = _showEmptySearchErrorMessage;
 
     @Inject
     public ManualInputViewModel(ResourceHelper resourceHelper) {
@@ -32,7 +36,6 @@ public class ManualInputViewModel extends ViewModel {
     }
 
     public void init() {
-        _searchType.setValue(SearchType.SEARCH_BY_TITLE);
         checkCameraPermissions();
     }
 
@@ -44,18 +47,22 @@ public class ManualInputViewModel extends ViewModel {
 
     public void onCameraButtonClicked() {
         if (resourceHelper.hasCameraPermission()) {
-            _nextScreen.setValue(new NextScreenData(DisplayType.BARCODE_SCANNER, null));
+            _navigateToBarcodeScanner.setValue(true);
         } else {
             _onShowPermissionRequestDialog.setValue(true);
         }
     }
 
     public void onSearchButtonClicked(String searchQuery) {
-        _nextScreen.setValue(new NextScreenData(DisplayType.BOOK_DETAILS, searchQuery));
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            _showEmptySearchErrorMessage.setValue(resourceHelper.getString(R.string.enter_search_value));
+        } else {
+            _navigateToBookDetails.setValue(new BookDetailsData(searchType, searchQuery));
+        }
     }
 
     public void onSearchTypeClicked(SearchType searchType) {
-        _searchType.setValue(searchType);
+        this.searchType = searchType;
     }
 
 }

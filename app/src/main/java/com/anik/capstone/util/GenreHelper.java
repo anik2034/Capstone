@@ -9,6 +9,7 @@ public class GenreHelper {
    private static final HashSet<String> genres = new HashSet<>(Arrays.asList(
             "fiction",
             "non-fiction",
+            "nonfiction",
             "mystery",
             "thriller",
             "romance",
@@ -41,11 +42,12 @@ public class GenreHelper {
 
    public static List<String> getGenres(List<String> subject){
        List<String> result = new ArrayList<>();
-       int length = 10;
-       if(subject.size() < 10) length = subject.size();
-       for(int  i = 0; i < length; i++){
-           if(genres.contains(subject.get(i).toLowerCase())){
-               result.add(subject.get(i));
+       if (subject != null) {
+           int length = Math.min(subject.size(), 10);
+           for (int i = 0; i < length; i++) {
+               if (genres.contains(subject.get(i).toLowerCase())) {
+                   result.add(subject.get(i));
+               }
            }
        }
        return result;

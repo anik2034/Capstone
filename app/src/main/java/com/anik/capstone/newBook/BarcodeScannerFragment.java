@@ -1,4 +1,4 @@
-package com.anik.capstone.addNewBook;
+package com.anik.capstone.newBook;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -6,6 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.anik.capstone.R;
+import com.anik.capstone.databinding.FragmentBarcodeScannerBinding;
+import com.anik.capstone.home.HomeActivity;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,18 +28,6 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.anik.capstone.R;
-import com.anik.capstone.bookDetails.BookDetailsFragment;
-import com.anik.capstone.bookDetails.SearchType;
-import com.anik.capstone.databinding.FragmentBarcodeScannerBinding;
-import com.anik.capstone.home.HomeActivity;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -85,22 +82,16 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
             }
         });
         barcodeScannerViewModel.cameraStart.observe(getViewLifecycleOwner(), cameraStart -> startCamera());
-        barcodeScannerViewModel.nextScreen.observe(getViewLifecycleOwner(), nextScreenData -> {
-            int fragmentId = 0;
-            String data = null;
-            switch (nextScreenData.getNextScreen()) {
-                case MANUAL_INPUT: {
-                    fragmentId = R.id.manualInputFragment;
-                    break;
-                }
-                case BOOK_DETAILS: {
-                    fragmentId = R.id.bookDetailsFragment;
-                    data = nextScreenData.getData();
-                    break;
-                }
-            }
-            ((HomeActivity) requireActivity()).navigateTo(fragmentId, data, true, SearchType.SEARCH_BY_ISBN);
-        });
+        barcodeScannerViewModel.navigateToManualEntry.observe(getViewLifecycleOwner(), manualEntryData ->
+                ((HomeActivity) requireActivity()).navigateTo(R.id.manualInputFragment)
+        );
+        barcodeScannerViewModel.navigateToBookDetails.observe(getViewLifecycleOwner(), bookDetailsData ->
+                ((HomeActivity) requireActivity()).navigateTo(
+                        R.id.bookDetailsFragment,
+                        bookDetailsData.searchValue,
+                        bookDetailsData.searchType
+                )
+        );
     }
 
     @Override

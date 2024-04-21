@@ -69,7 +69,13 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void init(int bookModelId, boolean isNewBook) {
         BookModel bookModel = null;
+        long emptyBookModelId = -1;
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
+        else if(bookModelId < 0){
+            bookModel = new BookModel();
+            emptyBookModelId = bookRepository.insertBook(bookModel);
+            bookModel.setId((int)emptyBookModelId);
+        }
         createBookDetailsList(bookModel, isNewBook);
     }
 

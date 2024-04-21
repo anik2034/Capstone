@@ -1,14 +1,16 @@
 package com.anik.capstone.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.anik.capstone.model.borrowing.BorrowingModel;
+import com.anik.capstone.model.borrowing.BorrowingStatus;
 import com.anik.capstone.model.rating.RatingModel;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 @Entity(tableName = "books")
 public class BookModel implements Serializable {
@@ -24,6 +26,18 @@ public class BookModel implements Serializable {
     private BorrowingModel borrowing;
     private RatingModel rating;
     private ListType listType;
+
+    public BookModel() {
+        this.ISBN = "";
+        this.coverUrl = "";
+        this.author = "";
+        this.title = "";
+        this.genres = Arrays.asList("", "");;
+        this.readingStatus = ReadingStatus.NOT_STARTED;;
+        this.borrowing =  new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
+        this.rating = new RatingModel();
+        this.listType = ListType.LIBRARY;
+    }
 
     public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating, ListType listType) {
         this.ISBN = ISBN;

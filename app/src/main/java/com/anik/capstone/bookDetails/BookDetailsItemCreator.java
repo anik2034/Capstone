@@ -40,43 +40,15 @@ public class BookDetailsItemCreator {
 
     public List<BookDetailsItem> create(BookModel bookModel, boolean isNewBook) {
         List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
-        BorrowingModel borrowingModel = new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
-        ReadingStatus readingStatus = ReadingStatus.NOT_STARTED;
-        RatingModel ratingModel = new RatingModel();
-        String url = resourceHelper.getString(R.string.sample);
-        String title = "";
-        String author = "";
-        List<String> genres = Arrays.asList("", "");
-        int bookModelId = -1;
-        if (bookModel != null) {
-            if (bookModel.getTitle() != null) {
-                title = bookModel.getTitle();
-            }
-            if (bookModel.getAuthor() != null) {
-                author = bookModel.getAuthor();
-            }
-            if (bookModel.getCoverUrl() != null) {
-                url = bookModel.getCoverUrl();
-            }
-            if (bookModel.getGenres() != null) {
-                genres = bookModel.getGenres();
-            }
-            if (bookModel.getReadingStatus() != null) {
-                readingStatus = bookModel.getReadingStatus();
-            }
-            if (bookModel.getBorrowing() != null) {
-                borrowingModel = bookModel.getBorrowing();
-                if (borrowingModel.getBorrowingStatus() == null)
-                    borrowingModel.setBorrowingStatus(BorrowingStatus.NOT_BORROWED);
-                if (borrowingModel.getDate() == null) borrowingModel.setDate("");
-                if (borrowingModel.getName() == null)
-                    borrowingModel.setName("");
-            }
-            if (bookModel.getRating() != null) {
-                ratingModel = bookModel.getRating();
-            }
-            bookModelId = bookModel.getId();
-        }
+        BorrowingModel borrowingModel = bookModel.getBorrowing();
+        ReadingStatus readingStatus = bookModel.getReadingStatus();
+        RatingModel ratingModel = bookModel.getRating();
+        String url = bookModel.getCoverUrl();
+        String title = bookModel.getTitle();
+        String author = bookModel.getAuthor();
+        List<String> genres = bookModel.getGenres();
+        int bookModelId = bookModel.getId();
+        
         BookDetailsItem valueTitle = new BookDetailsItem();
         setEditableText(valueTitle, title, resourceHelper.getString(R.string.title), isNewBook);
         valueTitle.setBookModelId(bookModelId);

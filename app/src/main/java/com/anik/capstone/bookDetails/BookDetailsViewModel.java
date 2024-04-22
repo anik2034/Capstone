@@ -1,5 +1,10 @@
 package com.anik.capstone.bookDetails;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
@@ -16,10 +21,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import db.BookRepository;
 import retrofit2.Call;
@@ -44,8 +45,11 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
-    private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
-    public LiveData<Boolean> isNewBook = _isNewBook;
+    private final MutableLiveData<Boolean> _updateList = new MutableLiveData<>();
+    public LiveData<Boolean> updateList = _updateList;
+
+    private final MutableLiveData<Boolean> _isVisible = new MutableLiveData<>();
+    public LiveData<Boolean> isVisible = _isVisible;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
 
 
@@ -73,16 +77,16 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void init(int bookModelId, boolean isNewBook) {
-        _isNewBook.setValue(isNewBook);
+        _isVisible.setValue(isNewBook);
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
-        else if(bookModelId < 0){
+        else if (bookModelId < 0) {
             bookModel = new BookModel();
         }
         createBookDetailsList(bookModel, isNewBook);
     }
 
     public void init(SearchType searchType, String query, boolean isNewBook) {
-        _isNewBook.setValue(isNewBook);
+        _isVisible.setValue(isNewBook);
         search(searchType, query);
     }
 
@@ -101,7 +105,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onRatingChanged(float rating, int position) {
-        updateBookDetails(position, rating, null, null,null, null);
+        updateBookDetails(position, rating, null, null, null, null);
     }
 
     public void onTextChanged(String oldText, String newText, int position) {
@@ -109,11 +113,11 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onDateChanged(String date, int position) {
-        updateBookDetails(position, null, null,null, date, null);
+        updateBookDetails(position, null, null, null, date, null);
     }
 
     public void onOptionChanged(String selected, int position) {
-        updateBookDetails(position, null, null,null, null, selected);
+        updateBookDetails(position, null, null, null, null, selected);
     }
 
     private void updateBookDetails(int position, Float rating, String oldText, String newText, String date, String selected) {
@@ -236,17 +240,13 @@ public class BookDetailsViewModel extends ViewModel {
                 BookResponse bookResponse = response.body();
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
-                    long insertedItemId = bookRepository.insertBook(searchedBook);
-                    if (insertedItemId > 0) {
-                        BookModel insertedBook = bookRepository.getBookById((int) insertedItemId);
-                        createBookDetailsList(insertedBook, true);
-                    } else {
-                        showErrorMessage();
-                    }
+
+                    createBookDetailsList(searchedBook, true);
                 } else {
                     _onShowBookNotFound.setValue(true);
                 }
             }
+
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
@@ -262,14 +262,15 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void onSaveClicked() {
         long id = bookRepository.insertBook(bookModel);
-        List<BookDetailsItem> list =  _bookDetailsList.getValue();
+        List<BookDetailsItem> list = _bookDetailsList.getValue();
         if (list != null) {
-            for(BookDetailsItem bookDetailsItem : list){
-                bookDetailsItem.setBookModelId((int)id);
+            for (BookDetailsItem bookDetailsItem : list) {
+                bookDetailsItem.setBookModelId((int) id);
                 bookDetailsItem.setEditable(false);
             }
         }
-        _isNewBook.setValue(false);
+        _isVisible.setValue(false);
+        _updateList.setValue(true);
     }
 
     public void onDeleteClicked() {

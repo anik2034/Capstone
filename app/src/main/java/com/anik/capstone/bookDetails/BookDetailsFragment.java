@@ -1,10 +1,17 @@
 package com.anik.capstone.bookDetails;
 
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
@@ -12,11 +19,6 @@ import com.anik.capstone.home.HomeActivity;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -44,11 +46,33 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         Bundle bundle = getArguments();
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
 
+        fragmentBookDetailsBinding.toolbar.inflateMenu(R.menu.toolbar_menu);
+
+        bookDetailsViewModel.isNewBook.observe(getViewLifecycleOwner(), isVisible -> {
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(0).setVisible(isVisible);
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(1).setVisible(!isVisible);
+        });
+
+        fragmentBookDetailsBinding.toolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.save) {
+                bookDetailsViewModel.onSaveClicked();
+            } else if (id == R.id.delete) {
+                bookDetailsViewModel.onDeleteClicked();
+                ((HomeActivity) getActivity()).back();
+            }
+            return true;
+        });
+
+        bookDetailsViewModel.updateList.observe(getViewLifecycleOwner(), updateList -> {
+            if (updateList) adapter.notifyDataSetChanged();
+        });
+
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
                 bookDetailsViewModel.init(
                         SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
-                        bundle.getString(ARG_SEARCH_VALUE)
+                        bundle.getString(ARG_SEARCH_VALUE), true
                 );
             } else if (bundle.containsKey(ARG_BOOK_ID)) {
                 bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false);

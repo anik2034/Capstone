@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/barcodeScannerFragment"
-        android:name="com.anik.capstone.addNewBook.BarcodeScannerFragment">
+        android:name="com.anik.capstone.newBook.BarcodeScannerFragment">
         <action
             android:id="@+id/action_barcodeScannerFragment_to_bookDetailsFragment"
             app:destination="@id/bookDetailsFragment" />
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/manualInputFragment"
-        android:name="com.anik.capstone.manualInput.ManualInputFragment">
+        android:name="com.anik.capstone.newBook.ManualInputFragment">
     </fragment>
 
     <fragment
@@ -45,8 +45,8 @@
             android:name="ARG_SEARCH_TITLE"
             app:argType="string" />
         <argument
-            android:name="ARG_BOOK_MODEL"
-            app:argType="string" />
+            android:name="ARG_BOOK_ID"
+            app:argType="integer" />
         <argument
             android:name="ARG_IS_NEW_BOOK"
             app:argType="boolean"/>

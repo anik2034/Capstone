@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="bookModel"
-            type="com.anik.capstone.model.BookModel" />
+            name="bookListItem"
+            type="com.anik.capstone.bookList.BookListItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:loadImage="@{bookModel.coverUrl}"
+            android:loadImage="@{bookListItem.coverUrl}"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="8dp"
-            android:text="@{bookModel.title}"
+            android:text="@{bookListItem.title}"
             app:layout_constraintBottom_toTopOf="@+id/authorTextView"
             app:layout_constraintStart_toEndOf="@+id/coverImageView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="@{bookModel.author}"
+            android:text="@{bookListItem.author}"
             app:layout_constraintStart_toEndOf="@+id/coverImageView"
             app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,17 +2,16 @@ package com.anik.capstone.home;
 
 import android.os.Bundle;
 
+import com.anik.capstone.R;
+import com.anik.capstone.bookDetails.BookDetailsFragment;
+import com.anik.capstone.bookDetails.SearchType;
+import com.anik.capstone.bookList.BookListFragment;
+import com.anik.capstone.databinding.ActivityHomeBinding;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import com.anik.capstone.R;
-import com.anik.capstone.bookDetails.BookDetailsFragment;
-import com.anik.capstone.bookList.BookListFragment;
-import com.anik.capstone.databinding.ActivityHomeBinding;
-import com.anik.capstone.model.BookModel;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -78,17 +77,17 @@ public class HomeActivity extends AppCompatActivity {
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, BookModel bookModel, Boolean isNewBook) {
+    public void navigateTo(int fragmentId, int bookModelId) {
         Bundle args = new Bundle();
-        args.putSerializable(BookDetailsFragment.ARG_BOOK_MODEL, bookModel);
-        args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        args.putInt(BookDetailsFragment.ARG_BOOK_ID, bookModelId);
         navController.navigate(fragmentId, args);
     }
 
-    public void navigateTo(int fragmentId, String searchData, Boolean isNewBook, String searchType) {
+    public void navigateTo(int fragmentId, String searchValue, SearchType searchType) {
         Bundle args = new Bundle();
-        args.putString(searchType, searchData);
-        args.putBoolean(BookDetailsFragment.ARG_IS_NEW_BOOK, isNewBook);
+        args.putString(BookDetailsFragment.ARG_SEARCH_TYPE, searchType.name());
+        args.putString(BookDetailsFragment.ARG_SEARCH_VALUE, searchValue);
+        args.putInt(BookDetailsFragment.ARG_BOOK_ID, -1);
         navController.navigate(fragmentId, args);
     }
 
@@ -96,8 +95,4 @@ public class HomeActivity extends AppCompatActivity {
         navController.popBackStack();
     }
 
-
 }
-
-
-

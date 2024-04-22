@@ -1,15 +1,13 @@
-package com.anik.capstone.addNewBook;
+package com.anik.capstone.newBook;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.anik.capstone.home.DisplayType;
-import com.anik.capstone.home.NextScreenData;
+import com.anik.capstone.bookDetails.SearchType;
 import com.anik.capstone.util.SingleLiveData;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
@@ -20,14 +18,14 @@ public class BarcodeScannerViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _permissionRequest = new MutableLiveData<>();
     public LiveData<Boolean> permissionRequest = _permissionRequest;
 
-    private final SingleLiveData<NextScreenData> _nextScreen = new SingleLiveData<>();
-    public LiveData<NextScreenData> nextScreen = _nextScreen;
+    private final SingleLiveData<Boolean> _navigateToManualEntry = new SingleLiveData<>();
+    public LiveData<Boolean> navigateToManualEntry = _navigateToManualEntry;
 
+    private final SingleLiveData<BookDetailsData> _navigateToBookDetails = new SingleLiveData<>();
+    public LiveData<BookDetailsData> navigateToBookDetails = _navigateToBookDetails;
 
     @Inject
-    public BarcodeScannerViewModel() {
-
-    }
+    public BarcodeScannerViewModel() {}
 
     public void init() {
         _permissionRequest.setValue(true);
@@ -37,15 +35,19 @@ public class BarcodeScannerViewModel extends ViewModel {
         if (isGranted) {
             _cameraStart.setValue(true);
         } else {
-            _nextScreen.setValue(new NextScreenData(DisplayType.MANUAL_INPUT, null));
+            navigateToManualEntry();
         }
     }
 
     public void onBarcodeDataReceived(String barcodeData) {
-        _nextScreen.setValue(new NextScreenData(DisplayType.BOOK_DETAILS, barcodeData));
+        _navigateToBookDetails.setValue(new BookDetailsData(SearchType.ISBN, barcodeData));
     }
 
     public void onManualInputButtonClicked() {
-        _nextScreen.setValue(new NextScreenData(DisplayType.MANUAL_INPUT, null));
+        navigateToManualEntry();
+    }
+
+    private void navigateToManualEntry() {
+        _navigateToManualEntry.setValue(true);
     }
 }

@@ -5,12 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.viewModels.BookListViewModel;
 import com.anik.capstone.bookList.viewModels.LibraryViewModel;
@@ -19,14 +13,20 @@ import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.HomeActivity;
-import com.anik.capstone.model.BookModel;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BookListFragment extends Fragment implements  BookRecyclerAdapter.OnItemClickListener{
+
     public static final String ARG_DISPLAY_TYPE = "ARG_DISPLAY_TYPE";
     private static final int GRID_COLUMN_COUNT = 3;
+
     private BookListViewModel bookListViewModel;
     private FragmentBookListBinding fragmentBookListBinding;
     private BookRecyclerAdapter adapter;
@@ -81,8 +81,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
             adapter.submitList(books);
         });
 
-        bookListViewModel.onNavigate.observe(getViewLifecycleOwner(), navigateData ->
-            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, navigateData.bookModel, navigateData.isNewBook));
+        bookListViewModel.navigateToBookDetails.observe(getViewLifecycleOwner(), bookModelId ->
+            ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModelId));
 
         bookListViewModel.layoutViewType.observe(getViewLifecycleOwner(), layoutViewType -> {
             switch (layoutViewType) {
@@ -96,8 +96,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
         });
     }
     @Override
-    public void onItemClick(BookModel bookModel) {
-        bookListViewModel.onItemClick(bookModel);
+    public void onItemClick(BookListItem bookListItem) {
+        bookListViewModel.onItemClick(bookListItem);
     }
 
     private void changeLayout(int iconResId, LinearLayoutManager layoutManager, LayoutViewType layoutViewType) {

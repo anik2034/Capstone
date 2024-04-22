@@ -1,13 +1,5 @@
 package com.anik.capstone.bookDetails;
 
-
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.R;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
@@ -20,12 +12,16 @@ import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import db.BookRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,209 +32,95 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<BookDetailsItem>> _bookDetailsList = new MutableLiveData<>();
     public LiveData<List<BookDetailsItem>> bookDetailsList = _bookDetailsList;
 
-    private final MutableLiveData<Integer> _progressBarVisibility = new MutableLiveData<>();
-    public LiveData<Integer> progressBarVisibility = _progressBarVisibility;
+    private final MutableLiveData<Boolean> _isProgressBarVisible = new MutableLiveData<>();
+    public LiveData<Boolean> isProgressBarVisible = _isProgressBarVisible;
 
     private final MutableLiveData<Boolean> _onShowBookNotFound = new MutableLiveData<>();
     public LiveData<Boolean> onShowBookNotFound = _onShowBookNotFound;
 
+    private final MutableLiveData<String> _onShowErrorMessage = new MutableLiveData<>();
+    public LiveData<String> onShowErrorMessage = _onShowErrorMessage;
+
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
-    private final ResourceHelper resourceHelper;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
+
+    private final ResourceHelper resourceHelper;
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
+    private final BookRepository bookRepository;
+    private final BookDetailsItemCreator bookDetailsItemCreator;
 
     @Inject
-    public BookDetailsViewModel(ResourceHelper resourceHelper, BookModelCreator bookModelCreator, RetrofitClient retrofitClient) {
+    public BookDetailsViewModel(
+            ResourceHelper resourceHelper,
+            BookModelCreator bookModelCreator,
+            RetrofitClient retrofitClient,
+            BookRepository bookRepository,
+            BookDetailsItemCreator bookDetailsItemCreator
+    ) {
         this.resourceHelper = resourceHelper;
         this.bookModelCreator = bookModelCreator;
         this.retrofitClient = retrofitClient;
+        this.bookRepository = bookRepository;
+        this.bookDetailsItemCreator = bookDetailsItemCreator;
     }
 
-    public void init(BookModel bookModel, boolean isNewBook) {
+    public void init(int bookModelId, boolean isNewBook) {
+        BookModel bookModel = null;
+        long emptyBookModelId = -1;
+        if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
+        else if(bookModelId < 0){
+            bookModel = new BookModel();
+            emptyBookModelId = bookRepository.insertBook(bookModel);
+            bookModel.setId((int)emptyBookModelId);
+        }
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    public void init(String query, SearchType searchType) {
-        search(query, searchType);
+    public void init(SearchType searchType, String query) {
+        search(searchType, query);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
-        BorrowingModel borrowingModel = new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
-        ReadingStatus readingStatus = ReadingStatus.NOT_STARTED;
-        RatingModel ratingModel = new RatingModel();
-        String url = "sample";
-        String title = "Title";
-        String author = "Author";
-        List<String> genres = Arrays.asList("Genre 1", "Genre 2");
-        if (bookModel != null) {
-            if (bookModel.getTitle() != null) {
-                title = bookModel.getTitle();
-            }
-            if (bookModel.getAuthor() != null) {
-                author = bookModel.getAuthor();
-            }
-            if (bookModel.getCoverUrl() != null) {
-                url = bookModel.getCoverUrl();
-            }
-            if (bookModel.getGenres() != null) {
-                genres = bookModel.getGenres();
-            }
-            if (bookModel.getReadingStatus() != null) {
-                readingStatus = bookModel.getReadingStatus();
-            }
-            if (bookModel.getBorrowing() != null) {
-                borrowingModel = bookModel.getBorrowing();
-                if (borrowingModel.getBorrowingStatus() == null)
-                    borrowingModel.setBorrowingStatus(BorrowingStatus.NOT_BORROWED);
-                if (borrowingModel.getDate() == null) borrowingModel.setDate("");
-                if (borrowingModel.getName() == null)
-                    borrowingModel.setName("");
-            }
-            if (bookModel.getRating() != null) {
-                ratingModel = bookModel.getRating();
-            }
-        }
-        BookDetailsItem valueTitle = new BookDetailsItem();
-        setEditableText(valueTitle, true, title, isNewBook);
-        bookDetailsItemList.add(valueTitle);
-
-        BookDetailsItem valueAuthor = new BookDetailsItem();
-        setEditableText(valueAuthor, true, author, isNewBook);
-        bookDetailsItemList.add(valueAuthor);
-
-        BookDetailsItem valueUrl = new BookDetailsItem();
-        valueUrl.setThumbnailUrl(url);
-        valueUrl.setItemViewType(BookDetailsItem.ItemViewType.THUMBNAIL);
-        bookDetailsItemList.add(valueUrl);
-
-        for (String genre : genres) {
-            BookDetailsItem headerGenre = new BookDetailsItem();
-            BookDetailsItem valueGenre = new BookDetailsItem();
-            setHeader(headerGenre, resourceHelper.getString(R.string.genre));
-            setEditableText(valueGenre, false, genre, isNewBook);
-            bookDetailsItemList.add(headerGenre);
-            bookDetailsItemList.add(valueGenre);
-        }
-
-        BookDetailsItem headerReadingStatus = new BookDetailsItem();
-        BookDetailsItem valueReadingStatus = new BookDetailsItem();
-        setHeader(headerReadingStatus, resourceHelper.getString(R.string.reading_status));
-        setSelectedValue(valueReadingStatus, ReadingStatus.getAllDisplayNames(), readingStatus.getDisplayName(), isNewBook);
-        bookDetailsItemList.add(headerReadingStatus);
-        bookDetailsItemList.add(valueReadingStatus);
-
-        BookDetailsItem headerBorrowingStatus = new BookDetailsItem();
-        BookDetailsItem valueBorrowingStatus = new BookDetailsItem();
-        setHeader(headerBorrowingStatus, resourceHelper.getString(R.string.borrowing_status));
-        setSelectedValue(valueBorrowingStatus, BorrowingStatus.getAllDisplayNames(), borrowingModel.getBorrowingStatus().getDisplayName(), isNewBook);
-        bookDetailsItemList.add(headerBorrowingStatus);
-        bookDetailsItemList.add(valueBorrowingStatus);
-
-        BookDetailsItem headerBorrowingDetails = new BookDetailsItem();
-        setHeader(headerBorrowingDetails, "Borrowing Details");
-
-        BookDetailsItem valueBorrowingName = new BookDetailsItem();
-        setEditableText(valueBorrowingName, false, borrowingModel.getName(), isNewBook);
-        bookDetailsItemList.add(headerBorrowingDetails);
-        bookDetailsItemList.add(valueBorrowingName);
-
-        BookDetailsItem valueBorrowingDate = new BookDetailsItem();
-        valueBorrowingDate.setItemViewType(BookDetailsItem.ItemViewType.DATE);
-        valueBorrowingDate.setDate(borrowingModel.getDate());
-        valueBorrowingDate.setEditable(isNewBook);
-        bookDetailsItemList.add(valueBorrowingDate);
-
-        BookDetailsItem headerRating = new BookDetailsItem();
-        setHeader(headerRating, resourceHelper.getString(R.string.rating));
-        bookDetailsItemList.add(headerRating);
-
-        BookDetailsItem valueEmotionalImpact = new BookDetailsItem();
-        setStarRating(valueEmotionalImpact, resourceHelper.getString(R.string.emotional_impact), ratingModel.getEmotionalImpact(), isNewBook);
-        bookDetailsItemList.add(valueEmotionalImpact);
-
-        BookDetailsItem valueCharacter = new BookDetailsItem();
-        setStarRating(valueCharacter, resourceHelper.getString(R.string.characters), ratingModel.getCharacter(), isNewBook);
-        bookDetailsItemList.add(valueCharacter);
-
-        BookDetailsItem valuePacing = new BookDetailsItem();
-        setStarRating(valuePacing, resourceHelper.getString(R.string.pacing), ratingModel.getPacing(), isNewBook);
-        bookDetailsItemList.add(valuePacing);
-
-        BookDetailsItem valueStoryLine = new BookDetailsItem();
-        setStarRating(valueStoryLine, resourceHelper.getString(R.string.story_line), ratingModel.getStoryline(), isNewBook);
-        bookDetailsItemList.add(valueStoryLine);
-
-        BookDetailsItem valueWritingStyle = new BookDetailsItem();
-        setStarRating(valueWritingStyle, resourceHelper.getString(R.string.writing_style), ratingModel.getWritingStyle(), isNewBook);
-        bookDetailsItemList.add(valueWritingStyle);
-
-        BookDetailsItem valueOverall = new BookDetailsItem();
-        setStarRating(valueOverall, resourceHelper.getString(R.string.overall_rating), ratingModel.getOverallRating(), isNewBook);
-        bookDetailsItemList.add(valueOverall);
-
+        bookDetailsItemList.addAll(bookDetailsItemCreator.create(bookModel, isNewBook));
         _bookDetailsList.setValue(bookDetailsItemList);
-
-    }
-
-    private void setEditableText(BookDetailsItem editableText, boolean isCenter, String value, boolean isEditable) {
-        editableText.setItemViewType(BookDetailsItem.ItemViewType.EDITABLE_TEXT);
-        editableText.setCenter(isCenter);
-        editableText.setValue(value);
-        editableText.setEditable(isEditable);
-    }
-
-    private void setSelectedValue(BookDetailsItem options, List<String> optionsList, String selected, boolean isEditable) {
-        options.setItemViewType(BookDetailsItem.ItemViewType.POP_UP);
-        options.setSingleSelection(optionsList);
-        options.setSelectedValue(selected);
-        options.setEditable(isEditable);
-    }
-
-    private void setHeader(BookDetailsItem header, String title) {
-        header.setTitle(title);
-        header.setItemViewType(BookDetailsItem.ItemViewType.HEADER);
-    }
-
-    private void setStarRating(BookDetailsItem starRating, String title, float rating, boolean isEditable) {
-        starRating.setItemViewType(BookDetailsItem.ItemViewType.STAR_RATING);
-        starRating.setTitle(title);
-        starRating.setRating(rating);
-        starRating.setEditable(isEditable);
     }
 
     public void onItemClicked(int position) {
-        updateBookDetails(position, true, null, null, null, null);
+        BookDetailsItem bookDetailsItem = getItemByPosition(position);
+        if (bookDetailsItem != null) {
+            bookDetailsItem.setEditable(true);
+            updateBookDetailsItemList(position);
+        }
     }
 
     public void onRatingChanged(float rating, int position) {
-        updateBookDetails(position, false, rating, null, null, null);
+        updateBookDetails(position, rating, null, null,null, null);
     }
 
-
-    public void onTextChanged(String text, int position) {
-        updateBookDetails(position, false, null, text, null, null);
+    public void onTextChanged(String oldText, String newText, int position) {
+        updateBookDetails(position, null, oldText, newText, null, null);
     }
 
     public void onDateChanged(String date, int position) {
-        updateBookDetails(position, false, null, null, date, null);
+        updateBookDetails(position, null, null,null, date, null);
     }
 
     public void onOptionChanged(String selected, int position) {
-        updateBookDetails(position, false, null, null, null, selected);
+        updateBookDetails(position, null, null,null, null, selected);
     }
 
-    private void updateBookDetails(int position, boolean editable, Float rating, String text, String date, String selected) {
-        if (position >= 0 && position < bookDetailsItemList.size()) {
-            BookDetailsItem item = bookDetailsItemList.get(position);
-            item.setEditable(editable);
+    private void updateBookDetails(int position, Float rating, String oldText, String newText, String date, String selected) {
+        BookDetailsItem item = getItemByPosition(position);
+        if (item != null) {
+            item.setEditable(false);
             if (rating != null) {
                 item.setRating(rating);
             }
-            if (text != null) {
-                item.setValue(text);
+            if (newText != null) {
+                item.setValue(newText);
             }
             if (date != null) {
                 item.setDate(date);
@@ -246,31 +128,117 @@ public class BookDetailsViewModel extends ViewModel {
             if (selected != null) {
                 item.setSelectedValue(selected);
             }
-            _bookDetailsList.setValue(bookDetailsItemList);
-            _updateDetailItem.setValue(position);
+            updateBookDetailsItemList(position);
+            updateBook(item, oldText);
         }
     }
 
+    private BookDetailsItem getItemByPosition(int position) {
+        if (position >= 0 && position < bookDetailsItemList.size()) {
+            return bookDetailsItemList.get(position);
+        }
+        return null;
+    }
 
-    private void search(String query, SearchType searchType) {
+    private void updateBookDetailsItemList(int position) {
+        _bookDetailsList.setValue(bookDetailsItemList);
+        _updateDetailItem.setValue(position);
+    }
+
+    private void updateBook(BookDetailsItem item, String oldText) {
+        BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
+        BorrowingModel borrowingModel = bookModel.getBorrowing();
+        RatingModel ratingModel = bookModel.getRating();
+        switch (item.getItemType()) {
+            case TITLE:
+                bookModel.setTitle(item.getValue());
+                break;
+            case AUTHOR:
+                bookModel.setAuthor(item.getValue());
+                break;
+            case THUMBNAIL:
+                bookModel.setCoverUrl(item.getThumbnailUrl());
+                break;
+            case GENRE:
+                List<String> genres = bookModel.getGenres();
+                int index = genres.indexOf(oldText);
+                if (index != -1) {
+                    genres.set(genres.indexOf(oldText), item.getValue());
+                    bookModel.setGenres(genres);
+                }
+                break;
+            case BORROWING_STATUS:
+                borrowingModel.setBorrowingStatus(BorrowingStatus.getBorrowingStatus(item.getSelectedValue()));
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case BORROWED_BY:
+                borrowingModel.setName(item.getValue());
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case BORROWING_DATE:
+                borrowingModel.setDate(item.getDate());
+                bookModel.setBorrowing(borrowingModel);
+                break;
+            case READING_STATUS:
+                bookModel.setReadingStatus(ReadingStatus.getReadingStatus(item.getSelectedValue()));
+                break;
+            case RATING_EMOTIONAL_IMPACT:
+                ratingModel.setEmotionalImpact(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_CHARACTERS:
+                ratingModel.setCharacter(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_PACING:
+                ratingModel.setPacing(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_STORYLINE:
+                ratingModel.setStoryline(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case RATING_WRITING_STYLE:
+                ratingModel.setWritingStyle(item.getRating());
+                bookModel.setRating(ratingModel);
+                break;
+            case OVERALL_RATING:
+                ratingModel.setOverallRating(ratingModel.getOverallRating());
+                bookModel.setRating(ratingModel);
+                break;
+
+        }
+        int updatedItemsCount = bookRepository.updateBook(bookModel);
+        if (updatedItemsCount <= 0) {
+            showErrorMessage();
+        }
+    }
+
+    private void search(SearchType searchType, String query) {
         Call<BookResponse> call = null;
-        _progressBarVisibility.setValue(View.VISIBLE);
+        _isProgressBarVisible.setValue(true);
         switch (searchType) {
-            case SEARCH_BY_ISBN:
+            case ISBN:
                 call = retrofitClient.bookService.searchByISBN(query);
                 break;
-            case SEARCH_BY_TITLE:
+            case TITLE:
                 call = retrofitClient.bookService.searchByTitle(query);
                 break;
         }
         call.enqueue(new Callback<BookResponse>() {
             @Override
             public void onResponse(@NonNull Call<BookResponse> call, @NonNull Response<BookResponse> response) {
+                _isProgressBarVisible.setValue(false);
                 BookResponse bookResponse = response.body();
-                _progressBarVisibility.setValue(View.GONE);
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
-                    createBookDetailsList(searchedBook, true);
+                    long insertedItemId = bookRepository.insertBook(searchedBook);
+                    if (insertedItemId > 0) {
+                        BookModel insertedBook = bookRepository.getBookById((int) insertedItemId);
+                        createBookDetailsList(insertedBook, true);
+                    } else {
+                        showErrorMessage();
+                    }
                 } else {
                     _onShowBookNotFound.setValue(true);
                 }
@@ -278,8 +246,14 @@ public class BookDetailsViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<BookResponse> call, @NonNull Throwable t) {
+                _isProgressBarVisible.setValue(false);
+                showErrorMessage();
             }
         });
+    }
+
+    private void showErrorMessage() {
+        _onShowErrorMessage.setValue(resourceHelper.getString(R.string.something_went_wrong));
     }
 }
 

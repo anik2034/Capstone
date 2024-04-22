@@ -49,7 +49,7 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        switch (BookDetailsItem.ItemViewType.values()[viewType]) {
+        switch (BookDetailsItem.ViewType.values()[viewType]) {
             case HEADER:
                 ListItemHeaderViewBinding headerViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item_header_view, parent, false);
                 return new HeaderViewHolder(headerViewBinding);
@@ -138,9 +138,11 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
         public void bind(BookDetailsItem bookDetailsItem) {
             if (binding != null) {
                 binding.itemEditableView.setIsEditable(bookDetailsItem.isEditable());
-                binding.itemEditableView.setCenter(bookDetailsItem.isCenter());
+                binding.itemEditableView.setHint(bookDetailsItem.getHint());
                 binding.itemEditableView.setText(bookDetailsItem.getValue());
-                binding.itemEditableView.setListener(text -> clickListener.onTextChanged(text, getAdapterPosition()));
+                binding.itemEditableView.setListener((oldText, newText) ->
+                        clickListener.onTextChanged(oldText, newText, getAdapterPosition())
+                );
                 binding.executePendingBindings();
             }
         }
@@ -225,7 +227,7 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
 
         void onRatingChanged(float rating, int position);
 
-        void onTextChanged(String newText, int position);
+        void onTextChanged(String oldText, String newText, int position);
 
         void onDateChanged(String date, int position);
 

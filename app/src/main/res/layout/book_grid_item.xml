@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="bookModel"
-            type="com.anik.capstone.model.BookModel" />
+            name="bookListItem"
+            type="com.anik.capstone.bookList.BookListItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:loadImage="@{bookModel.coverUrl}"
+            android:loadImage="@{bookListItem.coverUrl}"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="@{bookModel.title}"
+            android:text="@{bookListItem.title}"
             android:textAlignment="center"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/coverImageView"
@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="@{bookModel.author}"
+            android:text="@{bookListItem.author}"
             android:textAlignment="center"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/coverImageView"

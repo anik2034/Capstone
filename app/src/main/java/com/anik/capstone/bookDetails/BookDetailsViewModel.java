@@ -44,13 +44,18 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
+    private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
+    public LiveData<Boolean> isNewBook = _isNewBook;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
+
 
     private final ResourceHelper resourceHelper;
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
     private final BookRepository bookRepository;
     private final BookDetailsItemCreator bookDetailsItemCreator;
+
+    private BookModel bookModel;
 
     @Inject
     public BookDetailsViewModel(
@@ -68,22 +73,21 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void init(int bookModelId, boolean isNewBook) {
-        BookModel bookModel = null;
-        long emptyBookModelId = -1;
+        _isNewBook.setValue(isNewBook);
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
         else if(bookModelId < 0){
             bookModel = new BookModel();
-            emptyBookModelId = bookRepository.insertBook(bookModel);
-            bookModel.setId((int)emptyBookModelId);
         }
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    public void init(SearchType searchType, String query) {
+    public void init(SearchType searchType, String query, boolean isNewBook) {
+        _isNewBook.setValue(isNewBook);
         search(searchType, query);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
+        this.bookModel = bookModel;
         bookDetailsItemList.addAll(bookDetailsItemCreator.create(bookModel, isNewBook));
         _bookDetailsList.setValue(bookDetailsItemList);
     }
@@ -254,6 +258,22 @@ public class BookDetailsViewModel extends ViewModel {
 
     private void showErrorMessage() {
         _onShowErrorMessage.setValue(resourceHelper.getString(R.string.something_went_wrong));
+    }
+
+    public void onSaveClicked() {
+        long id = bookRepository.insertBook(bookModel);
+        List<BookDetailsItem> list =  _bookDetailsList.getValue();
+        if (list != null) {
+            for(BookDetailsItem bookDetailsItem : list){
+                bookDetailsItem.setBookModelId((int)id);
+                bookDetailsItem.setEditable(false);
+            }
+        }
+        _isNewBook.setValue(false);
+    }
+
+    public void onDeleteClicked() {
+        bookRepository.deleteBook(bookModel);
     }
 }
 

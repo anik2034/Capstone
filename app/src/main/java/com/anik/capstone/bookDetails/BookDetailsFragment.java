@@ -1,5 +1,7 @@
 package com.anik.capstone.bookDetails;
 
+
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +46,32 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         Bundle bundle = getArguments();
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
 
+        fragmentBookDetailsBinding.toolbar.inflateMenu(R.menu.toolbar_menu);
+
+        bookDetailsViewModel.isNewBook.observe(getViewLifecycleOwner(), isEditable ->{
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(0).setVisible(isEditable);
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(1).setVisible(!isEditable);
+        });
+
+        fragmentBookDetailsBinding.toolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+           if(id == R.id.save){
+               bookDetailsViewModel.onSaveClicked();
+               adapter.notifyDataSetChanged();
+           }
+           else if(id == R.id.delete){
+               bookDetailsViewModel.onDeleteClicked();
+               adapter.notifyDataSetChanged();
+               ((HomeActivity) getActivity()).back();
+           }
+            return true;
+        });
+
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
                 bookDetailsViewModel.init(
                         SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
-                        bundle.getString(ARG_SEARCH_VALUE)
+                        bundle.getString(ARG_SEARCH_VALUE), true
                 );
             } else if (bundle.containsKey(ARG_BOOK_ID)) {
                 bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false);

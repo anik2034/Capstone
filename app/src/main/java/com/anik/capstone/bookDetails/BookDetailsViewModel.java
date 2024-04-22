@@ -48,8 +48,8 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _updateList = new MutableLiveData<>();
     public LiveData<Boolean> updateList = _updateList;
 
-    private final MutableLiveData<Boolean> _isVisible = new MutableLiveData<>();
-    public LiveData<Boolean> isVisible = _isVisible;
+    private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
+    public LiveData<Boolean> isNewBook = _isNewBook;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
 
 
@@ -77,7 +77,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void init(int bookModelId, boolean isNewBook) {
-        _isVisible.setValue(isNewBook);
+        _isNewBook.setValue(isNewBook);
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
         else if (bookModelId < 0) {
             bookModel = new BookModel();
@@ -86,7 +86,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void init(SearchType searchType, String query, boolean isNewBook) {
-        _isVisible.setValue(isNewBook);
+        _isNewBook.setValue(isNewBook);
         search(searchType, query);
     }
 
@@ -269,7 +269,7 @@ public class BookDetailsViewModel extends ViewModel {
                 bookDetailsItem.setEditable(false);
             }
         }
-        _isVisible.setValue(false);
+        _isNewBook.setValue(false);
         _updateList.setValue(true);
     }
 

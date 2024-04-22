@@ -48,9 +48,9 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
 
         fragmentBookDetailsBinding.toolbar.inflateMenu(R.menu.toolbar_menu);
 
-        bookDetailsViewModel.isVisible.observe(getViewLifecycleOwner(), isEditable -> {
-            fragmentBookDetailsBinding.toolbar.getMenu().getItem(0).setVisible(isEditable);
-            fragmentBookDetailsBinding.toolbar.getMenu().getItem(1).setVisible(!isEditable);
+        bookDetailsViewModel.isNewBook.observe(getViewLifecycleOwner(), isVisible -> {
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(0).setVisible(isVisible);
+            fragmentBookDetailsBinding.toolbar.getMenu().getItem(1).setVisible(!isVisible);
         });
 
         fragmentBookDetailsBinding.toolbar.setOnMenuItemClickListener(item -> {

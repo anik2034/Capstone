@@ -28,8 +28,9 @@ public class LoginActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            finish();
         } else {
             String errorMessage = getString(R.string.something_went_wrong);
             if (response != null && response.getError() != null && response.getError().getMessage() != null) {

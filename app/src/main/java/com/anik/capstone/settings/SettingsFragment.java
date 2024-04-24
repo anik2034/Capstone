@@ -47,6 +47,7 @@ public class SettingsFragment extends Fragment {
         if (task.isSuccessful()) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+            requireActivity().finish();
         } else {
             Toast.makeText(requireContext(), getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
         }

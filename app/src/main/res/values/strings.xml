@@ -44,6 +44,7 @@
     <string name="genre_1">Genre 1</string>
     <string name="genre_2">Genre 2</string>
     <string name="name">Name</string>
+    <string name="logout">Logout</string>
 
     <string-array name="search_options">
         <item>Title</item>

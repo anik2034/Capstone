@@ -19,7 +19,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import db.BookRepository;
+import com.anik.capstone.db.BookRepository;
 
 import static com.anik.capstone.bookList.LayoutViewType.GRID;
 import static com.anik.capstone.bookList.LayoutViewType.ROW;

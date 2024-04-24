@@ -9,9 +9,9 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
-import db.BookDao;
-import db.BookDatabase;
-import db.BookRepository;
+import com.anik.capstone.db.BookDao;
+import com.anik.capstone.db.BookDatabase;
+import com.anik.capstone.db.BookRepository;
 
 @Module
 @InstallIn(SingletonComponent.class)

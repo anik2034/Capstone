@@ -1,4 +1,4 @@
-package db;
+package com.anik.capstone.db;
 
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ListType;

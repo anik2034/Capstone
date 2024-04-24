@@ -1,4 +1,4 @@
-package db;
+package com.anik.capstone.db;
 
 import android.content.Context;
 

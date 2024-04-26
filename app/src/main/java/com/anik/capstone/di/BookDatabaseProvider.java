@@ -12,6 +12,8 @@ import dagger.hilt.components.SingletonComponent;
 import com.anik.capstone.db.BookDao;
 import com.anik.capstone.db.BookDatabase;
 import com.anik.capstone.db.BookRepository;
+import com.anik.capstone.db.UserDao;
+import com.anik.capstone.db.UserRepository;
 
 @Module
 @InstallIn(SingletonComponent.class)
@@ -33,5 +35,17 @@ public class BookDatabaseProvider {
     @Provides
     public BookRepository provideBookRepository(BookDao bookDao) {
         return new BookRepository(bookDao);
+    }
+
+    @Singleton
+    @Provides
+    public UserDao provideUserDao(BookDatabase bookDatabase) {
+        return bookDatabase.userDao();
+    }
+
+    @Singleton
+    @Provides
+    public UserRepository provideUserRepository(UserDao userDao) {
+        return new UserRepository(userDao);
     }
 }

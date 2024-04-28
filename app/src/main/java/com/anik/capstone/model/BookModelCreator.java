@@ -16,7 +16,7 @@ public class BookModelCreator {
     @Inject
     public BookModelCreator() {}
 
-    public BookModel convertToBook(BookResponse bookResponse) {
+    public BookModel convertToBook(BookResponse bookResponse, UserModel user) {
         DocumentResponse documentResponse = bookResponse.getDocumentList().get(0);
         String title = documentResponse.getTitle();
         String isbn = documentResponse.getIsbnList().get(0);
@@ -24,6 +24,6 @@ public class BookModelCreator {
         int coverId = documentResponse.getCoverId();
         List<String> genres = GenreHelper.getGenres(documentResponse.getSubjectList());
         return new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg",
-                author, title, genres,ReadingStatus.NOT_STARTED, new BorrowingModel(BorrowingStatus.NOT_BORROWED, "",""), new RatingModel(), ListType.LIBRARY);
+                author, title, genres,ReadingStatus.NOT_STARTED, new BorrowingModel(BorrowingStatus.NOT_BORROWED, "",""), new RatingModel(), ListType.LIBRARY, user.getId());
     }
 }

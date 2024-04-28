@@ -1,9 +1,10 @@
-package com.anik.capstone;
+package com.anik.capstone.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.anik.capstone.R;
 import com.anik.capstone.databinding.ActivityLoginBinding;
 import com.anik.capstone.home.HomeActivity;
 import com.firebase.ui.auth.AuthUI;
@@ -17,8 +18,13 @@ import java.util.Collections;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
+
+    private LoginViewModel loginViewModel;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -30,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                loginViewModel.onSuccessfulLogin(FirebaseAuth.getInstance().getCurrentUser());
+            }
             finish();
         } else {
             String errorMessage = getString(R.string.something_went_wrong);
@@ -45,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
 
         Intent signInIntent =
                 AuthUI.getInstance()

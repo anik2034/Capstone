@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.anik.capstone.R;
+import com.anik.capstone.db.UserRepository;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
 import com.anik.capstone.model.ReadingStatus;
@@ -57,6 +58,8 @@ public class BookDetailsViewModel extends ViewModel {
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
+
     private final BookDetailsItemCreator bookDetailsItemCreator;
 
     private BookModel bookModel;
@@ -67,13 +70,15 @@ public class BookDetailsViewModel extends ViewModel {
             BookModelCreator bookModelCreator,
             RetrofitClient retrofitClient,
             BookRepository bookRepository,
-            BookDetailsItemCreator bookDetailsItemCreator
+            BookDetailsItemCreator bookDetailsItemCreator,
+            UserRepository userRepository
     ) {
         this.resourceHelper = resourceHelper;
         this.bookModelCreator = bookModelCreator;
         this.retrofitClient = retrofitClient;
         this.bookRepository = bookRepository;
         this.bookDetailsItemCreator = bookDetailsItemCreator;
+        this.userRepository = userRepository;
     }
 
     public void init(int bookModelId, boolean isNewBook) {
@@ -239,7 +244,7 @@ public class BookDetailsViewModel extends ViewModel {
                 _isProgressBarVisible.setValue(false);
                 BookResponse bookResponse = response.body();
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
-                    BookModel searchedBook = bookModelCreator.convertToBook(bookResponse);
+                    BookModel searchedBook = bookModelCreator.convertToBook(bookResponse, userRepository.getUser());
 
                     createBookDetailsList(searchedBook, true);
                 } else {

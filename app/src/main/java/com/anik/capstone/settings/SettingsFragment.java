@@ -7,15 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.anik.capstone.LoginActivity;
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentSettingsBinding;
+import com.anik.capstone.login.LoginActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -32,11 +33,12 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentSettingsBinding.logout.setOnClickListener(view1 -> {
-            AuthUI.getInstance()
-                    .signOut(requireContext())
-                    .addOnCompleteListener(this::handleSignOutDelete);
-        });
+        SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        settingsViewModel.init();
+        fragmentSettingsBinding.setViewModel(settingsViewModel);
+        fragmentSettingsBinding.logout.setOnClickListener(view1 -> AuthUI.getInstance()
+                .signOut(requireContext())
+                .addOnCompleteListener(this::handleSignOutDelete));
 
         fragmentSettingsBinding.deleteAccount.setOnClickListener(view1 -> AuthUI.getInstance()
                 .delete(requireContext())

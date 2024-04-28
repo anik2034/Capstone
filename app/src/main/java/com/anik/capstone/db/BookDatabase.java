@@ -8,14 +8,16 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.anik.capstone.model.BookModel;
+import com.anik.capstone.model.UserModel;
 
-@Database(entities = {BookModel.class}, version = 1, exportSchema = false)
+@Database(entities = {BookModel.class, UserModel.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class BookDatabase extends RoomDatabase {
 
     private static BookDatabase instance;
 
     public abstract BookDao bookDao();
+    public abstract UserDao userDao();
 
     public static synchronized BookDatabase getInstance(Context context) {
         if (instance == null) {

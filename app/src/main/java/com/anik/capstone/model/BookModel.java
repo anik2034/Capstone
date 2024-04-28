@@ -27,19 +27,22 @@ public class BookModel implements Serializable {
     private RatingModel rating;
     private ListType listType;
 
+    private String ownerId;
+
     public BookModel() {
         this.ISBN = "";
         this.coverUrl = "";
         this.author = "";
         this.title = "";
-        this.genres = Arrays.asList("", "");;
-        this.readingStatus = ReadingStatus.NOT_STARTED;;
-        this.borrowing =  new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
+        this.genres = Arrays.asList("", "");
+        this.readingStatus = ReadingStatus.NOT_STARTED;
+        this.borrowing = new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", "");
+        this.ownerId = "";
         this.rating = new RatingModel();
         this.listType = ListType.LIBRARY;
     }
 
-    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating, ListType listType) {
+    public BookModel(String ISBN, String coverUrl, String author, String title, List<String> genres, ReadingStatus readingStatus, BorrowingModel borrowing, RatingModel rating, ListType listType, String ownerId) {
         this.ISBN = ISBN;
         this.coverUrl = coverUrl;
         this.author = author;
@@ -49,6 +52,7 @@ public class BookModel implements Serializable {
         this.borrowing = borrowing;
         this.rating = rating;
         this.listType = listType;
+        this.ownerId = ownerId;
     }
 
     public String getISBN() {
@@ -131,16 +135,24 @@ public class BookModel implements Serializable {
         this.listType = listType;
     }
 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookModel bookModel = (BookModel) o;
-        return id == bookModel.id && Objects.equals(ISBN, bookModel.ISBN) && Objects.equals(coverUrl, bookModel.coverUrl) && Objects.equals(author, bookModel.author) && Objects.equals(title, bookModel.title) && Objects.equals(genres, bookModel.genres) && readingStatus == bookModel.readingStatus && Objects.equals(borrowing, bookModel.borrowing) && Objects.equals(rating, bookModel.rating) && listType == bookModel.listType;
+        return id == bookModel.id && Objects.equals(ISBN, bookModel.ISBN) && Objects.equals(coverUrl, bookModel.coverUrl) && Objects.equals(author, bookModel.author) && Objects.equals(title, bookModel.title) && Objects.equals(genres, bookModel.genres) && readingStatus == bookModel.readingStatus && Objects.equals(borrowing, bookModel.borrowing) && Objects.equals(rating, bookModel.rating) && listType == bookModel.listType && Objects.equals(ownerId, bookModel.ownerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ISBN, coverUrl, author, title, genres, readingStatus, borrowing, rating, listType);
+        return Objects.hash(id, ISBN, coverUrl, author, title, genres, readingStatus, borrowing, rating, listType, ownerId);
     }
 }

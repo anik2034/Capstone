@@ -9,6 +9,7 @@ import com.anik.capstone.R;
 import com.anik.capstone.db.UserRepository;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
+import com.anik.capstone.model.ListType;
 import com.anik.capstone.model.ReadingStatus;
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.borrowing.BorrowingStatus;
@@ -81,18 +82,19 @@ public class BookDetailsViewModel extends ViewModel {
         this.userRepository = userRepository;
     }
 
-    public void init(int bookModelId, boolean isNewBook) {
+    public void init(int bookModelId, boolean isNewBook, ListType listType) {
         _isNewBook.setValue(isNewBook);
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
-        else if (bookModelId < 0) {
+        else if (bookModelId < 0 && listType != null) {
             bookModel = new BookModel();
+            bookModel.setListType(listType);
         }
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    public void init(SearchType searchType, String query, boolean isNewBook) {
+    public void init(SearchType searchType, String query, boolean isNewBook, ListType listType) {
         _isNewBook.setValue(isNewBook);
-        search(searchType, query);
+        search(searchType, query, listType);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
@@ -227,7 +229,7 @@ public class BookDetailsViewModel extends ViewModel {
         }
     }
 
-    private void search(SearchType searchType, String query) {
+    private void search(SearchType searchType, String query, ListType listType) {
         Call<BookResponse> call = null;
         _isProgressBarVisible.setValue(true);
         switch (searchType) {
@@ -245,6 +247,7 @@ public class BookDetailsViewModel extends ViewModel {
                 BookResponse bookResponse = response.body();
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse, userRepository.getUser());
+                    searchedBook.setListType(listType);
 
                     createBookDetailsList(searchedBook, true);
                 } else {

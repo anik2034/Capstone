@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentBookDetailsBinding;
 import com.anik.capstone.home.HomeActivity;
+import com.anik.capstone.model.ListType;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailsAdapter adapter;
+    private ListType listType;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,12 +72,10 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
 
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
-                bookDetailsViewModel.init(
-                        SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
-                        bundle.getString(ARG_SEARCH_VALUE), true
-                );
+                showChooseListType(bundle);
+
             } else if (bundle.containsKey(ARG_BOOK_ID)) {
-                bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false);
+                bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false, null);
             }
         }
 
@@ -98,13 +98,40 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         });
     }
 
+    private void showChooseListType(Bundle bundle) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle("Choose Book List Type");
+        builder.setMessage("Please choose to which book list would you like to add this book");
+
+        builder.setPositiveButton("My Library", (dialog, which) -> {
+            listType = ListType.LIBRARY;
+            bookDetailsViewModel.init(
+                    SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
+                    bundle.getString(ARG_SEARCH_VALUE), true, listType
+            );
+
+        });
+        builder.setNegativeButton("Wishlist", (dialog, which) -> {
+            listType = ListType.WISHLIST;
+            bookDetailsViewModel.init(
+                    SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
+                    bundle.getString(ARG_SEARCH_VALUE), true, listType
+            );
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
     private void showBookNotFoundDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         builder.setTitle(R.string.book_not_found);
         builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
 
-        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(-1, true));
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(-1, true, listType));
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
             dialog.dismiss();
             ((HomeActivity) getActivity()).back();

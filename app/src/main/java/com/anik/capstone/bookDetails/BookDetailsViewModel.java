@@ -83,8 +83,9 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void init(int bookModelId, boolean isNewBook) {
         _isNewBook.setValue(isNewBook);
-        if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
-        else if (bookModelId < 0) {
+        if (bookModelId >= 0) {
+            bookModel = bookRepository.getBookById(bookModelId);
+        } else {
             bookModel = new BookModel();
         }
         createBookDetailsList(bookModel, isNewBook);
@@ -284,7 +285,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onDeleteClicked() {
-        bookRepository.deleteBook(bookModel);
+        bookRepository.deleteBook(bookModel, true);
     }
 }
 

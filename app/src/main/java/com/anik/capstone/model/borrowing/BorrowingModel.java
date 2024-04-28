@@ -8,9 +8,7 @@ public class BorrowingModel {
     private String date;
 
 
-    public BorrowingModel(BorrowingStatus borrowingStatus) {
-        this.borrowingStatus = borrowingStatus;
-    }
+    public BorrowingModel() {}
 
     public BorrowingModel(BorrowingStatus borrowingStatus, String name, String date) {
         this.borrowingStatus = borrowingStatus;

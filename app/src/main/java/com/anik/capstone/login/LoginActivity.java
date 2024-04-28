@@ -34,13 +34,10 @@ public class LoginActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 loginViewModel.onSuccessfulLogin(FirebaseAuth.getInstance().getCurrentUser());
             }
-            finish();
         } else {
             String errorMessage = getString(R.string.something_went_wrong);
             if (response != null && response.getError() != null && response.getError().getMessage() != null) {
@@ -58,6 +55,18 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
+        loginViewModel.navigateToHome.observe(this, aVoid -> {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+        );
+        loginViewModel.logout.observe(this, aVoid ->
+                AuthUI.getInstance().signOut(this)
+        );
+        loginViewModel.showErrorMessage.observe(this, aVoid ->
+                Toast.makeText(LoginActivity.this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+        );
 
         Intent signInIntent =
                 AuthUI.getInstance()

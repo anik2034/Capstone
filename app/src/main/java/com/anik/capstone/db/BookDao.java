@@ -24,9 +24,16 @@ public interface BookDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     ListenableFuture<Long> insertBook(BookModel book);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    ListenableFuture<Void> insertAll(List<BookModel> books);
+
     @Update
     ListenableFuture<Integer> updateBook(BookModel book);
 
     @Delete
-    ListenableFuture<Integer> deleteBook(BookModel book);
+    ListenableFuture<Void> deleteBook(BookModel book);
+
+    @Query("DELETE FROM books")
+    ListenableFuture<Void> dropTable();
+
 }

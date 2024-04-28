@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.anik.capstone.login.LoginActivity;
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.FragmentSettingsBinding;
-import com.anik.capstone.newBook.ManualInputViewModel;
+import com.anik.capstone.login.LoginActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 
@@ -18,14 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding fragmentSettingsBinding;
-    private SettingsViewModel settingsViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,13 +33,12 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         settingsViewModel.init();
-        fragmentSettingsBinding.logout.setOnClickListener(view1 -> {
-            AuthUI.getInstance()
-                    .signOut(requireContext())
-                    .addOnCompleteListener(this::handleSignOutDelete);
-        });
+        fragmentSettingsBinding.setViewModel(settingsViewModel);
+        fragmentSettingsBinding.logout.setOnClickListener(view1 -> AuthUI.getInstance()
+                .signOut(requireContext())
+                .addOnCompleteListener(this::handleSignOutDelete));
 
         fragmentSettingsBinding.deleteAccount.setOnClickListener(view1 -> AuthUI.getInstance()
                 .delete(requireContext())

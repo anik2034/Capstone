@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.anik.capstone.R;
 import com.anik.capstone.databinding.ActivityLoginBinding;
 import com.anik.capstone.home.HomeActivity;
@@ -20,6 +16,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -40,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 loginViewModel.onSuccessfulLogin(FirebaseAuth.getInstance().getCurrentUser());
-                finish();
             }
+            finish();
         } else {
             String errorMessage = getString(R.string.something_went_wrong);
             if (response != null && response.getError() != null && response.getError().getMessage() != null) {

@@ -1,14 +1,11 @@
 package com.anik.capstone.bookDetails;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.R;
+import com.anik.capstone.db.BookRepository;
 import com.anik.capstone.db.UserRepository;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
+import com.anik.capstone.model.ListType;
 import com.anik.capstone.model.ReadingStatus;
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.borrowing.BorrowingStatus;
@@ -22,8 +19,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import com.anik.capstone.db.BookRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,8 +37,8 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isProgressBarVisible = new MutableLiveData<>();
     public LiveData<Boolean> isProgressBarVisible = _isProgressBarVisible;
 
-    private final MutableLiveData<Boolean> _onShowBookNotFound = new MutableLiveData<>();
-    public LiveData<Boolean> onShowBookNotFound = _onShowBookNotFound;
+    private final MutableLiveData<Void> _onShowBookNotFound = new MutableLiveData<>();
+    public LiveData<Void> onShowBookNotFound = _onShowBookNotFound;
 
     private final MutableLiveData<String> _onShowErrorMessage = new MutableLiveData<>();
     public LiveData<String> onShowErrorMessage = _onShowErrorMessage;
@@ -46,22 +46,22 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Integer> _updateDetailItem = new MutableLiveData<>();
     public LiveData<Integer> updateDetailItem = _updateDetailItem;
 
-    private final MutableLiveData<Boolean> _updateList = new MutableLiveData<>();
-    public LiveData<Boolean> updateList = _updateList;
+    private final MutableLiveData<Void> _updateList = new MutableLiveData<>();
+    public LiveData<Void> updateList = _updateList;
 
     private final MutableLiveData<Boolean> _isNewBook = new MutableLiveData<>();
     public LiveData<Boolean> isNewBook = _isNewBook;
-    private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
 
+    private final MutableLiveData<Void> _onShowChooseListType = new MutableLiveData<>();
+    public LiveData<Void> onShowChooseListType = _onShowChooseListType;
 
     private final ResourceHelper resourceHelper;
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-
     private final BookDetailsItemCreator bookDetailsItemCreator;
-
+    private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
     private BookModel bookModel;
 
     @Inject
@@ -248,7 +248,7 @@ public class BookDetailsViewModel extends ViewModel {
 
                     createBookDetailsList(searchedBook, true);
                 } else {
-                    _onShowBookNotFound.setValue(true);
+                    _onShowBookNotFound.setValue(null);
                 }
             }
 
@@ -266,6 +266,11 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onSaveClicked() {
+        _onShowChooseListType.setValue(null);
+    }
+
+    public void onSaveClicked(ListType listType) {
+        bookModel.setListType(listType);
         long id = bookRepository.insertBook(bookModel);
         List<BookDetailsItem> list = _bookDetailsList.getValue();
         if (list != null) {
@@ -275,7 +280,7 @@ public class BookDetailsViewModel extends ViewModel {
             }
         }
         _isNewBook.setValue(false);
-        _updateList.setValue(true);
+        _updateList.setValue(null);
     }
 
     public void onDeleteClicked() {

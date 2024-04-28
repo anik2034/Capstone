@@ -82,19 +82,18 @@ public class BookDetailsViewModel extends ViewModel {
         this.userRepository = userRepository;
     }
 
-    public void init(int bookModelId, boolean isNewBook, ListType listType) {
+    public void init(int bookModelId, boolean isNewBook) {
         _isNewBook.setValue(isNewBook);
         if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
-        else if (bookModelId < 0 && listType != null) {
+        else if (bookModelId < 0) {
             bookModel = new BookModel();
-            bookModel.setListType(listType);
         }
         createBookDetailsList(bookModel, isNewBook);
     }
 
-    public void init(SearchType searchType, String query, boolean isNewBook, ListType listType) {
+    public void init(SearchType searchType, String query, boolean isNewBook) {
         _isNewBook.setValue(isNewBook);
-        search(searchType, query, listType);
+        search(searchType, query);
     }
 
     private void createBookDetailsList(BookModel bookModel, boolean isNewBook) {
@@ -229,7 +228,7 @@ public class BookDetailsViewModel extends ViewModel {
         }
     }
 
-    private void search(SearchType searchType, String query, ListType listType) {
+    private void search(SearchType searchType, String query) {
         Call<BookResponse> call = null;
         _isProgressBarVisible.setValue(true);
         switch (searchType) {
@@ -247,7 +246,6 @@ public class BookDetailsViewModel extends ViewModel {
                 BookResponse bookResponse = response.body();
                 if (bookResponse != null && bookResponse.getNumFound() > 0) {
                     BookModel searchedBook = bookModelCreator.convertToBook(bookResponse, userRepository.getUser());
-                    searchedBook.setListType(listType);
 
                     createBookDetailsList(searchedBook, true);
                 } else {
@@ -268,7 +266,8 @@ public class BookDetailsViewModel extends ViewModel {
         _onShowErrorMessage.setValue(resourceHelper.getString(R.string.something_went_wrong));
     }
 
-    public void onSaveClicked() {
+    public void onSaveClicked(ListType listType) {
+        bookModel.setListType(listType);
         long id = bookRepository.insertBook(bookModel);
         List<BookDetailsItem> list = _bookDetailsList.getValue();
         if (list != null) {

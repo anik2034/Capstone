@@ -32,7 +32,6 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     private FragmentBookDetailsBinding fragmentBookDetailsBinding;
     private BookDetailsViewModel bookDetailsViewModel;
     private BookDetailsAdapter adapter;
-    private ListType listType;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +57,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         fragmentBookDetailsBinding.toolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.save) {
-                bookDetailsViewModel.onSaveClicked();
+                showChooseListType();
             } else if (id == R.id.delete) {
                 bookDetailsViewModel.onDeleteClicked();
                 ((HomeActivity) getActivity()).back();
@@ -72,10 +71,11 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
 
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
-                showChooseListType(bundle);
-
+                bookDetailsViewModel.init(
+                        SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
+                        bundle.getString(ARG_SEARCH_VALUE), true);
             } else if (bundle.containsKey(ARG_BOOK_ID)) {
-                bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false, null);
+                bookDetailsViewModel.init(bundle.getInt(ARG_BOOK_ID), false);
             }
         }
 
@@ -98,31 +98,19 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         });
     }
 
-    private void showChooseListType(Bundle bundle) {
+    private void showChooseListType() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         builder.setTitle(R.string.choose_book_list_type);
-        builder.setMessage(R.string.please_choose_to_which_book_list_would_you_like_to_add_this_book);
+        builder.setMessage(R.string.please_choose_to_where_would_you_like_to_add_this_book);
 
-        builder.setPositiveButton(R.string.my_library, (dialog, which) -> {
-            listType = ListType.LIBRARY;
-            bookDetailsViewModel.init(
-                    SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
-                    bundle.getString(ARG_SEARCH_VALUE), true, listType
-            );
-
-        });
-        builder.setNegativeButton(R.string.wishlist, (dialog, which) -> {
-            listType = ListType.WISHLIST;
-            bookDetailsViewModel.init(
-                    SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
-                    bundle.getString(ARG_SEARCH_VALUE), true, listType
-            );
-        });
+        builder.setPositiveButton(R.string.my_library, (dialog, which) -> bookDetailsViewModel.onSaveClicked(ListType.LIBRARY));
+        builder.setNegativeButton(R.string.wishlist, (dialog, which) -> bookDetailsViewModel.onSaveClicked(ListType.WISHLIST));
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(true);
         dialog.show();
+
     }
 
     private void showBookNotFoundDialog() {
@@ -131,7 +119,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         builder.setTitle(R.string.book_not_found);
         builder.setMessage(R.string.sorry_we_couldn_t_find_your_book_would_you_like_to_manually_add_it);
 
-        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(-1, true, listType));
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> bookDetailsViewModel.init(-1, true));
         builder.setNegativeButton(R.string.no, (dialog, which) -> {
             dialog.dismiss();
             ((HomeActivity) getActivity()).back();

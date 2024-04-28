@@ -1,13 +1,13 @@
 package com.anik.capstone.bookList.viewModels;
 
 import com.anik.capstone.bookList.BookListItemCreator;
+import com.anik.capstone.db.BookRepository;
 import com.anik.capstone.model.ListType;
 import com.anik.capstone.util.ResourceHelper;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import com.anik.capstone.db.BookRepository;
 
 @HiltViewModel
 public class RecommendationsViewModel extends BookListViewModel {

@@ -47,6 +47,9 @@
     <string name="logout">Log out</string>
     <string name="delete_account">Delete Account</string>
     <string name="email">Email</string>
+    <string name="choose_book_list_type">Choose Book Location </string>
+    <string name="please_choose_to_where_would_you_like_to_add_this_book">Please choose where would you like to add this book</string>
+    <string name="my_library">My Library</string>
 
     <string-array name="search_options">
         <item>Title</item>

@@ -1,11 +1,7 @@
 package com.anik.capstone.bookDetails;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.anik.capstone.R;
+import com.anik.capstone.db.BookRepository;
 import com.anik.capstone.db.UserRepository;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.BookModelCreator;
@@ -22,8 +18,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import com.anik.capstone.db.BookRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,8 +82,9 @@ public class BookDetailsViewModel extends ViewModel {
 
     public void init(int bookModelId, boolean isNewBook) {
         _isNewBook.setValue(isNewBook);
-        if (bookModelId >= 0) bookModel = bookRepository.getBookById(bookModelId);
-        else if (bookModelId < 0) {
+        if (bookModelId >= 0) {
+            bookModel = bookRepository.getBookById(bookModelId);
+        } else {
             bookModel = new BookModel();
         }
         createBookDetailsList(bookModel, isNewBook);
@@ -279,7 +279,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onDeleteClicked() {
-        bookRepository.deleteBook(bookModel);
+        bookRepository.deleteBook(bookModel, true);
     }
 }
 

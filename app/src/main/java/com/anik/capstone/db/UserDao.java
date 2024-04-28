@@ -1,13 +1,13 @@
 package com.anik.capstone.db;
 
+import com.anik.capstone.model.UserModel;
+import com.google.common.util.concurrent.ListenableFuture;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import com.anik.capstone.model.UserModel;
-import com.google.common.util.concurrent.ListenableFuture;
 
 @Dao
 public interface UserDao {
@@ -15,8 +15,11 @@ public interface UserDao {
     ListenableFuture<UserModel> getUser();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    ListenableFuture<Long> insertUser(UserModel user);
+    ListenableFuture<Void> insertUser(UserModel user);
 
     @Delete
-    ListenableFuture<Integer> deleteUser(UserModel user);
+    ListenableFuture<Void> deleteUser(UserModel user);
+
+    @Query("DELETE FROM users")
+    ListenableFuture<Void> dropTable();
 }

@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding fragmentSettingsBinding;
+    private SettingsViewModel settingsViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,16 +34,29 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
-        settingsViewModel.init();
+        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
         fragmentSettingsBinding.setViewModel(settingsViewModel);
-        fragmentSettingsBinding.logout.setOnClickListener(view1 -> AuthUI.getInstance()
-                .signOut(requireContext())
-                .addOnCompleteListener(this::handleSignOutDelete));
 
-        fragmentSettingsBinding.deleteAccount.setOnClickListener(view1 -> AuthUI.getInstance()
-                .delete(requireContext())
-                .addOnCompleteListener(this::handleSignOutDelete));
+        settingsViewModel.init();
+
+        settingsViewModel.logOut.observe(getViewLifecycleOwner(), aVoid ->
+                AuthUI.getInstance()
+                        .signOut(requireContext())
+                        .addOnCompleteListener(this::handleSignOutDelete)
+        );
+        settingsViewModel.deleteAccount.observe(getViewLifecycleOwner(), aVoid ->
+                AuthUI.getInstance()
+                        .delete(requireContext())
+                        .addOnCompleteListener(this::handleSignOutDelete)
+        );
+
+        fragmentSettingsBinding.logout.setOnClickListener(view1 ->
+                settingsViewModel.onLogOutClicked()
+        );
+
+        fragmentSettingsBinding.deleteAccount.setOnClickListener(view1 ->
+                settingsViewModel.onDeleteAccountClicked()
+        );
     }
 
     private void handleSignOutDelete(Task<Void> task) {

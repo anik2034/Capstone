@@ -9,7 +9,6 @@ import com.anik.capstone.model.rating.RatingModel;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;

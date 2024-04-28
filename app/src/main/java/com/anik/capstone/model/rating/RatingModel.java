@@ -8,17 +8,7 @@ public class RatingModel {
     private float writingStyle;
     private float overallRating;
 
-    public RatingModel() {
-
-    }
-
-    public RatingModel(float emotionalImpact, float character, float pacing, float storyline, float writingStyle) {
-        this.emotionalImpact = emotionalImpact;
-        this.character = character;
-        this.pacing = pacing;
-        this.storyline = storyline;
-        this.writingStyle = writingStyle;
-    }
+    public RatingModel() {}
 
     public float getEmotionalImpact() {
         return emotionalImpact;

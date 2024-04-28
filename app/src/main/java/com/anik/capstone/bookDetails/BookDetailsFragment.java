@@ -101,10 +101,10 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     private void showChooseListType(Bundle bundle) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-        builder.setTitle("Choose Book List Type");
-        builder.setMessage("Please choose to which book list would you like to add this book");
+        builder.setTitle(R.string.choose_book_list_type);
+        builder.setMessage(R.string.please_choose_to_which_book_list_would_you_like_to_add_this_book);
 
-        builder.setPositiveButton("My Library", (dialog, which) -> {
+        builder.setPositiveButton(R.string.my_library, (dialog, which) -> {
             listType = ListType.LIBRARY;
             bookDetailsViewModel.init(
                     SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),
@@ -112,7 +112,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
             );
 
         });
-        builder.setNegativeButton("Wishlist", (dialog, which) -> {
+        builder.setNegativeButton(R.string.wishlist, (dialog, which) -> {
             listType = ListType.WISHLIST;
             bookDetailsViewModel.init(
                     SearchType.valueOf(bundle.getString(ARG_SEARCH_TYPE)),

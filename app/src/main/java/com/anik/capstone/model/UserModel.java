@@ -13,9 +13,12 @@ public class UserModel {
     @NonNull
     private String id;
 
-    public UserModel(String email, String id) {
+    private String name;
+
+    public UserModel(String email, String id, String name) {
         this.email = email;
         this.id = id;
+        this.name = name;
     }
 
     public String getEmail() {
@@ -34,16 +37,24 @@ public class UserModel {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserModel userModel = (UserModel) o;
-        return Objects.equals(email, userModel.email) && Objects.equals(id, userModel.id);
+        return Objects.equals(email, userModel.email) && Objects.equals(id, userModel.id) && Objects.equals(name, userModel.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, id);
+        return Objects.hash(email, id, name);
     }
 }

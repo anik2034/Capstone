@@ -46,6 +46,7 @@
     <string name="name">Name</string>
     <string name="logout">Logout</string>
     <string name="delete_account">Delete Account</string>
+    <string name="email">Email</string>
 
     <string-array name="search_options">
         <item>Title</item>

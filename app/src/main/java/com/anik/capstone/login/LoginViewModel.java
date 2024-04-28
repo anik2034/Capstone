@@ -22,6 +22,8 @@ public class LoginViewModel extends ViewModel {
     public void onSuccessfulLogin(FirebaseUser currentUser) {
         String email = currentUser.getEmail();
         String id =  currentUser.getUid();
-        userRepository.insertUser(new UserModel(email,id));
+        String name = currentUser.getDisplayName();
+
+        userRepository.insertUser(new UserModel(email,id, name));
     }
 }

@@ -44,6 +44,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         fragmentBookDetailsBinding.setLifecycleOwner(this);
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
         bookDetailsViewModel = new ViewModelProvider(this).get(BookDetailsViewModel.class);
+        fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {

@@ -12,7 +12,8 @@ public class BindingAdapters {
     public static void loadImage(ImageView imageView, String imageUrl) {
         Glide.with(imageView)
                 .load(imageUrl)
-                .placeholder(R.drawable.thumbnail_placeholder)
+                .placeholder(R.drawable.book_placeholder)
+                .error(R.drawable.book_placeholder)
                 .into(imageView);
     }
 }

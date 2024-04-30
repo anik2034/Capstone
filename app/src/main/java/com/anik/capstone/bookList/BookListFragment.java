@@ -87,10 +87,10 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
         bookListViewModel.layoutViewType.observe(getViewLifecycleOwner(), layoutViewType -> {
             switch (layoutViewType) {
                 case GRID:
-                    changeLayout(R.drawable.row, new GridLayoutManager(requireContext(), GRID_COLUMN_COUNT), LayoutViewType.GRID);
+                    changeLayout(R.drawable.ic_row, new GridLayoutManager(requireContext(), GRID_COLUMN_COUNT), LayoutViewType.GRID);
                     break;
                 case ROW:
-                    changeLayout(R.drawable.grid, new LinearLayoutManager(requireContext()), LayoutViewType.ROW);
+                    changeLayout(R.drawable.ic_grid, new LinearLayoutManager(requireContext()), LayoutViewType.ROW);
                     break;
             }
         });

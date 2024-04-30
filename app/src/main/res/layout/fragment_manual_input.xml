@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="64dp"
+            android:textStyle="bold"
+            android:textSize="22sp"
             android:text="@string/search_by"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +54,9 @@
             android:layout_marginEnd="32dp"
             android:ems="10"
             android:inputType="text"
+            android:textSize="22sp"
+            android:drawableStart="@drawable/ic_search_secondary"
+            android:drawablePadding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
@@ -71,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:textSize="18sp"
                 android:checked="true"
                 android:text="@string/isbn" />
 
@@ -78,6 +84,7 @@
                 android:id="@+id/titleRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:layout_marginStart="20dp"
                 android:text="@string/title" />
 

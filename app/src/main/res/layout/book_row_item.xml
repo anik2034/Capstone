@@ -13,15 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:layout_width="85dp"
+            android:layout_height="101dp"
+            android:background="@drawable/bg_rectangle_accent"
+            app:layout_constraintEnd_toEndOf="@+id/coverImageView"
+            app:layout_constraintStart_toStartOf="@+id/coverImageView"
+            app:layout_constraintTop_toTopOf="@+id/coverImageView"
+            app:layout_constraintBottom_toBottomOf="@+id/coverImageView"/>
+
         <ImageView
             android:id="@+id/coverImageView"
             android:layout_width="84dp"
             android:layout_height="100dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:loadImage="@{bookListItem.coverUrl}"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,24 +36,33 @@
 
         <TextView
             android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
+            android:singleLine="true"
+            android:ellipsize="middle"
             android:text="@{bookListItem.title}"
+            android:textStyle="bold"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/authorTextView"
             app:layout_constraintStart_toEndOf="@+id/coverImageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/coverImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="Book Title" />
 
         <TextView
             android:id="@+id/authorTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:text="@{bookListItem.author}"
-            app:layout_constraintStart_toEndOf="@+id/coverImageView"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/titleTextView"
+            app:layout_constraintEnd_toEndOf="@+id/titleTextView"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="Author" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

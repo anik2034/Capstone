@@ -1,7 +1,9 @@
 package com.anik.capstone.widgets;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -58,6 +60,14 @@ public class EditableTextView extends FrameLayout {
 
     private String getTextViewText() {
         return editableTextViewBinding.textView.getText().toString();
+    }
+
+    public void setStyle(int textSize) {
+        editableTextViewBinding.textView.setTypeface(
+                editableTextViewBinding.textView.getTypeface(),
+                Typeface.BOLD
+        );
+        editableTextViewBinding.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
 
     public void setText(String text) {

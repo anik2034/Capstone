@@ -48,6 +48,8 @@
             android:layout_height="wrap_content"
             android:onClick="@{(view) -> viewModel.onDisplayTypeChange(view.getId())}"
             android:src="@drawable/add"
+            android:tint="@color/white"
+            app:tint="@color/white"
             app:layout_anchor="@id/bottomAppBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -143,6 +143,12 @@ public class BookDetailsAdapter extends ListAdapter<BookDetailsItem, RecyclerVie
                 binding.itemEditableView.setListener((oldText, newText) ->
                         clickListener.onTextChanged(oldText, newText, getAdapterPosition())
                 );
+                if (bookDetailsItem.getItemType() == BookDetailsItem.ItemType.TITLE) {
+                    binding.itemEditableView.setStyle(22);
+                }
+                if (bookDetailsItem.getItemType() == BookDetailsItem.ItemType.AUTHOR) {
+                    binding.itemEditableView.setStyle(18);
+                }
                 binding.executePendingBindings();
             }
         }

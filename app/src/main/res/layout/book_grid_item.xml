@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="bookListItem"
             type="com.anik.capstone.bookList.BookListItem" />
@@ -13,17 +12,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <View
+            android:layout_width="85dp"
+            android:layout_height="101dp"
+            android:background="@drawable/bg_rectangle_accent"
+            app:layout_constraintEnd_toEndOf="@+id/coverImageView"
+            app:layout_constraintStart_toStartOf="@+id/coverImageView"
+            app:layout_constraintTop_toTopOf="@+id/coverImageView"
+            app:layout_constraintBottom_toBottomOf="@+id/coverImageView"/>
 
         <ImageView
             android:id="@+id/coverImageView"
             android:layout_width="84dp"
             android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:loadImage="@{bookListItem.coverUrl}"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,11 +41,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text="@{bookListItem.title}"
-            android:textAlignment="center"
-            android:textSize="12sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/coverImageView"
             app:layout_constraintStart_toStartOf="@+id/coverImageView"
-            app:layout_constraintTop_toBottomOf="@+id/coverImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/coverImageView"
+            tools:text="Book Title" />
 
         <TextView
             android:id="@+id/authorTextView"
@@ -47,10 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text="@{bookListItem.author}"
-            android:textAlignment="center"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/coverImageView"
             app:layout_constraintStart_toStartOf="@+id/coverImageView"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            tools:text="Author" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

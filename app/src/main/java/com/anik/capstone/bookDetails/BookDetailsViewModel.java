@@ -230,7 +230,7 @@ public class BookDetailsViewModel extends ViewModel {
 
     private void search(SearchType searchType, String query) {
         Call<BookResponse> call = null;
-        _isProgressBarVisible.setValue(true);
+       _isProgressBarVisible.setValue(true);
         switch (searchType) {
             case ISBN:
                 call = retrofitClient.bookService.searchByISBN(query);

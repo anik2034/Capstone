@@ -38,6 +38,11 @@
     <fragment
         android:id="@+id/bookDetailsFragment"
         android:name="com.anik.capstone.bookDetails.BookDetailsFragment">
+        <action
+            android:id="@+id/action_bookDetailsFragment_to_bookListFragment"
+            app:destination="@id/bookListFragment"
+            app:popUpTo="@id/bookListFragment"
+            app:popUpToInclusive="false" />
         <argument
             android:name="ARG_SEARCH_ISBN"
             app:argType="string" />

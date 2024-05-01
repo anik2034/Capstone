@@ -32,9 +32,7 @@ public class HomeActivity extends AppCompatActivity {
 
         initViews();
 
-
         navController = Navigation.findNavController(this, R.id.fragmentContainerView);
-
 
         viewModel.displayType.observe(this, displayType -> {
             switch (displayType) {

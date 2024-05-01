@@ -48,10 +48,6 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeAnalyzer.
     private ImageAnalysis imageAnalysis;
     private BarcodeAnalyzer barcodeAnalyzer;
 
-    public static BarcodeScannerFragment newInstance() {
-        return new BarcodeScannerFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         barcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(inflater, container, false);

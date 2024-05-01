@@ -14,10 +14,12 @@ import com.anik.capstone.model.ListType;
 
 import java.util.ArrayList;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -71,6 +73,14 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         adapter = new BookDetailsAdapter(this);
         fragmentBookDetailsBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fragmentBookDetailsBinding.recyclerView.setAdapter(adapter);
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(BookDetailsFragment.this)
+                        .popBackStack(R.id.bookListFragment, false);
+            }
+        });
 
         bookDetailsViewModel.isNewBook.observe(getViewLifecycleOwner(), isVisible -> {
             fragmentBookDetailsBinding.toolbar.getMenu().getItem(0).setVisible(isVisible);

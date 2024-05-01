@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import com.anik.capstone.bookList.BookListItem;
 import com.anik.capstone.bookList.BookListItemCreator;
 import com.anik.capstone.bookList.LayoutViewType;
+import com.anik.capstone.db.BookRepository;
 import com.anik.capstone.model.BookModel;
 import com.anik.capstone.model.ListType;
 import com.anik.capstone.util.ResourceHelper;
@@ -13,19 +14,14 @@ import com.anik.capstone.util.SingleLiveData;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import dagger.hilt.android.lifecycle.HiltViewModel;
-import com.anik.capstone.db.BookRepository;
 
 import static com.anik.capstone.bookList.LayoutViewType.GRID;
 import static com.anik.capstone.bookList.LayoutViewType.ROW;
 
-@HiltViewModel
-public class BookListViewModel extends ViewModel {
+public abstract class BookListViewModel extends ViewModel {
     protected final ResourceHelper resourceHelper;
     protected final BookRepository bookRepository;
     protected final BookListItemCreator bookListItemCreator;
@@ -42,13 +38,15 @@ public class BookListViewModel extends ViewModel {
     private final MutableLiveData<Drawable> _icon = new MutableLiveData<>();
     public LiveData<Drawable> icon = _icon;
 
+    private final MutableLiveData<Boolean> _isEmptyViewVisible = new MutableLiveData<>();
+    public LiveData<Boolean> isEmptyViewVisible = _isEmptyViewVisible;
+
     private final MutableLiveData<LayoutViewType> _layoutViewType = new MutableLiveData<>();
     public LiveData<LayoutViewType> layoutViewType = _layoutViewType;
 
     private final SingleLiveData<Integer> _navigateToBookDetails = new SingleLiveData<>();
     public LiveData<Integer> navigateToBookDetails = _navigateToBookDetails;
 
-    @Inject
     protected BookListViewModel(
             ResourceHelper resourceHelper,
             BookRepository bookRepository,
@@ -77,12 +75,15 @@ public class BookListViewModel extends ViewModel {
     }
 
     protected void setBooks(List<BookListItem> books) {
-        _books.setValue(books);
+        if (books.isEmpty()) {
+            _isEmptyViewVisible.setValue(true);
+        } else {
+            _isEmptyViewVisible.setValue(false);
+            _books.setValue(books);
+        }
     }
 
-    public void loadBooks() {
-
-    }
+    abstract void loadBooks();
 
     public void loadBookFromDatabase(ListType listType) {
         List<BookModel> bookModelList = bookRepository.getBooksByListType(listType);

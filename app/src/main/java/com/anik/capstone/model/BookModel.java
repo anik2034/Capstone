@@ -1,5 +1,8 @@
 package com.anik.capstone.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.anik.capstone.model.borrowing.BorrowingModel;
 import com.anik.capstone.model.borrowing.BorrowingStatus;
 import com.anik.capstone.model.rating.RatingModel;
@@ -8,9 +11,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 @Entity(tableName = "books")
 public class BookModel implements Serializable {
@@ -147,11 +147,11 @@ public class BookModel implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookModel bookModel = (BookModel) o;
-        return id == bookModel.id && Objects.equals(ISBN, bookModel.ISBN) && Objects.equals(coverUrl, bookModel.coverUrl) && Objects.equals(author, bookModel.author) && Objects.equals(title, bookModel.title) && Objects.equals(genres, bookModel.genres) && readingStatus == bookModel.readingStatus && Objects.equals(borrowing, bookModel.borrowing) && Objects.equals(rating, bookModel.rating) && listType == bookModel.listType && Objects.equals(ownerId, bookModel.ownerId);
+        return Objects.equals(title.toLowerCase(), bookModel.title.toLowerCase());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ISBN, coverUrl, author, title, genres, readingStatus, borrowing, rating, listType, ownerId);
+        return Objects.hash(title);
     }
 }

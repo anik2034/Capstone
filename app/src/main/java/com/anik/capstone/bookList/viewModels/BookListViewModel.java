@@ -30,6 +30,9 @@ public class BookListViewModel extends ViewModel {
     protected final BookRepository bookRepository;
     protected final BookListItemCreator bookListItemCreator;
 
+    protected final MutableLiveData<Boolean> _isProgressBarVisible = new MutableLiveData<>();
+    public LiveData<Boolean> isProgressBarVisible = _isProgressBarVisible;
+
     private final MutableLiveData<String> _title = new MutableLiveData<>();
     public LiveData<String> title = _title;
 
@@ -90,5 +93,6 @@ public class BookListViewModel extends ViewModel {
     public void onItemClick(BookListItem bookListItem) {
         _navigateToBookDetails.setValue(bookListItem.getBookModelId());
     }
+
 }
 

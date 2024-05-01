@@ -160,7 +160,7 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     private void updateBook(BookDetailsItem item, String oldText) {
-        BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
+//        bookModel = bookRepository.getBookById(item.getBookModelId());
         BorrowingModel borrowingModel = bookModel.getBorrowing();
         RatingModel ratingModel = bookModel.getRating();
         switch (item.getItemType()) {
@@ -282,6 +282,7 @@ public class BookDetailsViewModel extends ViewModel {
         }
         _isNewBook.setValue(false);
         _updateList.setValue(null);
+
     }
 
     public void onDeleteClicked() {

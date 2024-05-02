@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RecommendationEngine {
+
+    private static final int MAX_COUNT = 15;
     private List<BookModel> books;
     private int maxAuthorsBound;
     private int maxGenresBound;
@@ -35,8 +37,9 @@ public class RecommendationEngine {
 
         int authorsSize = allAuthors.size();
         int genresSize = allGenres.size();
-        this.maxAuthorsBound = (authorsSize > 1) ? random.nextInt(authorsSize / 2) + 1 : 1;
-        this.maxGenresBound = (genresSize > 1) ? random.nextInt(genresSize / 2) + 1 : 1;
+        this.maxAuthorsBound = (authorsSize > 1) ? Math.min(MAX_COUNT, random.nextInt(authorsSize / 2) + 1) : 1;
+        this.maxGenresBound = (genresSize > 1) ? Math.min(MAX_COUNT, random.nextInt(genresSize / 2) + 1) : 1;
+
     }
 
     public String selectAuthorsAndGenres() {
@@ -78,7 +81,14 @@ public class RecommendationEngine {
         List<String> combined = new ArrayList<>(authors);
         combined.addAll(genres);
 
-        return combined.stream()
-                .collect(Collectors.joining(" OR "));
+        StringBuilder queryBuilder = new StringBuilder();
+        for (int i = 0; i < combined.size(); i++) {
+            queryBuilder.append(combined.get(i));
+            if (i < combined.size() - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
+
+        return queryBuilder.toString();
     }
 }

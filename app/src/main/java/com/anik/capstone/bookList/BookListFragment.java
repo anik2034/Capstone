@@ -13,8 +13,10 @@ import com.anik.capstone.bookList.viewModels.WishlistViewModel;
 import com.anik.capstone.databinding.FragmentBookListBinding;
 import com.anik.capstone.home.DisplayType;
 import com.anik.capstone.home.HomeActivity;
+import com.anik.capstone.model.ListType;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -63,6 +65,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
             } else if (displayType == DisplayType.RECOMMENDATIONS.ordinal()) {
                 titleResId = R.string.recommendations;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
+                ((RecommendationsViewModel) bookListViewModel).onShowChooseListType.observe(getViewLifecycleOwner(), onShowChooseListType ->
+                        showChooseListType());
             }
         } else {
             titleResId = R.string.home;
@@ -77,9 +81,7 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
         fragmentBookListBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         fragmentBookListBinding.recyclerView.setAdapter(adapter);
 
-        bookListViewModel.books.observe(getViewLifecycleOwner(), books -> {
-            adapter.submitList(books);
-        });
+        bookListViewModel.books.observe(getViewLifecycleOwner(), books -> adapter.submitList(books));
 
         bookListViewModel.navigateToBookDetails.observe(getViewLifecycleOwner(), bookModelId ->
             ((HomeActivity) requireActivity()).navigateTo(R.id.bookDetailsFragment, bookModelId));
@@ -105,5 +107,20 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
         fragmentBookListBinding.recyclerView.setLayoutManager(layoutManager);
         fragmentBookListBinding.recyclerView.getRecycledViewPool().clear();
         adapter.setLayoutViewType(layoutViewType);
+    }
+
+    private void showChooseListType() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle(R.string.choose_book_list_type);
+        builder.setMessage(R.string.please_choose_to_where_would_you_like_to_add_this_book);
+
+        builder.setPositiveButton(R.string.my_library, (dialog, which) ->  ((RecommendationsViewModel) bookListViewModel).onSave(ListType.LIBRARY));
+        builder.setNegativeButton(R.string.wishlist, (dialog, which) ->  ((RecommendationsViewModel) bookListViewModel).onSave(ListType.WISHLIST));
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+
     }
 }

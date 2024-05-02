@@ -160,7 +160,6 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     private void updateBook(BookDetailsItem item, String oldText) {
-        BookModel bookModel = bookRepository.getBookById(item.getBookModelId());
         BorrowingModel borrowingModel = bookModel.getBorrowing();
         RatingModel ratingModel = bookModel.getRating();
         switch (item.getItemType()) {

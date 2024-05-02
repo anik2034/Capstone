@@ -21,7 +21,8 @@ public class BookListItemCreator {
                                 bookModel.getId(),
                                 bookModel.getTitle(),
                                 bookModel.getAuthor(),
-                                bookModel.getCoverUrl()
+                                bookModel.getCoverUrl(),
+                                bookModel.getGenres()
                         )
                 );
             }

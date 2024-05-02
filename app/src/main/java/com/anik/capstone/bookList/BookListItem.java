@@ -1,5 +1,6 @@
 package com.anik.capstone.bookList;
 
+import java.util.List;
 import java.util.Objects;
 
 public class BookListItem {
@@ -7,12 +8,14 @@ public class BookListItem {
     private String title;
     private String author;
     private String coverUrl;
+    private List<String> genres;
 
-    public BookListItem(int bookModelId, String title, String author, String coverUrl) {
+    public BookListItem(int bookModelId, String title, String author, String coverUrl, List<String> genres) {
         this.bookModelId = bookModelId;
         this.title = title;
         this.author = author;
         this.coverUrl = coverUrl;
+        this.genres = genres;
     }
 
     public int getBookModelId() {
@@ -47,16 +50,24 @@ public class BookListItem {
         this.coverUrl = coverUrl;
     }
 
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookListItem that = (BookListItem) o;
-        return bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(author, that.author) && Objects.equals(coverUrl, that.coverUrl);
+        return bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(author, that.author) && Objects.equals(coverUrl, that.coverUrl) && Objects.equals(genres, that.genres);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookModelId, title, author, coverUrl);
+        return Objects.hash(bookModelId, title, author, coverUrl, genres);
     }
 }

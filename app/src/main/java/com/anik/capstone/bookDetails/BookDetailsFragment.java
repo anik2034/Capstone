@@ -63,6 +63,7 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
             int id = item.getItemId();
             if (id == R.id.save) {
                 bookDetailsViewModel.onSaveClicked();
+
             } else if (id == R.id.delete) {
                 bookDetailsViewModel.onDeleteClicked();
                 back();

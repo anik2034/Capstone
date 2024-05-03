@@ -2,6 +2,7 @@ package com.anik.capstone.bookList.viewModels;
 
 import android.graphics.drawable.Drawable;
 
+import com.anik.capstone.R;
 import com.anik.capstone.bookList.BookListItem;
 import com.anik.capstone.bookList.BookListItemCreator;
 import com.anik.capstone.bookList.LayoutViewType;
@@ -11,6 +12,7 @@ import com.anik.capstone.model.ListType;
 import com.anik.capstone.util.ResourceHelper;
 import com.anik.capstone.util.SingleLiveData;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,6 +49,11 @@ public abstract class BookListViewModel extends ViewModel {
     private final SingleLiveData<Integer> _navigateToBookDetails = new SingleLiveData<>();
     public LiveData<Integer> navigateToBookDetails = _navigateToBookDetails;
 
+    private final MutableLiveData<Boolean> _isSearchable = new MutableLiveData<>();
+    public LiveData<Boolean> isSearchable = _isSearchable;
+
+    private List<BookListItem> filteredBookList = new ArrayList<>();
+
     protected BookListViewModel(
             ResourceHelper resourceHelper,
             BookRepository bookRepository,
@@ -61,7 +68,7 @@ public abstract class BookListViewModel extends ViewModel {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
         _layoutViewType.setValue(layoutViewType);
-
+        if(titleResId != R.string.recommendations) _isSearchable.setValue(true);
         loadBooks();
     }
 
@@ -93,6 +100,27 @@ public abstract class BookListViewModel extends ViewModel {
 
     public void onItemClick(BookListItem bookListItem) {
         _navigateToBookDetails.setValue(bookListItem.getBookModelId());
+    }
+
+    public void searchBooks(String query) {
+        if (query.isEmpty()) {
+            // If query is empty, load all books
+            loadBooks();
+        } else {
+            // Filter books based on search query
+            List<BookListItem> filteredList = new ArrayList<>();
+            filterBooks(query, _books.getValue(), filteredList);
+            setBooks(filteredList);
+        }
+    }
+
+    private void filterBooks(String query, List<BookListItem> books, List<BookListItem> filteredList) {
+        query = query.toLowerCase().trim();
+        for (BookListItem book : books) {
+            if (book.getTitle().toLowerCase().contains(query) || book.getAuthor().toLowerCase().contains(query)) {
+                filteredList.add(book);
+            }
+        }
     }
 
 }

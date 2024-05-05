@@ -22,6 +22,7 @@ public class LibraryViewModel extends BookListViewModel {
 
     @Override
     public void loadBooks() {
+
         loadBookFromDatabase(ListType.LIBRARY);
     }
 }

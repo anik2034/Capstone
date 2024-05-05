@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.viewModels.BookListViewModel;
@@ -21,6 +22,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -94,6 +98,20 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
                 case ROW:
                     changeLayout(R.drawable.ic_grid, new LinearLayoutManager(requireContext()), LayoutViewType.ROW);
                     break;
+            }
+        });
+
+
+        fragmentBookListBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                bookListViewModel.searchBooks(newText);
+                return true;
             }
         });
     }

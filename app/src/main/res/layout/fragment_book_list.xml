@@ -25,14 +25,13 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
                 android:visibility="@{viewModel.isEmptyViewVisible ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pageTitleTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
             <TextView
                 android:id="@+id/pageTitleTextView"
@@ -84,6 +83,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search"
+                android:visibility="@{viewModel.isSearchable ? View.VISIBLE : View.GONE}"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/round_rectangle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pageTitleTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

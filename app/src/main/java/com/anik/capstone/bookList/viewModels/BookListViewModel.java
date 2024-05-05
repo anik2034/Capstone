@@ -1,6 +1,13 @@
 package com.anik.capstone.bookList.viewModels;
 
+import static com.anik.capstone.bookList.LayoutViewType.GRID;
+import static com.anik.capstone.bookList.LayoutViewType.ROW;
+
 import android.graphics.drawable.Drawable;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.anik.capstone.R;
 import com.anik.capstone.bookList.BookListItem;
@@ -15,13 +22,6 @@ import com.anik.capstone.util.SingleLiveData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import static com.anik.capstone.bookList.LayoutViewType.GRID;
-import static com.anik.capstone.bookList.LayoutViewType.ROW;
 
 public abstract class BookListViewModel extends ViewModel {
     protected final ResourceHelper resourceHelper;
@@ -51,8 +51,7 @@ public abstract class BookListViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> _isSearchable = new MutableLiveData<>();
     public LiveData<Boolean> isSearchable = _isSearchable;
-
-    private List<BookListItem> filteredBookList = new ArrayList<>();
+    List<BookListItem> initialBooks = new ArrayList<>();
 
     protected BookListViewModel(
             ResourceHelper resourceHelper,
@@ -68,7 +67,7 @@ public abstract class BookListViewModel extends ViewModel {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
         _layoutViewType.setValue(layoutViewType);
-        if(titleResId != R.string.recommendations) _isSearchable.setValue(true);
+        if (titleResId != R.string.recommendations) _isSearchable.setValue(true);
         loadBooks();
     }
 
@@ -95,6 +94,7 @@ public abstract class BookListViewModel extends ViewModel {
     public void loadBookFromDatabase(ListType listType) {
         List<BookModel> bookModelList = bookRepository.getBooksByListType(listType);
         List<BookListItem> bookListItems = bookListItemCreator.convert(bookModelList);
+        initialBooks = bookListItems;
         setBooks(bookListItems);
     }
 
@@ -104,23 +104,22 @@ public abstract class BookListViewModel extends ViewModel {
 
     public void searchBooks(String query) {
         if (query.isEmpty()) {
-            // If query is empty, load all books
-            loadBooks();
+            setBooks(initialBooks);
         } else {
-            // Filter books based on search query
-            List<BookListItem> filteredList = new ArrayList<>();
-            filterBooks(query, _books.getValue(), filteredList);
+            List<BookListItem> filteredList = filterBooks(query, _books.getValue());
             setBooks(filteredList);
         }
     }
 
-    private void filterBooks(String query, List<BookListItem> books, List<BookListItem> filteredList) {
+    private List<BookListItem> filterBooks(String query, List<BookListItem> books) {
         query = query.toLowerCase().trim();
+        List<BookListItem> filteredList = new ArrayList<>();
         for (BookListItem book : books) {
             if (book.getTitle().toLowerCase().contains(query) || book.getAuthor().toLowerCase().contains(query)) {
                 filteredList.add(book);
             }
         }
+        return filteredList;
     }
 
 }

@@ -26,8 +26,4 @@ public class ResourceHelper {
     public boolean hasCameraPermission() {
         return (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
-
-    public boolean hasGalleryPermission() {
-        return (ActivityCompat.checkSelfPermission(this.context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED);
-    }
 }

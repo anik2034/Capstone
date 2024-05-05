@@ -15,7 +15,10 @@ import com.anik.capstone.network.responses.BookResponse;
 import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -55,6 +58,9 @@ public class BookDetailsViewModel extends ViewModel {
     private final MutableLiveData<Void> _onShowChooseListType = new MutableLiveData<>();
     public LiveData<Void> onShowChooseListType = _onShowChooseListType;
 
+    private final MutableLiveData<MenuItems> _updateMenuItemsVisibility = new MutableLiveData<>();
+    public LiveData<MenuItems> updateMenuItemsVisibility = _updateMenuItemsVisibility;
+
     private final ResourceHelper resourceHelper;
     private final BookModelCreator bookModelCreator;
     private final RetrofitClient retrofitClient;
@@ -63,6 +69,9 @@ public class BookDetailsViewModel extends ViewModel {
     private final BookDetailsItemCreator bookDetailsItemCreator;
     private final List<BookDetailsItem> bookDetailsItemList = new ArrayList<>();
     private BookModel bookModel;
+
+    private boolean isEditModeActive = false;
+    private List<BookDetailsItem> editedItems = new ArrayList<>();
 
     @Inject
     public BookDetailsViewModel(
@@ -89,6 +98,9 @@ public class BookDetailsViewModel extends ViewModel {
             bookModel = new BookModel();
         }
         createBookDetailsList(bookModel, isNewBook);
+        if (isNewBook) {
+            _updateMenuItemsVisibility.setValue(new MenuItems(true, false, false));
+        }
     }
 
     public void init(SearchType searchType, String query, boolean isNewBook) {
@@ -102,64 +114,35 @@ public class BookDetailsViewModel extends ViewModel {
         _bookDetailsList.setValue(bookDetailsItemList);
     }
 
-    public void onItemClicked(int position) {
-        BookDetailsItem bookDetailsItem = getItemByPosition(position);
-        if (bookDetailsItem != null) {
-            bookDetailsItem.setEditable(true);
-            updateBookDetailsItemList(position);
-        }
+    public void onRatingChanged(float rating, BookDetailsItem bookDetailsItem) {
+        BookDetailsItem editableItem = new BookDetailsItem(bookDetailsItem);
+        editableItem.setRating(rating);
+        editedItems.remove(editableItem);
+        editedItems.add(editableItem);
     }
 
-    public void onRatingChanged(float rating, int position) {
-        updateBookDetails(position, rating, null, null, null, null);
+    public void onTextChanged(String newText, BookDetailsItem bookDetailsItem) {
+        BookDetailsItem editableItem = new BookDetailsItem(bookDetailsItem);
+        editableItem.setValue(newText);
+        editedItems.remove(editableItem);
+        editedItems.add(editableItem);
     }
 
-    public void onTextChanged(String oldText, String newText, int position) {
-        updateBookDetails(position, null, oldText, newText, null, null);
+    public void onDateChanged(String date, BookDetailsItem bookDetailsItem) {
+        BookDetailsItem editableItem = new BookDetailsItem(bookDetailsItem);
+        editableItem.setDate(date);
+        editedItems.remove(editableItem);
+        editedItems.add(editableItem);
     }
 
-    public void onDateChanged(String date, int position) {
-        updateBookDetails(position, null, null, null, date, null);
+    public void onOptionChanged(String selected, BookDetailsItem bookDetailsItem) {
+        BookDetailsItem editableItem = new BookDetailsItem(bookDetailsItem);
+        editableItem.setSelectedValue(selected);
+        editedItems.remove(editableItem);
+        editedItems.add(editableItem);
     }
 
-    public void onOptionChanged(String selected, int position) {
-        updateBookDetails(position, null, null, null, null, selected);
-    }
-
-    private void updateBookDetails(int position, Float rating, String oldText, String newText, String date, String selected) {
-        BookDetailsItem item = getItemByPosition(position);
-        if (item != null) {
-            item.setEditable(false);
-            if (rating != null) {
-                item.setRating(rating);
-            }
-            if (newText != null) {
-                item.setValue(newText);
-            }
-            if (date != null) {
-                item.setDate(date);
-            }
-            if (selected != null) {
-                item.setSelectedValue(selected);
-            }
-            updateBookDetailsItemList(position);
-            updateBook(item, oldText);
-        }
-    }
-
-    private BookDetailsItem getItemByPosition(int position) {
-        if (position >= 0 && position < bookDetailsItemList.size()) {
-            return bookDetailsItemList.get(position);
-        }
-        return null;
-    }
-
-    private void updateBookDetailsItemList(int position) {
-        _bookDetailsList.setValue(bookDetailsItemList);
-        _updateDetailItem.setValue(position);
-    }
-
-    private void updateBook(BookDetailsItem item, String oldText) {
+    private void updateBookModel(BookDetailsItem item) {
         BorrowingModel borrowingModel = bookModel.getBorrowing();
         RatingModel ratingModel = bookModel.getRating();
         switch (item.getItemType()) {
@@ -173,12 +156,7 @@ public class BookDetailsViewModel extends ViewModel {
                 bookModel.setCoverUrl(item.getThumbnailUrl());
                 break;
             case GENRE:
-                List<String> genres = bookModel.getGenres();
-                int index = genres.indexOf(oldText);
-                if (index != -1) {
-                    genres.set(genres.indexOf(oldText), item.getValue());
-                    bookModel.setGenres(genres);
-                }
+                bookModel.setGenres(Collections.singletonList(item.getValue()));
                 break;
             case BORROWING_STATUS:
                 borrowingModel.setBorrowingStatus(BorrowingStatus.getBorrowingStatus(item.getSelectedValue()));
@@ -221,15 +199,11 @@ public class BookDetailsViewModel extends ViewModel {
                 break;
 
         }
-        int updatedItemsCount = bookRepository.updateBook(bookModel);
-        if (updatedItemsCount <= 0) {
-            showErrorMessage();
-        }
     }
 
     private void search(SearchType searchType, String query) {
         Call<BookResponse> call = null;
-       _isProgressBarVisible.setValue(true);
+        _isProgressBarVisible.setValue(true);
         switch (searchType) {
             case ISBN:
                 call = retrofitClient.bookService.searchByISBN(query);
@@ -266,25 +240,103 @@ public class BookDetailsViewModel extends ViewModel {
     }
 
     public void onSaveClicked() {
-        _onShowChooseListType.setValue(null);
+        List<BookDetailsItem> newList = mergeBookDetails(bookDetailsItemList, editedItems);
+        bookDetailsItemList.clear();
+        bookDetailsItemList.addAll(newList);
+        for (BookDetailsItem editableItem : editedItems) {
+            updateBookModel(editableItem);
+        }
+        if (isEditModeActive) {
+            setEditableMode(false);
+            int updatedItemsCount = bookRepository.updateBook(bookModel);
+            if (updatedItemsCount <= 0) {
+                showErrorMessage();
+            }
+        } else {
+            _onShowChooseListType.setValue(null);
+        }
     }
 
     public void onSaveClicked(ListType listType) {
         bookModel.setListType(listType);
         long id = bookRepository.insertBook(bookModel);
-        List<BookDetailsItem> list = _bookDetailsList.getValue();
-        if (list != null) {
-            for (BookDetailsItem bookDetailsItem : list) {
-                bookDetailsItem.setBookModelId((int) id);
-                bookDetailsItem.setEditable(false);
-            }
+        for (BookDetailsItem bookDetailsItem : bookDetailsItemList) {
+            bookDetailsItem.setBookModelId((int) id);
+            bookDetailsItem.setEditable(false);
         }
+        _bookDetailsList.setValue(bookDetailsItemList);
         _isNewBook.setValue(false);
         _updateList.setValue(null);
+        _updateMenuItemsVisibility.setValue(new MenuItems(false, true, true));
     }
 
     public void onDeleteClicked() {
         bookRepository.deleteBook(bookModel, true);
+    }
+
+    public void onEditClicked() {
+        editedItems.clear();
+        editedItems = new ArrayList<>();
+        setEditableMode(true);
+    }
+
+    private void setEditableMode(boolean isEditModeActive) {
+        for (BookDetailsItem bookDetailsItem : bookDetailsItemList) {
+            bookDetailsItem.setEditable(isEditModeActive);
+        }
+        this.isEditModeActive = isEditModeActive;
+        _bookDetailsList.setValue(bookDetailsItemList);
+        _updateList.setValue(null);
+        if (isEditModeActive) {
+            _updateMenuItemsVisibility.setValue(new MenuItems(true, false, false));
+        } else {
+            _updateMenuItemsVisibility.setValue(new MenuItems(false, true, true));
+        }
+    }
+
+    private List<BookDetailsItem> mergeBookDetails(
+            List<BookDetailsItem> initialList,
+            List<BookDetailsItem> editedList
+    ) {
+        Map<String, BookDetailsItem> editsMap = new HashMap<>();
+        for (BookDetailsItem edit : editedList) {
+            editsMap.put(edit.getId(), edit);
+        }
+        List<BookDetailsItem> mergedList = new ArrayList<>();
+
+        for (int i = 0; i < initialList.size(); i++) {
+            BookDetailsItem originalItem = initialList.get(i);
+            if (editsMap.containsKey(originalItem.getId())) {
+                mergedList.add(i, editsMap.get(originalItem.getId()));
+            } else {
+                mergedList.add(i, initialList.get(i));
+            }
+        }
+        return mergedList;
+    }
+
+    public static class MenuItems {
+        private final boolean isSaveVisible;
+        private final boolean isDeleteVisible;
+        private final boolean isEditVisible;
+
+        public MenuItems(boolean isSaveVisible, boolean isDeleteVisible, boolean isEditVisible) {
+            this.isSaveVisible = isSaveVisible;
+            this.isDeleteVisible = isDeleteVisible;
+            this.isEditVisible = isEditVisible;
+        }
+
+        public boolean isSaveVisible() {
+            return isSaveVisible;
+        }
+
+        public boolean isDeleteVisible() {
+            return isDeleteVisible;
+        }
+
+        public boolean isEditVisible() {
+            return isEditVisible;
+        }
     }
 }
 

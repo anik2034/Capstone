@@ -52,6 +52,9 @@
     <string name="my_library">My Library</string>
     <string name="please_scan">Please scan the barcode of the book</string>
     <string name="empty_book_list_message">Your bookshelf is currently empty. Tap the plus icon to start adding books</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="save">save</string>
 
     <string-array name="search_options">
         <item>Title</item>

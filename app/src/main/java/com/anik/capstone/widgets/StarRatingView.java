@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.anik.capstone.databinding.StarRatingViewBinding;
@@ -35,9 +34,9 @@ public class StarRatingView extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     private void init() {
         starRatingViewBinding = StarRatingViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        starRatingViewBinding.saveImageButton.setOnClickListener(v -> {
+        starRatingViewBinding.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if(listener != null){
-                listener.onRatingChanged(starRatingViewBinding.ratingBar.getRating());
+                listener.onRatingChanged(rating);
             }
         });
     }
@@ -49,20 +48,16 @@ public class StarRatingView extends FrameLayout {
     public void setRating(float rating) {
         starRatingViewBinding.setRate(rating);
         starRatingViewBinding.executePendingBindings();
-
     }
 
     public void setRatingType(String ratingType) {
         starRatingViewBinding.setRatingType(ratingType);
-
-    }
-
-    public boolean getIsEditable() {
-        return starRatingViewBinding.getIsEditable();
     }
 
     public void setIsEditable(boolean isEditable) {
-        starRatingViewBinding.setIsEditable(isEditable);
+        starRatingViewBinding.ratingBar.setFocusable(isEditable);
+        starRatingViewBinding.ratingBar.setClickable(isEditable);
+        starRatingViewBinding.ratingBar.setIsIndicator(!isEditable);
     }
 
     public void setListener(StartRatingViewListener listener) {

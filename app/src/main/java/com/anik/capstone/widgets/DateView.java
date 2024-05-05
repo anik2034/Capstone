@@ -43,9 +43,7 @@ public class DateView extends FrameLayout implements DatePickerDialog.OnDateSetL
 
         selectedDate = Calendar.getInstance();
 
-        dateViewBinding.resultTextView.setOnClickListener(v -> {
-            showDatePickerDialog();
-        });
+        dateViewBinding.resultTextView.setOnClickListener(v -> showDatePickerDialog());
     }
 
     private void showDatePickerDialog() {
@@ -72,12 +70,9 @@ public class DateView extends FrameLayout implements DatePickerDialog.OnDateSetL
         }
     }
 
-    public boolean getIsEditable() {
-        return dateViewBinding.getIsEditable();
-    }
-
     public void setIsEditable(boolean isEditable) {
-        dateViewBinding.setIsEditable(isEditable);
+        dateViewBinding.resultTextView.setFocusable(isEditable);
+        dateViewBinding.resultTextView.setClickable(isEditable);
     }
 
     public void setListener(DateViewListener listener) {

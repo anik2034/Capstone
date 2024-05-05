@@ -5,13 +5,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.anik.capstone.databinding.OptionsViewBinding;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class OptionsView extends FrameLayout {
 
@@ -37,9 +36,7 @@ public class OptionsView extends FrameLayout {
 
     private void init() {
         optionsViewBinding = OptionsViewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        optionsViewBinding.itemTextView.setOnClickListener(v -> {
-            showOptionsDialog(options);
-        });
+        optionsViewBinding.itemTextView.setOnClickListener(v -> showOptionsDialog(options));
 
     }
 
@@ -47,9 +44,19 @@ public class OptionsView extends FrameLayout {
         this.options = options;
     }
 
+    public void setIsEditable(boolean isEditable) {
+        optionsViewBinding.itemTextView.setFocusable(isEditable);
+        optionsViewBinding.itemTextView.setClickable(isEditable);
+    }
+
     private void showOptionsDialog(List<String> options) {
         optionsDialog = new OptionsDialog(getContext());
-        optionsDialog.setListener(listener);
+        optionsDialog.setListener(selected -> {
+            optionsViewBinding.setSelected(selected);
+            if (listener != null) {
+                listener.onOptionChanged(selected);
+            }
+        });
         optionsDialog.setOptions(options);
         optionsDialog.setSelected(getSelected());
         optionsDialog.show();

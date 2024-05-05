@@ -1,10 +1,13 @@
 package com.anik.capstone.bookDetails;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.anik.capstone.R;
@@ -47,6 +50,8 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
         bookDetailsViewModel = new ViewModelProvider(this).get(BookDetailsViewModel.class);
         fragmentBookDetailsBinding.setViewModel(bookDetailsViewModel);
+        InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey(ARG_SEARCH_TYPE) && bundle.containsKey(ARG_SEARCH_VALUE)) {
@@ -60,13 +65,15 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
 
         fragmentBookDetailsBinding.toolbar.inflateMenu(R.menu.toolbar_menu);
         fragmentBookDetailsBinding.toolbar.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.save) {
+            int itemId = item.getItemId();
+            if (itemId == R.id.save) {
                 bookDetailsViewModel.onSaveClicked();
-
-            } else if (id == R.id.delete) {
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            } else if (itemId == R.id.delete) {
                 bookDetailsViewModel.onDeleteClicked();
                 back();
+            } else if (itemId == R.id.edit) {
+                bookDetailsViewModel.onEditClicked();
             }
             return true;
         });
@@ -105,6 +112,12 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
         bookDetailsViewModel.onShowChooseListType.observe(getViewLifecycleOwner(), onShowChooseListType ->
                 showChooseListType()
         );
+        bookDetailsViewModel.updateMenuItemsVisibility.observe(getViewLifecycleOwner(), updateMenuItemsVisibility -> {
+            Menu menu = fragmentBookDetailsBinding.toolbar.getMenu();
+            menu.findItem(R.id.save).setVisible(updateMenuItemsVisibility.isSaveVisible());
+            menu.findItem(R.id.delete).setVisible(updateMenuItemsVisibility.isDeleteVisible());
+            menu.findItem(R.id.edit).setVisible(updateMenuItemsVisibility.isEditVisible());
+        });
     }
 
     private void showChooseListType() {
@@ -140,28 +153,23 @@ public class BookDetailsFragment extends Fragment implements BookDetailsAdapter.
     }
 
     @Override
-    public void onItemClick(int position) {
-        bookDetailsViewModel.onItemClicked(position);
+    public void onRatingChanged(float rating, BookDetailsItem bookDetailsItem) {
+        bookDetailsViewModel.onRatingChanged(rating, bookDetailsItem);
     }
 
     @Override
-    public void onRatingChanged(float rating, int position) {
-        bookDetailsViewModel.onRatingChanged(rating, position);
+    public void onTextChanged(String newText, BookDetailsItem bookDetailsItem) {
+        bookDetailsViewModel.onTextChanged(newText, bookDetailsItem);
     }
 
     @Override
-    public void onTextChanged(String oldText, String newText, int position) {
-        bookDetailsViewModel.onTextChanged(oldText, newText, position);
+    public void onDateChanged(String date, BookDetailsItem bookDetailsItem) {
+        bookDetailsViewModel.onDateChanged(date, bookDetailsItem);
     }
 
     @Override
-    public void onDateChanged(String date, int position) {
-        bookDetailsViewModel.onDateChanged(date, position);
-    }
-
-    @Override
-    public void onOptionChanged(String selected, int position) {
-        bookDetailsViewModel.onOptionChanged(selected, position);
+    public void onOptionChanged(String selected, BookDetailsItem bookDetailsItem) {
+        bookDetailsViewModel.onOptionChanged(selected, bookDetailsItem);
     }
 
     private void back() {

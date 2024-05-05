@@ -7,22 +7,22 @@ import android.view.LayoutInflater;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import androidx.annotation.NonNull;
-
 import com.anik.capstone.databinding.OptionsDialogBinding;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class OptionsDialog extends Dialog {
-    private OptionsDialogBinding optionsDialogBinding;
     private List<String> options;
-    private OptionsView.OptionsViewListener listener;
+    private OptionsDialogListener listener;
     private String selected;
 
     public OptionsDialog(@NonNull Context context) {
         super(context);
     }
-    public void setSelected(String selected){
+
+    public void setSelected(String selected) {
         this.selected = selected;
     }
 
@@ -30,13 +30,14 @@ public class OptionsDialog extends Dialog {
         this.options = options;
     }
 
-    public void setListener(OptionsView.OptionsViewListener listener) {
+    public void setListener(OptionsDialogListener listener) {
         this.listener = listener;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        optionsDialogBinding = OptionsDialogBinding.inflate(LayoutInflater.from(getContext()));
+        OptionsDialogBinding optionsDialogBinding = OptionsDialogBinding.inflate(LayoutInflater.from(getContext()));
         setContentView(optionsDialogBinding.getRoot());
 
         RadioGroup radioGroup = optionsDialogBinding.optionsRadioGroup;
@@ -47,7 +48,7 @@ public class OptionsDialog extends Dialog {
                     RadioGroup.LayoutParams.MATCH_PARENT,
                     RadioGroup.LayoutParams.WRAP_CONTENT
             ));
-            if(option.equals(selected)){
+            if (option.equals(selected)) {
                 radioButton.setChecked(true);
             }
             radioButton.setText(option);
@@ -64,5 +65,9 @@ public class OptionsDialog extends Dialog {
 
     private void radioButtonClicked(RadioButton radioButton) {
         this.selected = radioButton.getText().toString();
+    }
+
+    public interface OptionsDialogListener {
+        void onOptionChanged(String selected);
     }
 }

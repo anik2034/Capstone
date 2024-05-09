@@ -4,19 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".bookDetails.BookDetailsFragment">
 
+    <data>
+        <variable name="headerName" type="String" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.anik.capstone.widgets.HeaderView
-            android:id="@+id/itemHeaderView"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/headerTextview"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@{headerName}"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

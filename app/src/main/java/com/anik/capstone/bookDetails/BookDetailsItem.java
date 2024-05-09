@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BookDetailsItem {
+    private String id;
     private String title;
     private String value;
     private String selectedValue;
@@ -16,6 +17,33 @@ public class BookDetailsItem {
     private List<String> singleSelection;
     private int bookModelId;
     private String hint;
+
+    public BookDetailsItem() {
+    }
+
+    public BookDetailsItem(BookDetailsItem bookDetailsItem) {
+        this.id = bookDetailsItem.id;
+        this.title = bookDetailsItem.title;
+        this.value = bookDetailsItem.value;
+        this.selectedValue = bookDetailsItem.selectedValue;
+        this.rating = bookDetailsItem.rating;
+        this.date = bookDetailsItem.date;
+        this.viewType = bookDetailsItem.viewType;
+        this.itemType = bookDetailsItem.itemType;
+        this.thumbnailUrl = bookDetailsItem.thumbnailUrl;
+        this.isEditable = bookDetailsItem.isEditable;
+        this.singleSelection = bookDetailsItem.singleSelection;
+        this.bookModelId = bookDetailsItem.bookModelId;
+        this.hint = bookDetailsItem.hint;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -55,14 +83,6 @@ public class BookDetailsItem {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public ViewType getItemViewType() {
-        return viewType;
-    }
-
-    public void setItemViewType(ViewType viewType) {
-        this.viewType = viewType;
     }
 
     public String getThumbnailUrl() {
@@ -126,12 +146,12 @@ public class BookDetailsItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookDetailsItem that = (BookDetailsItem) o;
-        return Float.compare(rating, that.rating) == 0 && isEditable == that.isEditable && bookModelId == that.bookModelId && Objects.equals(title, that.title) && Objects.equals(value, that.value) && Objects.equals(selectedValue, that.selectedValue) && Objects.equals(date, that.date) && viewType == that.viewType && itemType == that.itemType && Objects.equals(thumbnailUrl, that.thumbnailUrl) && Objects.equals(singleSelection, that.singleSelection) && Objects.equals(hint, that.hint);
+        return Objects.equals(id, that.id) && isEditable == that.isEditable && viewType == that.viewType && itemType == that.itemType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, value, selectedValue, rating, date, viewType, itemType, thumbnailUrl, isEditable, singleSelection, bookModelId, hint);
+        return Objects.hash(id, isEditable, viewType, itemType);
     }
 
     public enum ViewType {

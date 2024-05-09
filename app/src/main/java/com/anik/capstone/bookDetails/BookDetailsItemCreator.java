@@ -10,6 +10,7 @@ import com.anik.capstone.util.ResourceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -49,6 +50,7 @@ public class BookDetailsItemCreator {
         int bookModelId = bookModel.getId();
         
         BookDetailsItem valueTitle = new BookDetailsItem();
+        valueTitle.setId(UUID.randomUUID().toString());
         setEditableText(valueTitle, title, resourceHelper.getString(R.string.title), isNewBook);
         valueTitle.setBookModelId(bookModelId);
 
@@ -56,21 +58,25 @@ public class BookDetailsItemCreator {
         bookDetailsItemList.add(valueTitle);
 
         BookDetailsItem valueAuthor = new BookDetailsItem();
+        valueAuthor.setId(UUID.randomUUID().toString());
         setEditableText(valueAuthor, author, resourceHelper.getString(R.string.author), isNewBook);
         valueAuthor.setItemType(AUTHOR);
         valueAuthor.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueAuthor);
 
         BookDetailsItem valueUrl = new BookDetailsItem();
+        valueUrl.setId(UUID.randomUUID().toString());
         valueUrl.setThumbnailUrl(url);
-        valueUrl.setItemViewType(BookDetailsItem.ViewType.THUMBNAIL);
+        valueUrl.setViewType(BookDetailsItem.ViewType.THUMBNAIL);
         valueUrl.setBookModelId(bookModelId);
         valueUrl.setItemType(THUMBNAIL);
         bookDetailsItemList.add(valueUrl);
 
         for (String genre : genres) {
             BookDetailsItem headerGenre = new BookDetailsItem();
+            headerGenre.setId(UUID.randomUUID().toString());
             BookDetailsItem valueGenre = new BookDetailsItem();
+            valueGenre.setId(UUID.randomUUID().toString());
             setHeader(headerGenre, resourceHelper.getString(R.string.genre));
             setEditableText(valueGenre, genre, resourceHelper.getString(R.string.genre), isNewBook);
             valueGenre.setItemType(GENRE);
@@ -80,7 +86,9 @@ public class BookDetailsItemCreator {
         }
 
         BookDetailsItem headerReadingStatus = new BookDetailsItem();
+        headerReadingStatus.setId(UUID.randomUUID().toString());
         BookDetailsItem valueReadingStatus = new BookDetailsItem();
+        valueReadingStatus.setId(UUID.randomUUID().toString());
         setHeader(headerReadingStatus, resourceHelper.getString(R.string.reading_status));
         setSelectedValue(valueReadingStatus, ReadingStatus.getAllDisplayNames(), readingStatus.getDisplayName(), isNewBook);
         valueReadingStatus.setItemType(READING_STATUS);
@@ -89,7 +97,9 @@ public class BookDetailsItemCreator {
         bookDetailsItemList.add(valueReadingStatus);
 
         BookDetailsItem headerBorrowingStatus = new BookDetailsItem();
+        headerBorrowingStatus.setId(UUID.randomUUID().toString());
         BookDetailsItem valueBorrowingStatus = new BookDetailsItem();
+        valueBorrowingStatus.setId(UUID.randomUUID().toString());
         setHeader(headerBorrowingStatus, resourceHelper.getString(R.string.borrowing_status));
         setSelectedValue(valueBorrowingStatus, BorrowingStatus.getAllDisplayNames(), borrowingModel.getBorrowingStatus().getDisplayName(), isNewBook);
         valueBorrowingStatus.setItemType(BORROWING_STATUS);
@@ -98,9 +108,11 @@ public class BookDetailsItemCreator {
         bookDetailsItemList.add(valueBorrowingStatus);
 
         BookDetailsItem headerBorrowingDetails = new BookDetailsItem();
+        headerBorrowingDetails.setId(UUID.randomUUID().toString());
         setHeader(headerBorrowingDetails, resourceHelper.getString(R.string.borrowing_details));
 
         BookDetailsItem valueBorrowingName = new BookDetailsItem();
+        valueBorrowingName.setId(UUID.randomUUID().toString());
         setEditableText(valueBorrowingName, borrowingModel.getName(), resourceHelper.getString(R.string.name), isNewBook);
         valueBorrowingName.setItemType(BORROWED_BY);
         valueBorrowingName.setBookModelId(bookModelId);
@@ -108,7 +120,8 @@ public class BookDetailsItemCreator {
         bookDetailsItemList.add(valueBorrowingName);
 
         BookDetailsItem valueBorrowingDate = new BookDetailsItem();
-        valueBorrowingDate.setItemViewType(BookDetailsItem.ViewType.DATE);
+        valueBorrowingDate.setId(UUID.randomUUID().toString());
+        valueBorrowingDate.setViewType(BookDetailsItem.ViewType.DATE);
         valueBorrowingDate.setDate(borrowingModel.getDate());
         valueBorrowingDate.setEditable(isNewBook);
         valueBorrowingDate.setBookModelId(bookModelId);
@@ -116,40 +129,47 @@ public class BookDetailsItemCreator {
         bookDetailsItemList.add(valueBorrowingDate);
 
         BookDetailsItem headerRating = new BookDetailsItem();
+        headerRating.setId(UUID.randomUUID().toString());
         setHeader(headerRating, resourceHelper.getString(R.string.rating));
         bookDetailsItemList.add(headerRating);
 
         BookDetailsItem valueEmotionalImpact = new BookDetailsItem();
+        valueEmotionalImpact.setId(UUID.randomUUID().toString());
         setStarRating(valueEmotionalImpact, resourceHelper.getString(R.string.emotional_impact), ratingModel.getEmotionalImpact(), isNewBook);
         valueEmotionalImpact.setItemType(RATING_EMOTIONAL_IMPACT);
         valueEmotionalImpact.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueEmotionalImpact);
 
         BookDetailsItem valueCharacter = new BookDetailsItem();
+        valueCharacter.setId(UUID.randomUUID().toString());
         setStarRating(valueCharacter, resourceHelper.getString(R.string.characters), ratingModel.getCharacter(), isNewBook);
         valueCharacter.setItemType(RATING_CHARACTERS);
         valueCharacter.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueCharacter);
 
         BookDetailsItem valuePacing = new BookDetailsItem();
+        valuePacing.setId(UUID.randomUUID().toString());
         setStarRating(valuePacing, resourceHelper.getString(R.string.pacing), ratingModel.getPacing(), isNewBook);
         valuePacing.setItemType(RATING_PACING);
         valuePacing.setBookModelId(bookModelId);
         bookDetailsItemList.add(valuePacing);
 
         BookDetailsItem valueStoryLine = new BookDetailsItem();
+        valueStoryLine.setId(UUID.randomUUID().toString());
         setStarRating(valueStoryLine, resourceHelper.getString(R.string.story_line), ratingModel.getStoryline(), isNewBook);
         valueStoryLine.setItemType(RATING_STORYLINE);
         valueStoryLine.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueStoryLine);
 
         BookDetailsItem valueWritingStyle = new BookDetailsItem();
+        valueWritingStyle.setId(UUID.randomUUID().toString());
         setStarRating(valueWritingStyle, resourceHelper.getString(R.string.writing_style), ratingModel.getWritingStyle(), isNewBook);
         valueWritingStyle.setItemType(RATING_WRITING_STYLE);
         valueWritingStyle.setBookModelId(bookModelId);
         bookDetailsItemList.add(valueWritingStyle);
 
         BookDetailsItem valueOverall = new BookDetailsItem();
+        valueOverall.setId(UUID.randomUUID().toString());
         setStarRating(valueOverall, resourceHelper.getString(R.string.overall_rating), ratingModel.getOverallRating(), isNewBook);
         valueOverall.setItemType(OVERALL_RATING);
         valueOverall.setBookModelId(bookModelId);
@@ -159,14 +179,14 @@ public class BookDetailsItemCreator {
     }
 
     private void setEditableText(BookDetailsItem editableText, String value, String hint, boolean isEditable) {
-        editableText.setItemViewType(BookDetailsItem.ViewType.EDITABLE_TEXT);
+        editableText.setViewType(BookDetailsItem.ViewType.EDITABLE_TEXT);
         editableText.setValue(value);
         editableText.setHint(hint);
         editableText.setEditable(isEditable);
     }
 
     private void setSelectedValue(BookDetailsItem options, List<String> optionsList, String selected, boolean isEditable) {
-        options.setItemViewType(BookDetailsItem.ViewType.POP_UP);
+        options.setViewType(BookDetailsItem.ViewType.POP_UP);
         options.setSingleSelection(optionsList);
         options.setSelectedValue(selected);
         options.setEditable(isEditable);
@@ -174,11 +194,11 @@ public class BookDetailsItemCreator {
 
     private void setHeader(BookDetailsItem header, String title) {
         header.setTitle(title);
-        header.setItemViewType(BookDetailsItem.ViewType.HEADER);
+        header.setViewType(BookDetailsItem.ViewType.HEADER);
     }
 
     private void setStarRating(BookDetailsItem starRating, String title, float rating, boolean isEditable) {
-        starRating.setItemViewType(BookDetailsItem.ViewType.STAR_RATING);
+        starRating.setViewType(BookDetailsItem.ViewType.STAR_RATING);
         starRating.setTitle(title);
         starRating.setRating(rating);
         starRating.setEditable(isEditable);

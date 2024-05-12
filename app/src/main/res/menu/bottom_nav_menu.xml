@@ -7,9 +7,9 @@
         />
 
     <item
-        android:id="@+id/bookWants"
+        android:id="@+id/wishlist"
         android:icon="@drawable/wishlist"
-        android:title="@string/book_wants"
+        android:title="@string/wishlist"
         />
 
     <item
@@ -18,9 +18,9 @@
         />
 
     <item
-        android:id="@+id/statistics"
-        android:icon="@drawable/statistics"
-        android:title="@string/statistics"
+        android:id="@+id/recs"
+        android:icon="@drawable/rec"
+        android:title="@string/for_you"
         />
 
     <item

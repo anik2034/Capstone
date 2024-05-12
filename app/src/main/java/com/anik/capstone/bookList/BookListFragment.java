@@ -67,7 +67,7 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
                 titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
             } else if (displayType == DisplayType.RECOMMENDATIONS.ordinal()) {
-                titleResId = R.string.recommendations;
+                titleResId = R.string.for_you;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
                 ((RecommendationsViewModel) bookListViewModel).onShowChooseListType.observe(getViewLifecycleOwner(), onShowChooseListType ->
                         showChooseListType());

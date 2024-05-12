@@ -2,11 +2,11 @@ package com.anik.capstone.home;
 
 
 import static com.anik.capstone.home.DisplayType.BARCODE_SCANNER;
-import static com.anik.capstone.home.DisplayType.BOOK_WANTS;
 import static com.anik.capstone.home.DisplayType.HOME;
 import static com.anik.capstone.home.DisplayType.MANUAL_INPUT;
+import static com.anik.capstone.home.DisplayType.RECOMMENDATIONS;
 import static com.anik.capstone.home.DisplayType.SETTINGS;
-import static com.anik.capstone.home.DisplayType.STATISTICS;
+import static com.anik.capstone.home.DisplayType.WISHLIST;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -40,12 +40,12 @@ public class HomeViewModel extends ViewModel {
     public void onDisplayTypeChange(int itemId) {
         if (itemId == R.id.home) {
             _displayType.setValue(HOME);
-        } else if (itemId == R.id.statistics) {
-            _displayType.setValue(STATISTICS);
+        } else if (itemId == R.id.recs) {
+            _displayType.setValue(RECOMMENDATIONS);
         } else if (itemId == R.id.settings) {
             _displayType.setValue(SETTINGS);
-        } else if (itemId == R.id.bookWants) {
-            _displayType.setValue(BOOK_WANTS);
+        } else if (itemId == R.id.wishlist) {
+            _displayType.setValue(WISHLIST);
         } else if (itemId == R.id.addNewBook) {
             if (sharedPrefHelper.isFirstTimeCameraPermission()) {
                 _displayType.setValue(BARCODE_SCANNER);

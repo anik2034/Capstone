@@ -55,6 +55,7 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="save">save</string>
+    <string name="for_you">For You</string>
 
     <string-array name="search_options">
         <item>Title</item>

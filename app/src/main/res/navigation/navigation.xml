@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
     app:startDestination="@id/bookListFragment">
-
+    <activity
+        android:id="@+id/login"
+        android:name="com.anik.capstone.login.LoginActivity">
+    </activity>
     <fragment
         android:id="@+id/bookListFragment"
         android:name="com.anik.capstone.bookList.BookListFragment">
@@ -26,15 +29,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/statisticsFragment"
-        android:name="com.anik.capstone.statistics.StatisticsFragment"/>
-
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.anik.capstone.settings.SettingsFragment"/>
-    <fragment
-        android:id="@+id/bookWantsFragment"
-        android:name="com.anik.capstone.bookList.bookWants.BookWantsFragment"/>
     <fragment
         android:id="@+id/bookDetailsFragment"
         android:name="com.anik.capstone.bookDetails.BookDetailsFragment">

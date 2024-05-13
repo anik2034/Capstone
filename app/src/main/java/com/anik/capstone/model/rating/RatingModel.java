@@ -51,7 +51,6 @@ public class RatingModel {
     }
 
     public float getOverallRating() {
-        overallRating = (emotionalImpact + character + pacing + storyline + writingStyle) / 5;
         return overallRating;
     }
     public void setOverallRating(float overallRating) {

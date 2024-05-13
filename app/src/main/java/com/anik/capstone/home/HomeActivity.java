@@ -39,14 +39,14 @@ public class HomeActivity extends AppCompatActivity {
                 case HOME:
                     navigateTo(R.id.bookListFragment, displayType);
                     break;
+                case WISHLIST:
+                    navigateTo(R.id.bookListFragment, displayType);
+                    break;
+                case RECOMMENDATIONS:
+                    navigateTo(R.id.bookListFragment, displayType);
+                    break;
                 case SETTINGS:
                     navigateTo(R.id.settingsFragment);
-                    break;
-                case BOOK_WANTS:
-                    navigateTo(R.id.bookWantsFragment);
-                    break;
-                case STATISTICS:
-                    navigateTo(R.id.statisticsFragment);
                     break;
                 case BARCODE_SCANNER:
                     navigateTo(R.id.barcodeScannerFragment);

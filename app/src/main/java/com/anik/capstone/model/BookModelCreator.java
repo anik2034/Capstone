@@ -50,8 +50,9 @@ public class BookModelCreator {
             }
 
             String title = documentResponse.getTitle();
-            String isbn = documentResponse.getIsbnList().get(0);
-            String author = documentResponse.getAuthorList().get(0);
+            String isbn = documentResponse.getIsbnList() == null ? "" : documentResponse.getIsbnList().get(0);
+
+            String author = documentResponse.getAuthorList() == null ? "" : documentResponse.getAuthorList().get(0);
             int coverId = documentResponse.getCoverId();
             List<String> genres = GenreHelper.getGenres(documentResponse.getSubjectList());
 
@@ -59,8 +60,9 @@ public class BookModelCreator {
                 continue;
             }
 
+            String coverUrl = coverId == 0 ? "" : "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg";
 
-            BookModel potentialNewBook = new BookModel(isbn, "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg",
+            BookModel potentialNewBook = new BookModel(isbn, coverUrl,
                     author, title, genres, ReadingStatus.NOT_STARTED, new BorrowingModel(BorrowingStatus.NOT_BORROWED, "", ""),
                     new RatingModel(), ListType.LIBRARY, "");
 

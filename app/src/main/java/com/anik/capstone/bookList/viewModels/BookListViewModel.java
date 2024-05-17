@@ -98,6 +98,7 @@ public abstract class BookListViewModel extends ViewModel {
         setBooks(bookListItems);
     }
 
+
     public void onItemClick(BookListItem bookListItem) {
         _navigateToBookDetails.setValue(bookListItem.getBookModelId());
     }

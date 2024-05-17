@@ -147,8 +147,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
     private void showAddToLibrary() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-        builder.setTitle("Add to Library");
-        builder.setMessage("Do you want to add this book to the library?");
+        builder.setTitle(R.string.add_to_library);
+        builder.setMessage(R.string.do_you_want_to_add_this_book_to_the_library);
 
         builder.setPositiveButton(R.string.yes, (dialog, which) ->  ((WishlistViewModel) bookListViewModel).onSave(ListType.LIBRARY));
         builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss() );

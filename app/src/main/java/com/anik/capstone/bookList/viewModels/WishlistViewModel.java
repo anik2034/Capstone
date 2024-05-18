@@ -33,12 +33,13 @@ public class WishlistViewModel extends BookListViewModel {
     public void onSave(ListType listType) {
         bookModel.setListType(listType);
         bookModel.setOwnerId(userRepository.getUser().getId());
-        bookRepository.insertBook(bookModel);
+        bookRepository.updateBook(bookModel);
     }
 
     @Override
     public void onItemClick(BookListItem bookListItem) {
         bookModel = new BookModel();
+        bookModel.setId(bookListItem.getBookModelId());
         bookModel.setAuthor(bookListItem.getAuthor());
         bookModel.setTitle(bookListItem.getTitle());
         bookModel.setCoverUrl(bookListItem.getCoverUrl());

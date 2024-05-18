@@ -56,6 +56,8 @@
     <string name="edit">Edit</string>
     <string name="save">save</string>
     <string name="for_you">For You</string>
+    <string name="add_to_library">Add to Library</string>
+    <string name="do_you_want_to_add_this_book_to_the_library">Do you want to add this book to the library?</string>
 
     <string-array name="search_options">
         <item>Title</item>

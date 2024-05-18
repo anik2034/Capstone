@@ -67,7 +67,7 @@ public abstract class BookListViewModel extends ViewModel {
         _title.setValue(resourceHelper.getString(titleResId));
         _books.setValue(Collections.emptyList());
         _layoutViewType.setValue(layoutViewType);
-        if (titleResId != R.string.recommendations) _isSearchable.setValue(true);
+        if (titleResId != R.string.for_you) _isSearchable.setValue(true);
         loadBooks();
     }
 
@@ -97,6 +97,7 @@ public abstract class BookListViewModel extends ViewModel {
         initialBooks = bookListItems;
         setBooks(bookListItems);
     }
+
 
     public void onItemClick(BookListItem bookListItem) {
         _navigateToBookDetails.setValue(bookListItem.getBookModelId());

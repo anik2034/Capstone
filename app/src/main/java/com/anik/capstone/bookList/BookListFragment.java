@@ -66,6 +66,8 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
             } else if (displayType == DisplayType.WISHLIST.ordinal()) {
                 titleResId = R.string.wishlist;
                 bookListViewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
+                ((WishlistViewModel) bookListViewModel).onShowChooseListType.observe(getViewLifecycleOwner(), onShowChooseListType ->
+                        showAddToLibrary());
             } else if (displayType == DisplayType.RECOMMENDATIONS.ordinal()) {
                 titleResId = R.string.for_you;
                 bookListViewModel = new ViewModelProvider(this).get(RecommendationsViewModel.class);
@@ -135,6 +137,21 @@ public class BookListFragment extends Fragment implements  BookRecyclerAdapter.O
 
         builder.setPositiveButton(R.string.my_library, (dialog, which) ->  ((RecommendationsViewModel) bookListViewModel).onSave(ListType.LIBRARY));
         builder.setNegativeButton(R.string.wishlist, (dialog, which) ->  ((RecommendationsViewModel) bookListViewModel).onSave(ListType.WISHLIST));
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+
+    }
+
+    private void showAddToLibrary() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        builder.setTitle(R.string.add_to_library);
+        builder.setMessage(R.string.do_you_want_to_add_this_book_to_the_library);
+
+        builder.setPositiveButton(R.string.yes, (dialog, which) ->  ((WishlistViewModel) bookListViewModel).onSave(ListType.LIBRARY));
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss() );
 
         AlertDialog dialog = builder.create();
         dialog.setCancelable(true);
